@@ -1,5 +1,6 @@
 package plant;
 
+// Test
 abstract class Plant {
     private int hp;
     private int atk;
@@ -8,7 +9,7 @@ abstract class Plant {
     private int cost;
     private int x, y;
 
-    public Plant(int hp, int atk, int atkSpd, int cooldown, int cost){
+    public Plant(int hp, int atk, int atkSpd, int cooldown, int cost) {
         this.hp = hp;
         this.atk = atk;
         this.atkSpd = atkSpd;
@@ -18,7 +19,7 @@ abstract class Plant {
 
     abstract void attack();
 
-    public void takeDmg(int damage){
+    public void takeDmg(int damage) {
         this.hp -= damage;
     }
 }
