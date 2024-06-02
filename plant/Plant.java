@@ -6,6 +6,7 @@ abstract class Plant {
     private int atkSpd;
     private int cooldown;
     private int cost;
+    private int x, y;
 
     public Plant(int hp, int atk, int atkSpd, int cooldown, int cost){
         this.hp = hp;
