@@ -1,6 +1,6 @@
 package zombies;
 
-abstract class Zombie {
+public abstract class Zombie {
     protected int hp;
     protected int x, y;
     protected int speed;

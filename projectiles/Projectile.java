@@ -1,11 +1,12 @@
 package projectiles;
+import zombies.*;
 
 public class Projectile {
-    protected int speed;
-    protected int damage;
+    private int speed;
+    private int damage;
     // -1 is fire, 0 is no effect, 1 is frost, 2 is stun, 3 is penetrate
-    protected int stat;
-    protected int x, y;
+    private int stat;
+    private int x, y;
 
     public Projectile(int speed, int damage, int stat, int x, int y){
         this.speed = speed;
@@ -15,8 +16,12 @@ public class Projectile {
         this.y = y;
     }
 
-    public boolean hit(){
-        return true;
+    public void isHit(Zombie z){
+        
+    }
+
+    public void hit(){
+
     }
 
     public void move(){
