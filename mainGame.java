@@ -15,6 +15,8 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
     BufferedImage mainMenu;
     BufferedImage grass;
     BufferedImage standing;
+    ArrayList <Zombie> zList = new ArrayList<>();
+    boolean newWave =true;
 
     Zombie z1 ;
 
@@ -24,7 +26,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
     int zombieX;
     int walkIndex;
-
+    int maxZombies =5;
     int zombieFrameCounter=0;
     // Normal z1;
 
@@ -73,6 +75,11 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             g2d.drawImage(background, 0, 0, this);
             g2d.drawImage(standing, zombieX, randY,this);
             g2d.drawRect(zombieX, randY, standing.getWidth(), standing.getHeight());
+            if(newWave){
+                newWave=false;
+                addingZombies();
+
+            }
 
 
 
@@ -90,6 +97,19 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
     }
 
+    public void addingZombies(){
+        for(int i =0 ; i<maxZombies ; i++){
+
+            randY = randRow[(int) (Math.random() * (4 - 0 + 1)) + 0];
+            zList.add(new Normal(100,10,zombieX,randY));
+
+
+        }
+
+
+    }
+
+
     public void initialize() {
         // initialize all the stuffff
         try {
@@ -97,10 +117,10 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             grass = ImageIO.read(new File("assets/backgrounds/grass.png"));
             standing = ImageIO.read(new File("assets/zombies/NormalZombie/zombiewalk1.png"));
 
-            randY = randRow[(int) (Math.random() * (4 - 0 + 1)) + 0];
+            // randY = randRow[(int) (Math.random() * (4 - 0 + 1)) + 0];
             // randY = randRow[3];
             System.out.println(randY);
-            zombieX =800;
+            zombieX =400;
 
             screen = 0;
         } catch (IOException e) {
@@ -130,8 +150,8 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
     public void update() {
         // updates the game
 
-        if(screen==2){
-            walking();
+        if(screen==1){
+            animation();
 
 
 
@@ -147,22 +167,24 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
     
     
 
-    public void walking(){
+    public void animation(){
        
-       if(zombieX ==185){
-        screen=3;
-        return;
-
-       }
-       
-        zombieFrameCounter++;
-    if (zombieFrameCounter ==10){
-            zombieX--;
+     
+     for(int i = 0 ; i<zList.size();i++){
+        if(zList.get(i).getX() ==185){
+            screen=3;
+            return;
+    
+           }
+           zombieFrameCounter++;
+           if (zombieFrameCounter ==10){
+            zList.get(i).setX(zList.get(i).getX()-1);
 
             
        
-            if(walkIndex==8)
+            if(walkIndex==8){
                 walkIndex=1;
+            }
             try {
                 standing = ImageIO.read(new File("assets/zombies/NormalZombie/zombiewalk"+walkIndex+".png"));
             } catch (IOException e) {
@@ -174,7 +196,13 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             }
             walkIndex++;
             zombieFrameCounter=0;
-        }
+           }
+
+     }
+     
+        
+       
+    
 
 
 

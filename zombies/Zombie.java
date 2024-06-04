@@ -38,4 +38,13 @@ public abstract class Zombie {
     public int getY() {
         return y;
     }
+
+    public void setX(int x){
+        this.x = x;
+
+    }
+
+
 }
+
+

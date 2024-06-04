@@ -17,6 +17,12 @@ public class Normal extends Zombie {
 
     }
 
+    public void setX(int x){
+        this.x = x;
+
+
+    }
+
     @Override
     public void attack() {
         // TODO Auto-generated method stub
