@@ -2,12 +2,12 @@ package plants;
 import projectiles.Projectile;
 
 abstract class Plant {
-    private int hp;
-    private int atk;
-    private int atkSpd;
-    private int cooldown;
-    private int cost;
-    private int x, y;
+    protected int hp;
+    protected int atk;
+    protected int atkSpd;
+    protected int cooldown;
+    protected int cost;
+    protected int x, y;
 
     public Plant(int hp, int atk, int atkSpd, int cooldown, int cost, int x, int y) {
         this.hp = hp;
