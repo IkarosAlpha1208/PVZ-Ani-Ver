@@ -116,7 +116,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             // putting them in random rows
             randY = randRow[(int) (Math.random() * (4 - 0 + 1)) + 0];
             // Add the zombie object into the list
-            zList.add(new Normal(100, 10, zombieX + i * 4, randY));
+            zList.add(new Normal(100, 10, zombieX + i * 20, randY));
 
         }
 
