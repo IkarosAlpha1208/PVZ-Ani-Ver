@@ -3,8 +3,9 @@ package zombies;
 public class Normal extends Zombie {
     // BufferedImage walking = new BufferedImage
 
-    public Normal(int hp, int atk, int atkspd, int speed, int x, int y) {
-        super(hp, atk, atkspd, speed, x, y);
+    public Normal(int hp, int speed, int x, int y) {
+        super(hp, speed, x, y);
+        // TODO Auto-generated constructor stub
     }
 
     public int getX() {

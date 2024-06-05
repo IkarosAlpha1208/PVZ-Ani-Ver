@@ -1,18 +1,13 @@
 package plants;
-import java.util.ArrayList;
-
 import projectiles.Projectile;
 
-public class Plant {
-    private int hp;
-    private int atk;
-    private int atkSpd;
-    private int cooldown;
-    private int cost;
-    private int stat;
-    private int x, y;
-    private String plantAsset;
-    private String projectileAsset;
+abstract class Plant {
+    protected int hp;
+    protected int atk;
+    protected int atkSpd;
+    protected int cooldown;
+    protected int cost;
+    protected int x, y;
 
     public Plant(int hp, int atk, int atkSpd, int cooldown, int cost, int x, int y) {
         this.hp = hp;
@@ -24,9 +19,7 @@ public class Plant {
         this.y = y;
     }
 
-    public void attack(ArrayList<Projectile> projectileList){
-        
-    }
+    abstract Projectile attack();
 
     public void takeDmg(int damage) {
         this.hp -= damage;

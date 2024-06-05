@@ -1,7 +1,7 @@
 package projectiles;
 import zombies.*;
 
-public abstract class Projectile {
+public class Projectile {
     private int speed;
     private int damage;
     // -1 is fire, 0 is no effect, 1 is frost, 2 is stun, 3 is penetrate
@@ -16,9 +16,13 @@ public abstract class Projectile {
         this.y = y;
     }
 
-    abstract boolean isHit(Object o);
+    public void isHit(Zombie z){
+        
+    }
 
-    abstract boolean hit(Object o);
+    public void hit(){
+
+    }
 
     public void move(){
         this.x += this.speed;

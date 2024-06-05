@@ -5,9 +5,9 @@ import javax.imageio.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import plants.*;
+// import plants.*;
 import zombies.*;
-import projectiles.*;
+// import projectiles.*
 import javax.sound.sampled.*;
 
 class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
@@ -18,8 +18,13 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
     Zombie z1 ;
 
+
+
+
+
     int zombieX;
     int walkIndex;
+
     int zombieFrameCounter=0;
     // Normal z1;
 
