@@ -22,7 +22,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
     Zombie z1;
 
-    int zombieX = 160;
+    int zombieX = 700;
     int walkIndex = 1;
 
     // Abmount of zombies on the screen
@@ -99,7 +99,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             g.drawImage(background, 0, 0, this);
             zList.removeAll(zList);
             newWave = true;
-            zombieX = 300;
+            zombieX = 700;
             zombieFrameCounter = 0;
 
         }
@@ -116,7 +116,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             // putting them in random rows
             randY = randRow[(int) (Math.random() * (4 - 0 + 1)) + 0];
             // Add the zombie object into the list
-            zList.add(new Normal(100, 10, zombieX + i * 20, randY));
+            zList.add(new Normal(100, 10, zombieX + i * 4, randY));
 
         }
 
