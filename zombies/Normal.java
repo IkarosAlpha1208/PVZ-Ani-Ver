@@ -1,7 +1,9 @@
 package zombies;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
+
 public class Normal extends Zombie {
-    // BufferedImage walking = new BufferedImage
 
     public Normal(int hp, int speed, int x, int y) {
         super(hp, speed, x, y);
@@ -17,23 +19,23 @@ public class Normal extends Zombie {
 
     }
 
-    public void setX(int x){
+    public void setX(int x) {
         this.x = x;
-
 
     }
 
     @Override
     public void attack() {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'attack'");
+        // throw new UnsupportedOperationException("Unimplemented method 'attack'");
     }
 
     @Override
     public void move() {
-        // TODO Auto-generated method stub
+        this.x = this.x - 1;
+        this.hitX = this.hitX - 1;
 
-        throw new UnsupportedOperationException("Unimplemented method 'move'");
+        // throw new UnsupportedOperationException("Unimplemented method 'move'");
     }
 
 }

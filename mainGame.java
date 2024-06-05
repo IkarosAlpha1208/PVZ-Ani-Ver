@@ -13,21 +13,22 @@ import javax.sound.sampled.*;
 class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
     BufferedImage background;
     BufferedImage mainMenu;
+    BufferedImage gameOver;
+
     BufferedImage grass;
-    BufferedImage standing;
-    ArrayList <Zombie> zList = new ArrayList<>();
-    boolean newWave =true;
+    BufferedImage zombieAni;
+    ArrayList<Zombie> zList = new ArrayList<>();
+    boolean newWave = true;
 
-    Zombie z1 ;
+    Zombie z1;
 
+    int zombieX = 160;
+    int walkIndex = 1;
 
+    // Abmount of zombies on the screen
+    int maxZombies = 5;
 
-
-
-    int zombieX;
-    int walkIndex;
-    int maxZombies =5;
-    int zombieFrameCounter=0;
+    int zombieFrameCounter = 0;
     // Normal z1;
 
     int[] randRow = { 0, 75, 150, 215, 290 };
@@ -62,65 +63,110 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Graphics2D g2d = (Graphics2D) g;
 
         if (screen == 0) {
             background = mainMenu;
-            g2d.drawImage(background, 0, 0, this);
+            g.drawImage(background, 0, 0, this);
 
         }
 
         else if (screen == 1) {
             background = grass;
-            g2d.drawImage(background, 0, 0, this);
-            g2d.drawImage(standing, zombieX, randY,this);
-            g2d.drawRect(zombieX, randY, standing.getWidth(), standing.getHeight());
-            if(newWave){
-                newWave=false;
+            g.drawImage(background, 0, 0, this);
+            // g.drawImage(zombieAni, zombieX, randY, this);
+            // g.drawRect(zombieX, randY, zombieAni.getWidth(), zombieAni.getHeight());
+            if (newWave) {
+                newWave = false;
                 addingZombies();
 
             }
 
+            // Printint out all the zombies
+            for (int i = 0; i < zList.size(); i++) {
+                g.drawImage(zList.get(i).getAnimation(), zList.get(i).getX(),
+                        zList.get(i).getY(), this);
 
+                g.drawRect(zList.get(i).getHitX(), zList.get(i).getHitY(), zList.get(i).getWidth(),
+                        zList.get(i).getHeight());
 
+            }
 
+            animation();
+
+            // Game over screen
+        } else if (screen == 7) {
+            background = gameOver;
+            g.drawImage(background, 0, 0, this);
+            zList.removeAll(zList);
+            newWave = true;
+            zombieX = 300;
+            zombieFrameCounter = 0;
 
         }
-        else if(screen ==3 ){
 
-            g2d.drawString("GAME OVER", 100, randY);
-
-        }
-
-
-        // g2d.drawImage(background, 0, 0, this);
+        // g.drawImage(background, 0, 0, this);
 
     }
 
-    public void addingZombies(){
-        for(int i =0 ; i<maxZombies ; i++){
+    // Adding the zombies to the arraylist
+    public void addingZombies() {
 
+        for (int i = 0; i < maxZombies; i++) {
+
+            // putting them in random rows
             randY = randRow[(int) (Math.random() * (4 - 0 + 1)) + 0];
-            zList.add(new Normal(100,10,zombieX,randY));
-
+            // Add the zombie object into the list
+            zList.add(new Normal(100, 10, zombieX + i * 20, randY));
 
         }
 
-
     }
 
+    public void animation() {
+
+        // every 10 frame change the animation
+        zombieFrameCounter++;
+        if (zombieFrameCounter == 10) {
+            for (int i = 0; i < zList.size(); i++) {
+                if (zList.get(i).getX() == 145) {
+                    screen = 7;
+                    return;
+
+                }
+
+                zList.get(i).move();
+
+                if (walkIndex == 8) {
+                    walkIndex = 1;
+                }
+                try {
+                    zombieAni = ImageIO.read(new File("assets/zombies/NormalZombie/zombiewalk" + walkIndex + ".png"));
+                    zList.get(i).setAnimation(zombieAni);
+
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    System.out.println("----ERROR-----" + walkIndex);
+
+                }
+                walkIndex++;
+                zombieFrameCounter = 0;
+            }
+        }
+
+    }
 
     public void initialize() {
         // initialize all the stuffff
         try {
             mainMenu = ImageIO.read(new File("assets/backgrounds/main.png"));
             grass = ImageIO.read(new File("assets/backgrounds/grass.png"));
-            standing = ImageIO.read(new File("assets/zombies/NormalZombie/zombiewalk1.png"));
+            gameOver = ImageIO.read(new File("assets/backgrounds/gameover.png"));
+
+            zombieAni = ImageIO.read(new File("assets/zombies/NormalZombie/zombiewalk1.png"));
 
             // randY = randRow[(int) (Math.random() * (4 - 0 + 1)) + 0];
             // randY = randRow[3];
             System.out.println(randY);
-            zombieX =400;
 
             screen = 0;
         } catch (IOException e) {
@@ -150,89 +196,54 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
     public void update() {
         // updates the game
 
-        if(screen==1){
-            animation();
+        // if (screen == 1) {
+        // animation();
 
-
-
-        }
-       
-     
-
-
-
+        // }
 
     }
 
-    
-    
-
-    public void animation(){
-       
-     
-     for(int i = 0 ; i<zList.size();i++){
-        if(zList.get(i).getX() ==185){
-            screen=3;
-            return;
-    
-           }
-           zombieFrameCounter++;
-           if (zombieFrameCounter ==10){
-            zList.get(i).setX(zList.get(i).getX()-1);
-
-            
-       
-            if(walkIndex==8){
-                walkIndex=1;
-            }
-            try {
-                standing = ImageIO.read(new File("assets/zombies/NormalZombie/zombiewalk"+walkIndex+".png"));
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                System.out.println("----------"+walkIndex);
-
-
-
-            }
-            walkIndex++;
-            zombieFrameCounter=0;
-           }
-
-     }
-     
-        
-       
-    
-
-
-
-        
-
-    }
-    
     @Override
     public void mouseClicked(MouseEvent e) {
 
         System.out.println(e.getX() + " " + e.getY());
 
-        if (e.getX() > 592 && e.getX() < 703 && e.getY() > 225 && e.getY() < 264) {
-            screen = 1;
+        if (screen == 0) {
+            if (e.getX() > 592 && e.getX() < 710 && e.getY() > 225 && e.getY() < 264) {
+                screen = 1;
+                // System.out.println("PLAY");
+
+            }
+
+            else if (e.getX() > 582 && e.getX() < 705 && e.getY() > 270 && e.getY() < 308) {
+                System.out.println("ENDLESS");
+
+            }
+
+            else if (e.getX() > 576 && e.getX() < 692 && e.getY() > 317 && e.getY() < 353) {
+                System.out.println("WIKI");
+
+            }
+
+            else if (e.getX() > 138 && e.getX() < 217 && e.getY() > 318 && e.getY() < 360) {
+                System.out.println("GACHA");
+
+            }
+
+            else if (e.getX() > 640 && e.getX() < 678 && e.getY() > 386 && e.getY() < 419) {
+                System.out.println("Exist");
+                System.exit(ABORT);
+
+            }
 
         }
 
-        else if (e.getX() > 582 && e.getX() < 694 && e.getY() > 270 && e.getY() < 308) {
-            System.out.println("ENDLESS");
+        else if (screen == 7) {
 
-        }
+            if (e.getX() > 320 && e.getX() < 463 && e.getY() > 379 && e.getY() < 419) {
+                screen = 0;
 
-        else if (e.getX() > 576 && e.getX() < 687 && e.getY() > 317 && e.getY() < 353) {
-            System.out.println("WIKI");
-
-        }
-
-        else if (e.getX() > 138 && e.getX() < 213 && e.getY() > 318 && e.getY() < 356) {
-            System.out.println("GACHA");
-
+            }
         }
 
         // else if (e.getX() > 590 && e.getX() < 709 && e.getY() > 232 && e.getY() <
