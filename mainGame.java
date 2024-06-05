@@ -20,16 +20,15 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
     ArrayList<Zombie> zList = new ArrayList<>();
     boolean newWave = true;
 
-    Zombie z1 ;
+    Zombie z1;
 
+    int zombieX = 160;
+    int walkIndex = 1;
 
+    // Abmount of zombies on the screen
+    int maxZombies = 5;
 
-
-
-    int zombieX;
-    int walkIndex;
-
-    int zombieFrameCounter=0;
+    int zombieFrameCounter = 0;
     // Normal z1;
 
     int[] randRow = { 0, 75, 150, 215, 290 };
