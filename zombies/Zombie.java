@@ -156,7 +156,7 @@ public abstract class Zombie {
     }
 
     public int yTile(){
-        return (this.hitY - 72)/72;
+        return (this.hitY - 82)/72;
     }
 
     public void setX(int x) {
@@ -205,6 +205,10 @@ public abstract class Zombie {
 
     public int getHeight() {
         return this.height;
+    }
+
+    public void setRec(){
+        this.hitbox = new Rectangle(this.hitX, this.hitY, this.width, this.height);
     }
 
     public Rectangle getRec(){

@@ -215,6 +215,13 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                     i--;
                 }
             }
+            for (int i = 0; i < zList.size(); i++) {
+                zList.get(i).isDead();
+                if(zList.get(i).getIsDead()){
+                    zList.remove(i);
+                    i--;
+                }
+            }
         }
 
     }
