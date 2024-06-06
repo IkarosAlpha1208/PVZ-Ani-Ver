@@ -34,6 +34,7 @@ public abstract class Zombie {
 
     public void takeDamage(int damage) {
         this.hp -= damage;
+        System.out.println("hp: " + this.hp);
     }
 
     public boolean isDead() {

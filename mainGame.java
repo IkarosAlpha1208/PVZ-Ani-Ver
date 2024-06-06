@@ -5,9 +5,9 @@ import javax.imageio.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-// import plants.*;
+import plants.*;
 import zombies.*;
-// import projectiles.*
+import projectiles.*;
 import javax.sound.sampled.*;
 
 class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
@@ -18,6 +18,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
     BufferedImage grass;
     BufferedImage zombieAni;
     ArrayList<Zombie> zList = new ArrayList<>();
+    HashMap<String, Plant> pList = new HashMap<>();
     boolean newWave = true;
 
     Zombie z1;
@@ -33,6 +34,8 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
     int[] randRow = { 0, 75, 150, 215, 290 };
     int randY;
+    int mapLcord = 187, mapRcord = 720, mapUcord = 72, mapDcord = 440;
+    int blockSizeX = 56, blockSizeY = 68;
     Thread thread;
     int FPS = 60;
     int screen;
