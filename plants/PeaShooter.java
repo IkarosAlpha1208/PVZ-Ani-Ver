@@ -1,6 +1,6 @@
 package plants;
 import projectiles.*;
-import zombies.Zombie;
+import zombies.*;
 
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
