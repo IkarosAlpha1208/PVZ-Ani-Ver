@@ -19,6 +19,9 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
     BufferedImage zombieAni;
     ArrayList<Zombie> zList = new ArrayList<>();
     HashMap<String, Plant> pList = new HashMap<>();
+    ArrayList<Plant> selectedPlants = new ArrayList<>();
+    ArrayList<Plant> plantObjects = new ArrayList<>();
+    ArrayList<Projectile> projectileList = new ArrayList<>();
     boolean newWave = true;
 
     Zombie z1;
@@ -35,7 +38,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
     int[] randRow = { 0, 75, 150, 215, 290 };
     int randY;
     int mapLcord = 187, mapRcord = 720, mapUcord = 72, mapDcord = 440;
-    int blockSizeX = 56, blockSizeY = 68;
+    int blockSizeX = 56, blockSizeY = 75;
     Thread thread;
     int FPS = 60;
     int screen;
@@ -70,7 +73,6 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
         if (screen == 0) {
             background = mainMenu;
             g.drawImage(background, 0, 0, this);
-
         }
 
         else if (screen == 1) {
@@ -93,6 +95,10 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                         zList.get(i).getHeight());
 
             }
+            for(Plant p : pList.values()) {
+                g.drawImage(p.getImage(), p.getX(), p.getY(), this);
+                g.drawRect(p.getX() + 10, p.getY() + 10, p.getWidth() - 20, p.getHeight() - 20);
+            }
 
             animation();
 
@@ -101,6 +107,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             background = gameOver;
             g.drawImage(background, 0, 0, this);
             zList.removeAll(zList);
+            
             newWave = true;
             zombieX = 300;
             zombieFrameCounter = 0;
@@ -164,8 +171,8 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             mainMenu = ImageIO.read(new File("assets/backgrounds/main.png"));
             grass = ImageIO.read(new File("assets/backgrounds/grass.png"));
             gameOver = ImageIO.read(new File("assets/backgrounds/gameover.png"));
-
             zombieAni = ImageIO.read(new File("assets/zombies/NormalZombie/zombiewalk1.png"));
+            plantObjects.add(new PeaShooter(0, 0));
 
             // randY = randRow[(int) (Math.random() * (4 - 0 + 1)) + 0];
             // randY = randRow[3];
@@ -239,6 +246,16 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
             }
 
+        }
+
+        else if(screen == 1){
+            if(e.getX() > mapLcord && e.getX() < mapRcord && e.getY() > mapUcord && e.getY() < mapDcord){
+                int xCord = (e.getX() - mapLcord)/blockSizeX;
+                int yCord = (e.getY() - mapUcord)/blockSizeY;
+                String cords = "" + xCord + yCord;
+                pList.put(cords, plantObjects.get(0).createPlant(mapLcord + xCord*blockSizeX, mapUcord + yCord*(blockSizeY - 10)));
+                System.out.println("Planted" + " " + cords);
+            }
         }
 
         else if (screen == 7) {

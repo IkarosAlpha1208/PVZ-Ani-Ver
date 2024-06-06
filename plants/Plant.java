@@ -1,6 +1,8 @@
 package plants;
 import java.util.ArrayList;
-import javax.swing.Icon;
+import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+
 import projectiles.Projectile;
 
 
@@ -12,10 +14,10 @@ public abstract class Plant {
     protected int cost;
     protected int stat;
     protected int x, y;
-    protected int hitX, hitY;
-    protected Icon plantAsset;
+    protected Rectangle hitbox;
+    protected BufferedImage img;
 
-    public Plant(int hp, int atk, int atkSpd, int cooldown, int cost, int x, int y, int hitX, int hitY, Icon plantAsset) {
+    public Plant(int hp, int atk, int atkSpd, int cooldown, int cost, int x, int y, Rectangle hitbox) {
         this.hp = hp;
         this.atk = atk;
         this.atkSpd = atkSpd;
@@ -23,9 +25,7 @@ public abstract class Plant {
         this.cost = cost;
         this.x = x;
         this.y = y;
-        this.hitX = hitX;
-        this.hitY = hitY;
-        this.plantAsset = plantAsset;
+        this.hitbox = hitbox;
     }
 
     public abstract void attack(ArrayList<Projectile> projectileList);
@@ -37,4 +37,41 @@ public abstract class Plant {
     public boolean isDead(){
         return this.hp <= 0;
     }
+
+    public Rectangle getRec(){
+        return this.hitbox;
+    }
+
+    public int getWidth(){
+        return this.hitbox.width;
+    }
+
+    public int getHeight(){
+        return this.hitbox.height;
+    }
+
+    public int getX(){
+        return this.x;
+    }
+
+    public int getY(){
+        return this.y;
+    }
+
+    public void setCord(int x, int y){
+        this.x = x;
+        this.y = y;
+        this.hitbox.x = x;
+        this.hitbox.y = y;
+    }
+
+    public BufferedImage getImage(){
+        return this.img;
+    }
+
+    public void setImage(BufferedImage img){
+        this.img = img;
+    }
+
+    public abstract Plant createPlant(int x, int y);
 }

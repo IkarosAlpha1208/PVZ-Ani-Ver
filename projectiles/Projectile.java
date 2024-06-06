@@ -1,16 +1,17 @@
 package projectiles;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import zombies.*;
 
 public abstract class Projectile {
-    private int speed;
-    private int damage;
-    // -1 is fire, 0 is no effect, 1 is frost, 2 is stun, 3 is penetrate
-    private String stat;
-    private int x, y;
-    private BufferedImage Image;
+    protected int speed;
+    protected int damage;
+    protected String stat;
+    protected int x, y;
+    protected Rectangle hitbox;
+    protected BufferedImage Image;
 
     public Projectile(int speed, int damage, String stat, int x, int y, BufferedImage image) {
         this.speed = speed;
@@ -26,6 +27,7 @@ public abstract class Projectile {
 
     public void move(){
         this.x += this.speed;
+        hitbox.x = this.x;
     }
 
     public String getStat(){
