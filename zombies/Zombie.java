@@ -47,6 +47,8 @@ public abstract class Zombie {
         // Making the hitbox closer to the zombie
         this.hitY = y + 58;
         this.hitX = x + 15;
+        this.hitbox = new Rectangle(this.hitX, this.hitY, this.width, this.height);
+
         try {
             this.head = ImageIO.read(new File("assets/zombies/head.png"));
         } catch (IOException e) {
@@ -162,6 +164,7 @@ public abstract class Zombie {
     public void setX(int x) {
         this.x = x;
         this.headX = x;
+        
 
     }
 

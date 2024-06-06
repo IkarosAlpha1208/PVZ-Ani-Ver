@@ -33,6 +33,7 @@ public class Normal extends Zombie {
     public void move() {
         this.x = this.x - 1;
         this.hitX = this.hitX - 1;
+        setRec();
 
         // throw new UnsupportedOperationException("Unimplemented method 'move'");
     }
