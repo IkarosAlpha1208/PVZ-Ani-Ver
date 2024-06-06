@@ -2,21 +2,19 @@ package zombies;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 public class Normal extends Zombie {
 
     public Normal(int hp, int speed, int x, int y) {
         super(hp, speed, x, y);
+        this.walkingIndex = 1;
+        this.dyingIndex = 1;
+
         // TODO Auto-generated constructor stub
-    }
-
-    public int getX() {
-        return this.x;
-    }
-
-    public int getY() {
-        return this.y;
-
     }
 
     public void setX(int x) {
@@ -32,8 +30,8 @@ public class Normal extends Zombie {
 
     @Override
     public void move() {
-        this.x = this.x - 2;
-        this.hitX = this.hitX - 2;
+        this.x = this.x - 1;
+        this.hitX = this.hitX - 1;
 
         // throw new UnsupportedOperationException("Unimplemented method 'move'");
     }

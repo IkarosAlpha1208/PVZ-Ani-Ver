@@ -22,7 +22,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
     Zombie z1;
 
-    int zombieX = 700;
+    int zombieX = 300;
     int walkIndex = 1;
 
     // Abmount of zombies on the screen
@@ -85,6 +85,9 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             for (int i = 0; i < zList.size(); i++) {
                 g.drawImage(zList.get(i).getAnimation(), zList.get(i).getX(),
                         zList.get(i).getY(), this);
+                // System.out.println(zList.get(i).getHeadX() + "------------- " + i);
+                if (zList.get(i).getIsDead())
+                    g.drawImage(zList.get(i).getHead(), zList.get(i).getHeadX(), zList.get(i).getHeadY(), this);
 
                 g.drawRect(zList.get(i).getHitX(), zList.get(i).getHitY(), zList.get(i).getWidth(),
                         zList.get(i).getHeight());
@@ -116,7 +119,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             // putting them in random rows
             randY = randRow[(int) (Math.random() * (4 - 0 + 1)) + 0];
             // Add the zombie object into the list
-            zList.add(new Normal(100, 10, zombieX + i * 20, randY));
+            zList.add(new Normal(100, 10, zombieX + i * 40, randY));
 
         }
 
@@ -126,8 +129,9 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
         // every 10 frame change the animation
         zombieFrameCounter++;
-        if (zombieFrameCounter == 10) {
+        if (zombieFrameCounter == 30) {
             for (int i = 0; i < zList.size(); i++) {
+
                 if (zList.get(i).getX() == 145) {
                     screen = 7;
                     return;
@@ -135,20 +139,9 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                 }
 
                 zList.get(i).move();
-
-                if (walkIndex == 8) {
-                    walkIndex = 1;
-                }
-                try {
-                    zombieAni = ImageIO.read(new File("assets/zombies/NormalZombie/zombiewalk" + walkIndex + ".png"));
-                    zList.get(i).setAnimation(zombieAni);
-
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    System.out.println("----ERROR-----" + walkIndex);
-
-                }
-                walkIndex++;
+                zList.get(i).animation();
+                // zList.get(i).animateHead();
+                // zList.get(i).animateHead();
                 zombieFrameCounter = 0;
             }
         }
