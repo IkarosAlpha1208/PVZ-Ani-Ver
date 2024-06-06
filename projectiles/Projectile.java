@@ -11,9 +11,9 @@ public abstract class Projectile {
     protected String stat;
     protected int x, y;
     protected Rectangle hitbox;
-    protected BufferedImage Image;
+    protected BufferedImage img;
 
-    public Projectile(int speed, int damage, String stat, int x, int y, BufferedImage image) {
+    public Projectile(int speed, int damage, String stat, int x, int y) {
         this.speed = speed;
         this.damage = damage;
         this.stat = stat;
@@ -21,9 +21,9 @@ public abstract class Projectile {
         this.y = y;
     }
 
-    public abstract void isHit(ArrayList<Zombie> zList);
+    public abstract boolean isHit(ArrayList<Zombie> zList);
 
-    public abstract void hit();
+    public abstract void hit(Object o);
 
     public void move(){
         this.x += this.speed;
@@ -32,5 +32,25 @@ public abstract class Projectile {
 
     public String getStat(){
         return this.stat;
+    }
+
+    public BufferedImage getImage(){
+        return this.img;
+    }
+
+    public int getX() {
+        return this.x;
+    }
+
+    public int getY() {
+        return this.y;
+    }
+
+    public int getWidth(){
+        return this.hitbox.width;
+    }
+
+    public int getHeight(){
+        return this.hitbox.height;
     }
 }

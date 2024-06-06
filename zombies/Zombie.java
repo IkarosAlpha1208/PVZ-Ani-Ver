@@ -4,8 +4,11 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 import javax.imageio.ImageIO;
+
+import plants.*;
 
 public abstract class Zombie {
     protected int hp;
@@ -14,6 +17,7 @@ public abstract class Zombie {
     protected int atk;
     protected int hitX, hitY;
     protected int width, height;
+    protected Rectangle hitbox;
     // The y cord of the head
     protected int headY;
 
@@ -51,7 +55,7 @@ public abstract class Zombie {
         }
     }
 
-    public abstract void attack();
+    public abstract void attack(HashMap<String, Plant> pList);
 
     public abstract void move();
 
@@ -151,10 +155,22 @@ public abstract class Zombie {
         return y;
     }
 
+    public int yTile(){
+        return (this.hitY - 72)/72;
+    }
+
     public void setX(int x) {
         this.x = x;
         this.headX = x;
 
+    }
+
+    public void isDead(){
+        if(this.hp <= 0){
+            this.isDead = true;
+            this.isWalking = false;
+            this.dyingIndex = 1;
+        }
     }
 
     public boolean getIsDead() {
@@ -191,4 +207,7 @@ public abstract class Zombie {
         return this.height;
     }
 
+    public Rectangle getRec(){
+        return this.hitbox;
+    }
 }

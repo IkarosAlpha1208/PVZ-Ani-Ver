@@ -4,6 +4,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import projectiles.Projectile;
+import zombies.Zombie;
 
 
 public abstract class Plant {
@@ -13,7 +14,8 @@ public abstract class Plant {
     protected int cooldown;
     protected int cost;
     protected int stat;
-    protected int x, y;
+    protected int x, y, yTile;
+    protected long lastAttack;
     protected Rectangle hitbox;
     protected BufferedImage img;
 
@@ -26,9 +28,10 @@ public abstract class Plant {
         this.x = x;
         this.y = y;
         this.hitbox = hitbox;
+        this.lastAttack = System.currentTimeMillis();
     }
 
-    public abstract void attack(ArrayList<Projectile> projectileList);
+    public abstract void attack(ArrayList<Projectile> projectileList, ArrayList<Zombie> zList);
 
     public void takeDmg(int damage) {
         this.hp -= damage;
@@ -58,6 +61,10 @@ public abstract class Plant {
         return this.y;
     }
 
+    public int yTile(){
+        return (this.y - 72)/65;
+    }
+
     public void setCord(int x, int y){
         this.x = x;
         this.y = y;
@@ -73,5 +80,5 @@ public abstract class Plant {
         this.img = img;
     }
 
-    public abstract Plant createPlant(int x, int y);
+    public abstract Plant createPlant(int x, int y, int yTi);
 }

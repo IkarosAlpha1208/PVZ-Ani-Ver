@@ -102,6 +102,10 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                 g.drawImage(p.getImage(), p.getX(), p.getY(), this);
                 g.drawRect(p.getX() + 10, p.getY() + 10, p.getWidth() - 20, p.getHeight() - 20);
             }
+            for (Projectile p : projectileList) {
+                g.drawImage(p.getImage(), p.getX(), p.getY(), this);
+                g.drawRect(p.getX(), p.getY(), p.getWidth(), p.getHeight());
+            }
 
             animation();
 
@@ -199,10 +203,19 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
     public void update() {
         // updates the game
 
-        // if (screen == 1) {
-        // animation();
-
-        // }
+        if (screen == 1) {
+            for(Plant p : pList.values()){
+                p.attack(projectileList, zList);
+            }
+            for (int i = 0; i < projectileList.size(); i++) {
+                projectileList.get(i).move();
+                boolean b = projectileList.get(i).isHit(zList);
+                if(b){
+                    projectileList.remove(i);
+                    i--;
+                }
+            }
+        }
 
     }
 
@@ -246,8 +259,13 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                 int xCord = (e.getX() - mapLcord)/blockSizeX;
                 int yCord = (e.getY() - mapUcord)/blockSizeY;
                 String cords = "" + xCord + yCord;
-                pList.put(cords, plantObjects.get(0).createPlant(mapLcord + xCord*blockSizeX, mapUcord + yCord*(blockSizeY - 10)));
-                System.out.println("Planted" + " " + cords);
+                if(pList.containsKey(cords)){
+                    System.out.println("There is already a plant there! at " + cords);
+                }
+                else{
+                    pList.put(cords, plantObjects.get(0).createPlant(mapLcord + xCord*blockSizeX, mapUcord + yCord*(blockSizeY - 10), yCord));
+                    System.out.println("Planted" + " " + cords);
+                }
             }
         }
 
