@@ -25,10 +25,15 @@ public abstract class Zombie {
 
     protected boolean isDead;
     protected boolean isWalking;
+    protected boolean isEating;
+
     protected boolean remove;
     protected int walkingIndex;
     protected int dyingIndex;
+    protected int eatingIndex;
     protected BufferedImage zombieImage;
+    protected int atkSpd;
+    protected long lastAttack;
 
     protected BufferedImage currentAnimation;
     protected BufferedImage head;
@@ -44,7 +49,13 @@ public abstract class Zombie {
         this.headX = x;
         this.isWalking = true;
         this.isDead = false;
+        this.isEating = false;
         this.remove = false;
+        this.walkingIndex = 1;
+        this.dyingIndex = 1;
+        this.eatingIndex = 1;
+        this.atkSpd = 3;
+        this.lastAttack = System.currentTimeMillis();
 
         // Making the hitbox closer to the zombie
         this.hitY = y + 58;
@@ -73,7 +84,6 @@ public abstract class Zombie {
         if (isWalking) {
             if (this.walkingIndex == 8) {
                 this.walkingIndex = 1;
-
             }
 
             try {
@@ -115,10 +125,29 @@ public abstract class Zombie {
             }
 
             this.dyingIndex++;
-            System.out.println("++++++++++++++++" + this.dyingIndex);
-            System.out.println("------------------------" + this.remove);
-            System.out.println("+-+-+-+-+" + this.isDead);
+
             animateHead();
+
+        } else if (isEating) {
+
+            if (this.eatingIndex == 8) {
+                this.eatingIndex = 1;
+
+            }
+            try {
+                zombieImage = ImageIO
+                        .read(new File("assets/zombies/NormalZombie/zombieeating" + this.eatingIndex + ".png"));
+                this.currentAnimation = zombieImage;
+                this.height = this.currentAnimation.getHeight() - 60;
+                this.width = this.currentAnimation.getWidth() - 15;
+
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                System.out.println("----ERROR-----" + this.eatingIndex);
+
+            }
+
+            this.eatingIndex++;
 
         }
 
@@ -134,10 +163,6 @@ public abstract class Zombie {
         this.hp -= damage;
         System.out.println("hp: " + this.hp);
     }
-
-    // public boolean isDead() {
-    // return this.hp <= 0;
-    // }
 
     // Getters & Setters Methods
 
@@ -195,6 +220,10 @@ public abstract class Zombie {
     public boolean getIsDead() {
         return this.isDead;
 
+    }
+
+    public boolean getIsEating() {
+        return this.isEating;
     }
 
     public BufferedImage getAnimation() {

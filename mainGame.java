@@ -26,8 +26,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
     Zombie z1;
 
-    int zombieX = 400;
-    int walkIndex = 1;
+    int zombieX = 500;
 
     // Abmount of zombies on the screen
     int maxZombies = 5;
@@ -93,9 +92,9 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                 // System.out.println(zList.get(i).getHeadX() + "------------- " + i);
 
                 // // If the zombie is dead show the head falling off
-                if (zList.get(i).getIsDead())
-                    g.drawImage(zList.get(i).getHead(), zList.get(i).getHeadX(),
-                            zList.get(i).getHeadY(), this);
+                // if (zList.get(i).getIsDead())
+                // g.drawImage(zList.get(i).getHead(), zList.get(i).getHeadX(),
+                // zList.get(i).getHeadY(), this);
 
                 // g.drawRect(zList.get(i).getHitX(), zList.get(i).getHitY(),
                 // zList.get(i).getWidth(),
@@ -103,9 +102,16 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
             }
             for (Plant p : pList.values()) {
-                g.drawImage(p.getImage(), p.getX(), p.getY(), this);
-                g.drawRect(p.getX() + 10, p.getY() + 10, p.getWidth() - 20, p.getHeight() - 20);
+                if (!p.isDead())
+                    g.drawImage(p.getImage(), p.getX(), p.getY(), this);
+                // g.drawRect(p.getX() + 10, p.getY() + 10, p.getWidth() - 20, p.getHeight() -
+                // 20);
             }
+            // if (pList.size() > 0 && pList.get("00").isDead() != true) {
+            // g.drawImage(pList.get("00").getImage(), pList.get("00").getX(),
+            // pList.get("00").getY(), this);
+            // }
+
             for (Projectile p : projectileList) {
                 g.drawImage(p.getImage(), p.getX(), p.getY(), this);
                 g.drawRect(p.getX(), p.getY(), p.getWidth(), p.getHeight());
@@ -137,7 +143,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             // putting them in random rows
             randY = randRow[(int) (Math.random() * (4 - 0 + 1)) + 0];
             // Add the zombie object into the list
-            zList.add(new Normal(20, 10, zombieX + i * 40, randY));
+            zList.add(new Normal(100, 10, zombieX + i * 40, randY));
 
         }
 
@@ -150,13 +156,14 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
         if (zombieFrameCounter == 30) {
             for (int i = 0; i < zList.size(); i++) {
 
-                if (zList.get(i).getX() == 145) {
+                if (zList.get(i).getX() <= 145) {
                     screen = 7;
                     return;
 
                 }
 
-                zList.get(i).move();
+                if (!zList.get(i).getIsEating())
+                    zList.get(i).move();
                 zList.get(i).animation();
                 // zList.get(i).animateHead();
                 // zList.get(i).animateHead();
@@ -222,7 +229,8 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                 }
             }
             for (int i = 0; i < zList.size(); i++) {
-                // zList.get(i).isDead();
+                zList.get(i).attack(pList);
+
                 if (zList.get(i).getRemove()) {
                     zList.remove(i);
                     i--;
