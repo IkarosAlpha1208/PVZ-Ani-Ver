@@ -25,6 +25,7 @@ public abstract class Zombie {
 
     protected boolean isDead;
     protected boolean isWalking;
+    protected boolean remove;
     protected int walkingIndex;
     protected int dyingIndex;
     protected BufferedImage zombieImage;
@@ -43,6 +44,7 @@ public abstract class Zombie {
         this.headX = x;
         this.isWalking = true;
         this.isDead = false;
+        this.remove = false;
 
         // Making the hitbox closer to the zombie
         this.hitY = y + 58;
@@ -66,6 +68,7 @@ public abstract class Zombie {
 
         // Need to add methods to see if the zombie is currently eating or dying here.
         // HAVE TO WAIT FOR DAIVD
+        isDead();
 
         if (isWalking) {
             if (this.walkingIndex == 8) {
@@ -85,6 +88,7 @@ public abstract class Zombie {
                 System.out.println("----ERROR-----" + this.walkingIndex);
 
             }
+            // System.out.println("++++++++++++++++" + this.wal);
 
             this.walkingIndex++;
 
@@ -94,6 +98,7 @@ public abstract class Zombie {
 
             if (this.dyingIndex == 6) {
                 this.isDead = false;
+                this.remove = true;
 
             }
             try {
@@ -108,7 +113,11 @@ public abstract class Zombie {
                 System.out.println("----ERROR-----" + this.dyingIndex);
 
             }
+
             this.dyingIndex++;
+            System.out.println("++++++++++++++++" + this.dyingIndex);
+            System.out.println("------------------------" + this.remove);
+            System.out.println("+-+-+-+-+" + this.isDead);
             animateHead();
 
         }
@@ -116,8 +125,8 @@ public abstract class Zombie {
     }
 
     public void animateHead() {
-        this.headY += 8;
-        this.headX -= 4;
+        this.headY += 3;
+        // this.headX -= 1;
 
     }
 
@@ -132,6 +141,10 @@ public abstract class Zombie {
 
     // Getters & Setters Methods
 
+    public boolean getRemove() {
+        return this.remove;
+    }
+
     public int getHeadY() {
         return this.headY;
     }
@@ -145,6 +158,9 @@ public abstract class Zombie {
     }
 
     public int getX() {
+        if (isDead) {
+            return x - 16;
+        }
         return x;
     }
 
@@ -157,22 +173,22 @@ public abstract class Zombie {
         return y;
     }
 
-    public int yTile(){
-        return (this.hitY - 82)/72;
+    public int yTile() {
+        return (this.hitY - 82) / 72;
     }
 
     public void setX(int x) {
         this.x = x;
         this.headX = x;
-        
 
     }
 
-    public void isDead(){
-        if(this.hp <= 0){
+    public void isDead() {
+        if (this.hp <= 0 && this.dyingIndex < 6) {
             this.isDead = true;
             this.isWalking = false;
-            this.dyingIndex = 1;
+            // this.dyingIndex = 1;
+
         }
     }
 
@@ -181,14 +197,9 @@ public abstract class Zombie {
 
     }
 
-    // HAve the hitbox closer to the size of the zombie
-    // public abstract void setAnimation(BufferedImage i);
-
     public BufferedImage getAnimation() {
         return this.currentAnimation;
     }
-
-    // public abstract void animateHead();
 
     public BufferedImage getHead() {
         return this.head;
@@ -210,11 +221,11 @@ public abstract class Zombie {
         return this.height;
     }
 
-    public void setRec(){
+    public void setRec() {
         this.hitbox = new Rectangle(this.hitX, this.hitY, this.width, this.height);
     }
 
-    public Rectangle getRec(){
+    public Rectangle getRec() {
         return this.hitbox;
     }
 }
