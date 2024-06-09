@@ -1,4 +1,5 @@
 package projectiles;
+
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
@@ -8,9 +9,9 @@ import javax.imageio.ImageIO;
 
 import zombies.*;
 
-public class Pea extends Projectile{
+public class Pea extends Projectile {
 
-    public Pea(int speed, int damage, String stat, int x, int y){
+    public Pea(int speed, int damage, String stat, int x, int y) {
         super(speed, damage, stat, x, y);
         try {
             this.img = ImageIO.read(new File("assets/projectiles/ProjectilePea.png"));
@@ -21,14 +22,14 @@ public class Pea extends Projectile{
     }
 
     @Override
-    public boolean isHit(ArrayList<Zombie> zList){
-        if(this.x >= 720){
+    public boolean isHit(ArrayList<Zombie> zList) {
+        if (this.x >= 720) {
             System.out.println("Hit wall");
             return true;
         }
-        for(Zombie z : zList){
+        for (Zombie z : zList) {
             // z.setRec();
-            if(this.hitbox.intersects(z.getRec())){
+            if (this.hitbox.intersects(z.getRec())) {
                 System.out.println("Hit zombie");
                 hit(z);
                 return true;
@@ -36,9 +37,10 @@ public class Pea extends Projectile{
         }
         return false;
     }
+
     @Override
     public void hit(Object o) {
         Zombie z = (Zombie) o;
         z.takeDamage(this.damage);
-    } 
+    }
 }

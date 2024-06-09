@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.awt.Rectangle;
 
 public class PeaShooter extends Plant {
+
     public PeaShooter(int x, int y) {
         super(60, 10, 2, 10, 100, x, y, new Rectangle(x, y, 56, 68));
         try {
@@ -27,7 +28,8 @@ public class PeaShooter extends Plant {
         for (Zombie z : zList) {
             if ((currentTime - lastAttack) / 1000 >= atkSpd && this.isDead != true) {
                 lastAttack = currentTime;
-                System.out.println("Peashooter attacking at (" + yTile() + " toward " + z.yTile() + ")");
+                System.out.println("Peashooter attacking at (" + yTile() + " toward " +
+                        z.yTile() + ")");
                 projectileList.add(new Pea(5, atk, "none", this.x - 10, this.y + 10));
                 break;
             }
@@ -35,9 +37,10 @@ public class PeaShooter extends Plant {
     }
 
     @Override
-    public Plant createPlant(int x, int y, int yTi) {
+    public Plant createPlant(int x, int y, int yTi, String grid) {
         Plant p = new PeaShooter(x, y);
         p.yTile = yTi;
+        p.grid = grid;
         return p;
     }
 }

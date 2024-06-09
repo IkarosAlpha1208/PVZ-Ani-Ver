@@ -19,6 +19,7 @@ public abstract class Plant {
     protected Rectangle hitbox;
     protected BufferedImage img;
     protected boolean isDead;
+    protected String grid;
 
     public Plant(int hp, int atk, int atkSpd, int cooldown, int cost, int x, int y, Rectangle hitbox) {
         this.hp = hp;
@@ -90,6 +91,20 @@ public abstract class Plant {
         this.img = img;
     }
 
-    public abstract Plant createPlant(int x, int y, int yTi);
+    public int getGrid() {
+        return Integer.parseInt(this.grid);
+    }
+
+    public boolean checkRow(ArrayList<Zombie> li) {
+        for (int i = 0; i < li.size(); i++) {
+            if (Integer.parseInt(this.grid) % 10 == li.get(i).getRow()) {
+                return true;
+            }
+
+        }
+        return false;
+    }
+
+    public abstract Plant createPlant(int x, int y, int yTi, String grid);
 
 }

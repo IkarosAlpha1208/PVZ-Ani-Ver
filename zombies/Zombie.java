@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Objects;
 
 import javax.imageio.ImageIO;
 
@@ -34,17 +35,19 @@ public abstract class Zombie {
     protected BufferedImage zombieImage;
     protected int atkSpd;
     protected long lastAttack;
+    protected int row;
 
     protected BufferedImage currentAnimation;
     protected BufferedImage head;
     // 0 is not being effected, 1 is being slowed, 2 is being stuned
     private int stat;
 
-    public Zombie(int hp, int speed, int x, int y) {
+    public Zombie(int hp, int speed, int x, int y, int row) {
         this.hp = hp;
         this.speed = speed;
         this.x = x;
         this.y = y;
+        this.row = row;
         this.headY = y + 20;
         this.headX = x;
         this.isWalking = true;
@@ -161,10 +164,14 @@ public abstract class Zombie {
 
     public void takeDamage(int damage) {
         this.hp -= damage;
-        System.out.println("hp: " + this.hp);
+        // System.out.println("hp: " + this.hp);
     }
 
     // Getters & Setters Methods
+
+    public int getRow() {
+        return this.row;
+    }
 
     public boolean getRemove() {
         return this.remove;

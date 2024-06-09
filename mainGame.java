@@ -9,6 +9,7 @@ import plants.*;
 import zombies.*;
 import projectiles.*;
 import javax.sound.sampled.*;
+import maps.*;
 
 class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
     BufferedImage background;
@@ -22,7 +23,8 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
     ArrayList<Plant> selectedPlants = new ArrayList<>();
     ArrayList<Plant> plantObjects = new ArrayList<>();
     ArrayList<Projectile> projectileList = new ArrayList<>();
-    boolean newWave = true;
+
+    Background map;
 
     Zombie z1;
 
@@ -75,30 +77,17 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
         }
 
         else if (screen == 1) {
-            background = grass;
-            g.drawImage(background, 0, 0, this);
-            // g.drawImage(zombieAni, zombieX, randY, this);
-            // g.drawRect(zombieX, randY, zombieAni.getWidth(), zombieAni.getHeight());
-            if (newWave) {
-                newWave = false;
-                addingZombies();
-
-            }
+            g.drawImage(map.getBackground(), 0, 0, this);
 
             // Printint out all the zombies
             for (int i = 0; i < zList.size(); i++) {
                 g.drawImage(zList.get(i).getAnimation(), zList.get(i).getX(),
                         zList.get(i).getY(), this);
-                // System.out.println(zList.get(i).getHeadX() + "------------- " + i);
 
                 // // If the zombie is dead show the head falling off
                 // if (zList.get(i).getIsDead())
                 // g.drawImage(zList.get(i).getHead(), zList.get(i).getHeadX(),
                 // zList.get(i).getHeadY(), this);
-
-                // g.drawRect(zList.get(i).getHitX(), zList.get(i).getHitY(),
-                // zList.get(i).getWidth(),
-                // zList.get(i).getHeight());
 
             }
             for (Plant p : pList.values()) {
@@ -107,10 +96,6 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                 // g.drawRect(p.getX() + 10, p.getY() + 10, p.getWidth() - 20, p.getHeight() -
                 // 20);
             }
-            // if (pList.size() > 0 && pList.get("00").isDead() != true) {
-            // g.drawImage(pList.get("00").getImage(), pList.get("00").getX(),
-            // pList.get("00").getY(), this);
-            // }
 
             for (Projectile p : projectileList) {
                 g.drawImage(p.getImage(), p.getX(), p.getY(), this);
@@ -125,9 +110,10 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             g.drawImage(background, 0, 0, this);
             zList.removeAll(zList);
 
-            newWave = true;
-            zombieX = 700;
             zombieFrameCounter = 0;
+
+        } else if (screen == 8) {
+            g.drawString("GAME WON", 400, 400);
 
         }
 
@@ -138,13 +124,16 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
     // Adding the zombies to the arraylist
     public void addingZombies() {
 
-        for (int i = 0; i < maxZombies; i++) {
+        if (map.getWaveNum() == 1)
+            map.waveOne(zList);
+        else if (map.getWaveNum() == 2)
+            map.waveTwo(zList);
+        else if (map.getWaveNum() == 3)
+            map.waveThree(zList);
 
-            // putting them in random rows
-            randY = randRow[(int) (Math.random() * (4 - 0 + 1)) + 0];
-            // Add the zombie object into the list
-            zList.add(new Normal(100, 10, zombieX + i * 40, randY));
-
+        // Game won Screen
+        else {
+            screen = 8;
         }
 
     }
@@ -177,14 +166,9 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
         // initialize all the stuffff
         try {
             mainMenu = ImageIO.read(new File("assets/backgrounds/main.png"));
-            grass = ImageIO.read(new File("assets/backgrounds/grass.png"));
             gameOver = ImageIO.read(new File("assets/backgrounds/gameover.png"));
             zombieAni = ImageIO.read(new File("assets/zombies/NormalZombie/zombiewalk1.png"));
             plantObjects.add(new PeaShooter(0, 0));
-
-            // randY = randRow[(int) (Math.random() * (4 - 0 + 1)) + 0];
-            // randY = randRow[3];
-            System.out.println(randY);
 
             screen = 0;
         } catch (IOException e) {
@@ -216,9 +200,13 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
         if (screen == 1) {
             animation();
+            if (zList.size() == 0) {
+                addingZombies();
+            }
 
             for (Plant p : pList.values()) {
-                p.attack(projectileList, zList);
+                if (p.checkRow(zList))
+                    p.attack(projectileList, zList);
             }
             for (int i = 0; i < projectileList.size(); i++) {
                 projectileList.get(i).move();
@@ -247,7 +235,10 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
         if (screen == 0) {
             if (e.getX() > 592 && e.getX() < 710 && e.getY() > 225 && e.getY() < 264) {
+                map = new Grass("grass");
+
                 screen = 1;
+
                 // System.out.println("PLAY");
 
             }
@@ -284,7 +275,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                     System.out.println("There is already a plant there! at " + cords);
                 } else {
                     pList.put(cords, plantObjects.get(0).createPlant(mapLcord + xCord * blockSizeX,
-                            mapUcord + yCord * (blockSizeY - 10), yCord));
+                            mapUcord + yCord * (blockSizeY - 10), yCord, cords));
                     System.out.println("Planted" + " " + cords);
                 }
             }

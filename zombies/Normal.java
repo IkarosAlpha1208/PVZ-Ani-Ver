@@ -15,8 +15,8 @@ import javax.imageio.ImageIO;
 
 public class Normal extends Zombie {
 
-    public Normal(int hp, int speed, int x, int y) {
-        super(hp, speed, x, y);
+    public Normal(int hp, int speed, int x, int y, int row) {
+        super(hp, speed, x, y, row);
 
         this.hitbox = new Rectangle(this.x, this.y, this.width, this.height);
         // TODO Auto-generated constructor stub
@@ -67,8 +67,8 @@ public class Normal extends Zombie {
 
     @Override
     public void move() {
-        this.x = this.x - 2;
-        this.hitX = this.hitX - 2;
+        this.x = this.x - 3;
+        this.hitX = this.hitX - 3;
         setRec();
 
         // throw new UnsupportedOperationException("Unimplemented method 'move'");
