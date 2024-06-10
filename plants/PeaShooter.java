@@ -13,7 +13,7 @@ import java.awt.Rectangle;
 public class PeaShooter extends Plant {
 
     public PeaShooter(int x, int y) {
-        super(60, 10, 2, 10, 100, x, y, new Rectangle(x, y, 56, 68));
+        super(60, 10, 2, 10, 100, x, y, new Rectangle(x, y, 36, 48));
         try {
             BufferedImage img = ImageIO.read((new File("assets/plants/PeaShooter.png")));
             this.setImage(img);

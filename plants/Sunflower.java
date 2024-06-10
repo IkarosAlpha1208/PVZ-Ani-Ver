@@ -13,6 +13,7 @@ import java.awt.Rectangle;
 public class Sunflower extends Plant {
     public Sunflower(int x, int y) {
         super(100, 0, 8, 5, 50, x, y, new Rectangle(x, y, 56, 68));
+        this.stat = "sun";
         try {
             BufferedImage img = ImageIO.read((new File("assets/plants/Sunflower.png")));
             this.setImage(img);

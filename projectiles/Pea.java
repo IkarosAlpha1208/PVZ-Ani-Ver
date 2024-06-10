@@ -32,6 +32,11 @@ public class Pea extends Projectile {
             if (this.hitbox.intersects(z.getRec())) {
                 System.out.println("Hit zombie");
                 hit(z);
+
+                z.isDead();
+                if (z.getIsDead()) {
+                    zList.remove(z);
+                }
                 return true;
             }
         }

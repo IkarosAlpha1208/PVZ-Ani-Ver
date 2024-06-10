@@ -93,8 +93,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             for (Plant p : pList.values()) {
                 if (!p.isDead())
                     g.drawImage(p.getImage(), p.getX(), p.getY(), this);
-                g.drawRect(p.getX() + 10, p.getY() + 10, p.getWidth() - 20, p.getHeight() -
-                20);
+                g.drawRect(p.getX() + 10, p.getY() + 10, p.getWidth(), p.getHeight());
             }
 
             for (Projectile p : projectileList) {
@@ -221,11 +220,9 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             
             // zombie attacking
             for (int i = 0; i < zList.size(); i++) {
-                zList.get(i).attack(pList);
-
-                if (zList.get(i).getRemove()) {
-                    zList.remove(i);
-                    i--;
+                boolean b = zList.get(i).isAttack(pList);
+                if(b){
+                    zList.get(i).setWalking();
                 }
             }
         }

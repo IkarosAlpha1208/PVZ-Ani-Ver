@@ -13,7 +13,7 @@ public abstract class Plant {
     protected int atkSpd;
     protected int cooldown;
     protected int cost;
-    protected int stat;
+    protected String stat;
     protected int x, y, yTile;
     protected long lastAttack;
     protected Rectangle hitbox;
