@@ -221,10 +221,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             
             // zombie attacking
             for (int i = 0; i < zList.size(); i++) {
-                boolean b = zList.get(i).isAttack(pList);
-                if(b){
-                    zList.get(i).setWalking();
-                }
+                zList.get(i).attack(pList);
             }
         }
 

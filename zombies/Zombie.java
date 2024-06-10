@@ -5,8 +5,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Objects;
-
 import javax.imageio.ImageIO;
 
 import plants.*;
@@ -40,8 +38,6 @@ public abstract class Zombie {
 
     protected BufferedImage currentAnimation;
     protected BufferedImage head;
-    // 0 is not being effected, 1 is being slowed, 2 is being stuned
-    private int stat;
 
     public Zombie(int hp, int speed, int x, int y, int row) {
         this.hp = hp;
@@ -179,10 +175,6 @@ public abstract class Zombie {
 
     public int getHeadX() {
         return this.headX;
-    }
-
-    public void setStat(int stat) {
-        this.stat = stat;
     }
 
     public int getX() {

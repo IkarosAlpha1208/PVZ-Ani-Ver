@@ -2,13 +2,7 @@ package maps;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import javax.imageio.ImageIO;
-
 import plants.Plant;
-import zombies.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import zombies.*;
 
 public class Grass extends Background {
