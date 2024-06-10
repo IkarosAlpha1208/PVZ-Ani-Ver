@@ -34,10 +34,15 @@ public class Normal extends Zombie {
         Set<String> keyList = pList.keySet();
         Iterator iter = keyList.iterator();
 
+        // System.out.println(this.isEating);
+        // System.out.println("IM BEGGING PLS WORK");
+
         while (iter.hasNext()) {
             String currentKey = (String) iter.next();
             Plant p = pList.get(currentKey);
             long currentTime = System.currentTimeMillis();
+            // System.out.println(this.isEating);
+            // System.out.println("IM BEGGING PLS WORK");
 
             if (p.getRec().intersects(this.hitbox) && this.isDead == false
                     && (currentTime - lastAttack) / 1000 >= atkSpd && !p.isDead()) {
@@ -45,19 +50,33 @@ public class Normal extends Zombie {
                 this.isEating = true;
                 this.isWalking = false;
                 p.takeDmg(10);
+                this.currentEating = p;
                 System.out.println("PLANTTTTT HEALLTTTHHH " + p.getHealth());
 
+                System.out.println("Hellloliii");
+
             }
+        
+
 
             if (p.isDead()) {
                 this.isEating = false;
                 this.isWalking = true;
-                System.out.println(pList.get(currentKey));
 
                 iter.remove();
-                // pList.remove(currentKey, p);
 
             }
+            if(!pList.containsValue(this.currentEating)){
+                this.isEating = false;
+                this.isWalking = true;
+            }
+           
+        }
+
+        
+        if(pList.size()==0){
+            this.isEating = false;
+            this.isWalking = true;
 
         }
 

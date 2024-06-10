@@ -36,6 +36,7 @@ public abstract class Zombie {
     protected int atkSpd;
     protected long lastAttack;
     protected int row;
+    protected Plant currentEating;
 
     protected BufferedImage currentAnimation;
     protected BufferedImage head;

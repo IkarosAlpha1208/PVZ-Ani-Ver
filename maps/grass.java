@@ -9,6 +9,7 @@ import plants.Plant;
 import zombies.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import zombies.*;
 
 public class Grass extends Background {
     protected int maxZombies;
@@ -35,6 +36,12 @@ public class Grass extends Background {
                 { 150, 2 },
                 { 215, 3 },
                 { 290, 4 } };
+
+
+        // int[][] randRow = {
+        //     { 0, 0 }};
+
+
         int randY = 0;
         int randomIndex = 0;
         for (int i = 0; i < maxZombies; i++) {
