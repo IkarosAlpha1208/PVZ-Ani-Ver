@@ -50,7 +50,6 @@ public class Normal extends Zombie {
             }
 
             if (p.isDead()) {
-                p.setIsDead(true);
                 this.isEating = false;
                 this.isWalking = true;
                 System.out.println(pList.get(currentKey));

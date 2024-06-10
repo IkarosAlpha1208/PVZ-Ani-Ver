@@ -117,7 +117,6 @@ public class Grass extends Background {
 
     @Override
     public boolean checkRow(Plant p) {
-        // TODO Auto-generated method stub
         return this.zombieGrid.containsKey(p.getGrid() % 10);
     }
 

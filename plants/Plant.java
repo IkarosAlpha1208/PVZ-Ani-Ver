@@ -18,7 +18,6 @@ public abstract class Plant {
     protected long lastAttack;
     protected Rectangle hitbox;
     protected BufferedImage img;
-    protected boolean isDead;
     protected String grid;
 
     public Plant(int hp, int atk, int atkSpd, int cooldown, int cost, int x, int y, Rectangle hitbox) {
@@ -30,7 +29,6 @@ public abstract class Plant {
         this.x = x;
         this.y = y;
         this.hitbox = hitbox;
-        this.isDead = false;
         this.lastAttack = System.currentTimeMillis();
     }
 
@@ -42,10 +40,6 @@ public abstract class Plant {
 
     public boolean isDead() {
         return this.hp <= 0;
-    }
-
-    public void setIsDead(boolean b) {
-        this.isDead = b;
     }
 
     public int getHealth() {

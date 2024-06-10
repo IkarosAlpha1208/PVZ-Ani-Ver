@@ -68,7 +68,6 @@ public abstract class Zombie {
         try {
             this.head = ImageIO.read(new File("assets/zombies/head.png"));
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -78,7 +77,6 @@ public abstract class Zombie {
     public abstract void move();
 
     public void animation() {
-        // TODO Auto-generated method stub
 
         // Need to add methods to see if the zombie is currently eating or dying here.
         // HAVE TO WAIT FOR DAIVD
@@ -97,7 +95,6 @@ public abstract class Zombie {
                 this.width = this.currentAnimation.getWidth() - 15;
 
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 System.out.println("----ERROR-----" + this.walkingIndex);
 
             }
@@ -122,7 +119,6 @@ public abstract class Zombie {
                 this.width = this.currentAnimation.getWidth() - 15;
 
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 System.out.println("----ERROR-----" + this.dyingIndex);
 
             }
@@ -145,7 +141,6 @@ public abstract class Zombie {
                 this.width = this.currentAnimation.getWidth() - 15;
 
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 System.out.println("----ERROR-----" + this.eatingIndex);
 
             }

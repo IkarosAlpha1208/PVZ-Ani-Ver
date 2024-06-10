@@ -26,7 +26,7 @@ public class PeaShooter extends Plant {
     public void attack(ArrayList<Projectile> projectileList, ArrayList<Zombie> zList) {
         long currentTime = System.currentTimeMillis();
         for (Zombie z : zList) {
-            if ((currentTime - lastAttack) / 1000 >= atkSpd && this.isDead != true) {
+            if ((currentTime - lastAttack) / 1000 >= atkSpd) {
                 lastAttack = currentTime;
                 System.out.println("Peashooter attacking at (" + yTile() + " toward " +
                         z.yTile() + ")");

@@ -93,8 +93,8 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             for (Plant p : pList.values()) {
                 if (!p.isDead())
                     g.drawImage(p.getImage(), p.getX(), p.getY(), this);
-                // g.drawRect(p.getX() + 10, p.getY() + 10, p.getWidth() - 20, p.getHeight() -
-                // 20);
+                g.drawRect(p.getX() + 10, p.getY() + 10, p.getWidth() - 20, p.getHeight() -
+                20);
             }
 
             for (Projectile p : projectileList) {
@@ -172,7 +172,6 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
             screen = 0;
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             System.out.println("FIle not Found");
         }
 
@@ -204,10 +203,13 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                 addingZombies();
             }
 
+            // plant shooting
             for (Plant p : pList.values()) {
                 if (p.checkRow(zList))
                     p.attack(projectileList, zList);
             }
+
+            // projectile moving & hitting
             for (int i = 0; i < projectileList.size(); i++) {
                 projectileList.get(i).move();
                 boolean b = projectileList.get(i).isHit(zList);
@@ -216,6 +218,8 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                     i--;
                 }
             }
+            
+            // zombie attacking
             for (int i = 0; i < zList.size(); i++) {
                 zList.get(i).attack(pList);
 
@@ -273,7 +277,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                 String cords = "" + xCord + yCord;
                 if (pList.containsKey(cords)) {
                     System.out.println("There is already a plant there! at " + cords);
-                } else {
+                } else if( xCord <= 8) {
                     pList.put(cords, plantObjects.get(0).createPlant(mapLcord + xCord * blockSizeX,
                             mapUcord + yCord * (blockSizeY - 10), yCord, cords));
                     System.out.println("Planted" + " " + cords);
@@ -301,28 +305,20 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
+    public void mousePressed(MouseEvent e) {}
 
     @Override
-    public void mouseReleased(MouseEvent e) {
-    }
+    public void mouseReleased(MouseEvent e) {}
 
     @Override
-    public void mouseExited(MouseEvent e) {
-    }
+    public void mouseExited(MouseEvent e) {}
 
     @Override
-    public void keyTyped(KeyEvent e) {
-        // TODO Auto-generated method stub
-        // throw new UnsupportedOperationException("Unimplemented method 'keyTyped'");
-    }
+    public void keyTyped(KeyEvent e) {}
 
     @Override
     public void keyPressed(KeyEvent e) {
 
-        // TODO Auto-generated method stub
         int key = e.getKeyCode();
 
         if (key == KeyEvent.VK_A) {
@@ -337,9 +333,5 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {
-        // TODO Auto-generated method stub
-        // throw new UnsupportedOperationException("Unimplemented method
-        // 'keyReleased'");
-    }
+    public void keyReleased(KeyEvent e) {}
 }

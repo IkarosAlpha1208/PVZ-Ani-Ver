@@ -24,7 +24,6 @@ public abstract class Background {
         try {
             this.background = ImageIO.read(new File("assets/backgrounds/" + name + ".png"));
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             System.out.println("CANNOT READ FILE");
         }
 
