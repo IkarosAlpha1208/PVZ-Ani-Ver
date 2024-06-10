@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import plants.*;
 import zombies.*;
 import projectiles.*;
+import maps.*;
 import javax.sound.sampled.*;
 import maps.*;
 
