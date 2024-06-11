@@ -4,9 +4,7 @@ import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-
 import javax.imageio.ImageIO;
-
 import zombies.*;
 
 public class Pea extends Projectile {
@@ -22,9 +20,8 @@ public class Pea extends Projectile {
     }
 
     @Override
-    public boolean isHit(ArrayList<Zombie> zList) {
+    public boolean isHit(ArrayList<Zombie> zList, int x, int y) {
         if (this.x >= 720) {
-            System.out.println("Hit wall");
             return true;
         }
         for (Zombie z : zList) {

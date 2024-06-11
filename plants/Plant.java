@@ -13,6 +13,8 @@ public abstract class Plant {
     protected int atkSpd;
     protected int cooldown;
     protected int cost;
+    protected String name;
+    protected int id;
     protected String stat;
     protected int x, y, yTile;
     protected long lastAttack;
@@ -29,10 +31,11 @@ public abstract class Plant {
         this.x = x;
         this.y = y;
         this.hitbox = hitbox;
-        this.lastAttack = System.currentTimeMillis();
     }
 
-    public abstract void attack(ArrayList<Projectile> projectileList, ArrayList<Zombie> zList);
+    public abstract void attack(ArrayList<Projectile> projectileList);
+
+    public abstract Plant createPlant(int x, int y, int yTi, String grid);
 
     public void takeDmg(int damage) {
         this.hp -= damage;
@@ -64,6 +67,18 @@ public abstract class Plant {
 
     public int getY() {
         return this.y;
+    }
+
+    public String getName(){
+        return this.name;
+    }
+
+    public int getId(){
+        return this.id;
+    }
+
+    public String getStat() {
+        return this.stat;
     }
 
     public int yTile() {
@@ -98,7 +113,4 @@ public abstract class Plant {
         }
         return false;
     }
-
-    public abstract Plant createPlant(int x, int y, int yTi, String grid);
-
 }

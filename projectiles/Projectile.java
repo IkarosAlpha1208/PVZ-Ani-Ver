@@ -21,7 +21,7 @@ public abstract class Projectile {
         this.y = y;
     }
 
-    public abstract boolean isHit(ArrayList<Zombie> zList);
+    public abstract boolean isHit(ArrayList<Zombie> zList, int x, int y);
 
     public abstract void hit(Object o);
 

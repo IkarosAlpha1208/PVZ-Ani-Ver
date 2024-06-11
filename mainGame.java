@@ -24,6 +24,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
     ArrayList<Plant> selectedPlants = new ArrayList<>();
     ArrayList<Plant> plantObjects = new ArrayList<>();
     ArrayList<Projectile> projectileList = new ArrayList<>();
+    ArrayList<Projectile> sunList = new ArrayList<>();
 
     Background map;
 
@@ -102,6 +103,11 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                 g.drawRect(p.getX(), p.getY(), p.getWidth(), p.getHeight());
             }
 
+            for(Projectile p : sunList) {
+                g.drawImage(p.getImage(), p.getX(), p.getY(), this);
+                g.drawRect(p.getX(), p.getY(), p.getWidth(), p.getHeight());
+            }
+
             // animation();
 
             // Game over screen
@@ -168,7 +174,9 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             mainMenu = ImageIO.read(new File("assets/backgrounds/main.png"));
             gameOver = ImageIO.read(new File("assets/backgrounds/gameover.png"));
             zombieAni = ImageIO.read(new File("assets/zombies/NormalZombie/zombiewalk1.png"));
+            plantObjects.add(new Sunflower(0,0));
             plantObjects.add(new PeaShooter(0, 0));
+            plantObjects.add(new Wallnut(0,0));
 
             screen = 0;
         } catch (IOException e) {
@@ -205,16 +213,29 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
             // plant shooting
             for (Plant p : pList.values()) {
-                if (p.checkRow(zList))
-                    p.attack(projectileList, zList);
+                if(p.getStat().contains("sun")){
+                    p.attack(sunList);
+                }
+                else if (p.checkRow(zList)){
+                    p.attack(projectileList);
+                }
             }
 
             // projectile moving & hitting
             for (int i = 0; i < projectileList.size(); i++) {
                 projectileList.get(i).move();
-                boolean b = projectileList.get(i).isHit(zList);
+                boolean b = projectileList.get(i).isHit(zList, 0, 0);
                 if (b) {
                     projectileList.remove(i);
+                    i--;
+                }
+            }
+
+            for(int i = 0; i < sunList.size(); i++) {
+                // Sunlight s = (Sunlight) sunList.get(i);
+                boolean b = sunList.get(i).isHit(zList, 0, 0);
+                if (b) {
+                    sunList.remove(i);
                     i--;
                 }
             }
@@ -266,6 +287,13 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
         }
 
         else if (screen == 1) {
+            for(int i = 0; i < sunList.size(); i++) {
+                if(sunList.get(i).isHit(zList, e.getX() - 5, e.getY() - 20)) {
+                    sunList.remove(i);
+                    break;
+                }
+            }
+
             if (e.getX() > mapLcord && e.getX() < mapRcord && e.getY() > mapUcord && e.getY() < mapDcord) {
                 int xCord = (e.getX() - mapLcord) / blockSizeX;
                 int yCord = (e.getY() - mapUcord) / blockSizeY;

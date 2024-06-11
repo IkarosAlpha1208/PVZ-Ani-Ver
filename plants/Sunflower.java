@@ -1,7 +1,6 @@
 package plants;
 
 import projectiles.*;
-import zombies.*;
 
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
@@ -12,8 +11,11 @@ import java.awt.Rectangle;
 
 public class Sunflower extends Plant {
     public Sunflower(int x, int y) {
-        super(100, 0, 8, 5, 50, x, y, new Rectangle(x, y, 56, 68));
+        super(50, 25, 10, 5, 50, x, y, new Rectangle(x, y, 36, 48));
+        this.name = "Sunflower";
         this.stat = "sun";
+        this.id = 0;
+        this.lastAttack = System.currentTimeMillis();
         try {
             BufferedImage img = ImageIO.read((new File("assets/plants/Sunflower.png")));
             this.setImage(img);
@@ -23,8 +25,12 @@ public class Sunflower extends Plant {
     }
 
     @Override
-    public void attack(ArrayList<Projectile> projectileList, ArrayList<Zombie> zList) {
-
+    public void attack(ArrayList<Projectile> projectileList) {
+        long currentTime = System.currentTimeMillis();
+        if ((currentTime - lastAttack) / 1000 >= atkSpd) {
+            lastAttack = currentTime;
+            projectileList.add(new Sunlight(0, atk, stat, this.x - 10, this.y + 10));
+        }
     }
 
     @Override
