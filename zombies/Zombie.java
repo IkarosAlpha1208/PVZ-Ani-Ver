@@ -5,6 +5,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
+
 import javax.imageio.ImageIO;
 
 import plants.*;
@@ -25,6 +27,7 @@ public abstract class Zombie {
     protected boolean isDead;
     protected boolean isWalking;
     protected boolean isEating;
+    protected String path;
 
     protected boolean remove;
     protected int walkingIndex;
@@ -35,13 +38,14 @@ public abstract class Zombie {
     protected long lastAttack;
     protected int row;
     protected Plant currentEating;
+    protected int damage; 
 
     protected BufferedImage currentAnimation;
     protected BufferedImage head;
 
-    public Zombie(int hp, int speed, int x, int y, int row) {
+    public Zombie(int hp,int damage , int x, int y, int row) {
         this.hp = hp;
-        this.speed = speed;
+        this.damage = damage;
         this.x = x;
         this.y = y;
         this.row = row;
@@ -69,7 +73,52 @@ public abstract class Zombie {
         }
     }
 
-    public abstract void attack(HashMap<String, Plant> pList);
+    public void attack(HashMap<String, Plant> pList) {
+        Iterator<String> iter = pList.keySet().iterator();
+
+        while (iter.hasNext()) {
+            String currentKey = (String) iter.next();
+            Plant p = pList.get(currentKey);
+            long currentTime = System.currentTimeMillis();
+
+            if (p.getRec().intersects(this.hitbox) && this.isDead == false
+                    && (currentTime - lastAttack) / 1000 >= atkSpd && !p.isDead()) {
+                this.lastAttack = currentTime;
+                this.isEating = true;
+                this.isWalking = false;
+                p.takeDmg(this.damage);
+                this.currentEating = p;
+                // System.out.println("PLANTTTTT HEALLTTTHHH " + p.getHealth());
+
+
+            }
+        
+
+
+            if (p.isDead()) {
+                this.isEating = false;
+                this.isWalking = true;
+
+                iter.remove();
+
+            }
+            if(!pList.containsValue(this.currentEating)){
+                this.isEating = false;
+                this.isWalking = true;
+            }
+           
+        }
+
+        
+        if(pList.size()==0){
+            this.isEating = false;
+            this.isWalking = true;
+
+        }
+
+        // throw new UnsupportedOperationException("Unimplemented method 'attack'");
+    }
+
 
     public abstract void move();
 
@@ -86,7 +135,7 @@ public abstract class Zombie {
 
             try {
                 zombieImage = ImageIO
-                        .read(new File("assets/zombies/NormalZombie/zombiewalk" + this.walkingIndex + ".png"));
+                        .read(new File(this.path + "walk" + this.walkingIndex + ".png"));
                 this.currentAnimation = zombieImage;
                 this.height = this.currentAnimation.getHeight() - 60;
                 this.width = this.currentAnimation.getWidth() - 15;
@@ -110,7 +159,7 @@ public abstract class Zombie {
             }
             try {
                 zombieImage = ImageIO
-                        .read(new File("assets/zombies/NormalZombie/zombiefall" + this.dyingIndex + ".png"));
+                        .read(new File ("assets/zombies/NormalZombie/zombiefall" + this.dyingIndex + ".png"));
                 this.currentAnimation = zombieImage;
                 this.height = this.currentAnimation.getHeight() - 60;
                 this.width = this.currentAnimation.getWidth() - 15;
@@ -132,7 +181,7 @@ public abstract class Zombie {
             }
             try {
                 zombieImage = ImageIO
-                        .read(new File("assets/zombies/NormalZombie/zombieeating" + this.eatingIndex + ".png"));
+                        .read(new File( this.path+ "eat" + this.eatingIndex + ".png"));
                 this.currentAnimation = zombieImage;
                 this.height = this.currentAnimation.getHeight() - 60;
                 this.width = this.currentAnimation.getWidth() - 15;

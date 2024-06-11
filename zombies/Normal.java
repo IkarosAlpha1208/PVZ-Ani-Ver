@@ -7,10 +7,11 @@ import java.util.Iterator;
 
 public class Normal extends Zombie {
 
-    public Normal(int hp, int speed, int x, int y, int row) {
-        super(hp, speed, x, y, row);
+    public Normal(int hp,int damage, int x, int y, int row) {
+        super(hp,damage, x, y, row);
 
         this.hitbox = new Rectangle(this.x, this.y, this.width, this.height);
+        this.path = "assets/zombies/NormalZombie/zombie";
     }
 
     public void setX(int x) {
@@ -18,55 +19,7 @@ public class Normal extends Zombie {
 
     }
 
-    @Override
-    public void attack(HashMap<String, Plant> pList) {
-        Iterator<String> iter = pList.keySet().iterator();
-
-        while (iter.hasNext()) {
-            String currentKey = (String) iter.next();
-            Plant p = pList.get(currentKey);
-            long currentTime = System.currentTimeMillis();
-
-            if (p.getRec().intersects(this.hitbox) && this.isDead == false
-                    && (currentTime - lastAttack) / 1000 >= atkSpd && !p.isDead()) {
-                this.lastAttack = currentTime;
-                this.isEating = true;
-                this.isWalking = false;
-                p.takeDmg(10);
-                this.currentEating = p;
-                System.out.println("PLANTTTTT HEALLTTTHHH " + p.getHealth());
-
-                System.out.println("Hellloliii");
-
-            }
-        
-
-
-            if (p.isDead()) {
-                this.isEating = false;
-                this.isWalking = true;
-
-                iter.remove();
-
-            }
-            if(!pList.containsValue(this.currentEating)){
-                this.isEating = false;
-                this.isWalking = true;
-            }
-           
-        }
-
-        
-        if(pList.size()==0){
-            this.isEating = false;
-            this.isWalking = true;
-
-        }
-
-        // throw new UnsupportedOperationException("Unimplemented method 'attack'");
-    }
-
-    @Override
+        @Override
     public void move() {
         this.x = this.x - 3;
         this.hitX = this.hitX - 3;

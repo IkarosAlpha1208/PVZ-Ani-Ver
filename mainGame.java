@@ -16,6 +16,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
     BufferedImage background;
     BufferedImage mainMenu;
     BufferedImage gameOver;
+    BufferedImage levels;
 
     BufferedImage grass;
     BufferedImage zombieAni;
@@ -77,6 +78,13 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             background = mainMenu;
             g.drawImage(background, 0, 0, this);
         }
+        else if(screen ==4 ){
+            background = levels;
+            g.drawImage(background, 0, 0, this);
+
+        }
+       
+      
 
         else if (screen == 1) {
             g.drawImage(map.getBackground(), 0, 0, this);
@@ -174,11 +182,13 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             mainMenu = ImageIO.read(new File("assets/backgrounds/main.png"));
             gameOver = ImageIO.read(new File("assets/backgrounds/gameover.png"));
             zombieAni = ImageIO.read(new File("assets/zombies/NormalZombie/zombiewalk1.png"));
+            levels = ImageIO.read(new File("assets/backgrounds/LevelSelect.png"));
             plantObjects.add(new Sunflower(0,0));
             plantObjects.add(new PeaShooter(0, 0));
             plantObjects.add(new Wallnut(0,0));
+            background = mainMenu;
 
-            screen = 0;
+            screen = 7;
         } catch (IOException e) {
             System.out.println("FIle not Found");
         }
@@ -250,17 +260,14 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        System.out.println(screen);
 
         System.out.println(e.getX() + " " + e.getY());
 
         if (screen == 0) {
             if (e.getX() > 592 && e.getX() < 710 && e.getY() > 225 && e.getY() < 264) {
-                map = new Grass("grass");
-
-                screen = 1;
-
-                // System.out.println("PLAY");
-
+                background = levels;
+                screen = 4;
             }
 
             else if (e.getX() > 582 && e.getX() < 705 && e.getY() > 270 && e.getY() < 308) {
@@ -285,6 +292,32 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             }
 
         }
+
+        else if(screen == 4){
+             if (e.getX() > 211 && e.getX() < 286 && e.getY() > 319 && e.getY() < 340) {
+                System.out.println("Level 1 ");
+                map = new Grass("grass");
+                screen = 1 ;
+
+
+            }
+            else if (e.getX() > 356 && e.getX() < 436 && e.getY() > 319 && e.getY() < 340) {
+                System.out.println("Level 2 ");
+
+            }
+
+            else if (e.getX() > 505 && e.getX() < 583 && e.getY() > 319 && e.getY() < 340) {
+                System.out.println("Level 3 ");
+
+            }
+        
+        
+        
+
+
+        }
+
+
 
         else if (screen == 1) {
             for(int i = 0; i < sunList.size(); i++) {
@@ -311,6 +344,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
         else if (screen == 7) {
 
             if (e.getX() > 320 && e.getX() < 463 && e.getY() > 379 && e.getY() < 419) {
+                System.out.println("Hello");
                 screen = 0;
 
             }
