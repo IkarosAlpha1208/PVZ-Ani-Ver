@@ -43,7 +43,7 @@ public class Grass extends Background {
             randomIndex = (int) (Math.random() * (4 - 0 + 1)) + 0;
             randY = randRow[randomIndex][0];
 
-            Zombie z = new Normal(100, 10, zombieX + i * 40, randY, randRow[randomIndex][1]);
+            Zombie z = new Bucket(100,10, zombieX + i * 40, randY, randRow[randomIndex][1]);
             // zombieGrid.put(randRow[randomIndex][1], z);
 
             // Add the zombie object into the list
@@ -74,7 +74,7 @@ public class Grass extends Background {
             randomIndex = (int) (Math.random() * (4 - 0 + 1)) + 0;
             randY = randRow[randomIndex][0];
 
-            Zombie z = new Normal(100, 10, zombieX + i * 40, randY, randRow[randomIndex][1]);
+            Zombie z = new Normal(100, 10,zombieX + i * 40, randY, randRow[randomIndex][1]);
             zombieGrid.put(randRow[randomIndex][1], z);
 
             // Add the zombie object into the list
@@ -105,7 +105,7 @@ public class Grass extends Background {
             randomIndex = (int) (Math.random() * (4 - 0 + 1)) + 0;
             randY = randRow[randomIndex][0];
 
-            Zombie z = new Normal(100, 10, zombieX + i * 40, randY, randRow[randomIndex][1]);
+            Zombie z = new Normal(100,10,  zombieX + i * 40, randY, randRow[randomIndex][1]);
             zombieGrid.put(randRow[randomIndex][1], z);
 
             // Add the zombie object into the list
