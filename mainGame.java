@@ -269,8 +269,8 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             }
 
             else if (e.getX() > 576 && e.getX() < 692 && e.getY() > 317 && e.getY() < 353) {
-                System.out.println("WIKI");
-
+                System.out.println("TEAM");
+                screen = 4;
             }
 
             else if (e.getX() > 138 && e.getX() < 217 && e.getY() > 318 && e.getY() < 360) {
