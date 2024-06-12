@@ -17,6 +17,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
     BufferedImage mainMenu;
     BufferedImage gameOver;
     BufferedImage levels;
+    BufferedImage winnerScreen;
 
     BufferedImage grass;
     BufferedImage zombieAni;
@@ -77,14 +78,11 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
         if (screen == 0) {
             background = mainMenu;
             g.drawImage(background, 0, 0, this);
-        }
-        else if(screen ==4 ){
+        } else if (screen == 4) {
             background = levels;
             g.drawImage(background, 0, 0, this);
 
         }
-       
-      
 
         else if (screen == 1) {
             g.drawImage(map.getBackground(), 0, 0, this);
@@ -111,7 +109,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                 g.drawRect(p.getX(), p.getY(), p.getWidth(), p.getHeight());
             }
 
-            for(Projectile p : sunList) {
+            for (Projectile p : sunList) {
                 g.drawImage(p.getImage(), p.getX(), p.getY(), this);
                 g.drawRect(p.getX(), p.getY(), p.getWidth(), p.getHeight());
             }
@@ -127,7 +125,8 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             zombieFrameCounter = 0;
 
         } else if (screen == 8) {
-            g.drawString("GAME WON", 400, 400);
+            background = winnerScreen;
+            g.drawImage(background, 0, 0, this);
 
         }
 
@@ -137,12 +136,18 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
     // Adding the zombies to the arraylist
     public void addingZombies() {
+        // 1
+        if (map.getWaveNum() % 2 == 1 && map.getWaveNum() != 7) {
+            map.miniWave(zList);
+        }
 
-        if (map.getWaveNum() == 1)
-            map.waveOne(zList);
         else if (map.getWaveNum() == 2)
+            map.waveOne(zList);
+
+        else if (map.getWaveNum() == 4)
             map.waveTwo(zList);
-        else if (map.getWaveNum() == 3)
+
+        else if (map.getWaveNum() == 6)
             map.waveThree(zList);
 
         // Game won Screen
@@ -158,6 +163,8 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
         zombieFrameCounter++;
         if (zombieFrameCounter == 30) {
             for (int i = 0; i < zList.size(); i++) {
+
+                zList.get(i).takeDamage(10);
 
                 if (zList.get(i).getX() <= 145) {
                     screen = 7;
@@ -181,14 +188,15 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
         try {
             mainMenu = ImageIO.read(new File("assets/backgrounds/main.png"));
             gameOver = ImageIO.read(new File("assets/backgrounds/gameover.png"));
-            zombieAni = ImageIO.read(new File("assets/zombies/NormalZombie/zombiewalk1.png"));
             levels = ImageIO.read(new File("assets/backgrounds/LevelSelect.png"));
-            plantObjects.add(new Sunflower(0,0));
+            winnerScreen = ImageIO.read(new File("assets/backgrounds/winner.png"));
+
+            plantObjects.add(new Sunflower(0, 0));
             plantObjects.add(new PeaShooter(0, 0));
-            plantObjects.add(new Wallnut(0,0));
+            plantObjects.add(new Wallnut(0, 0));
             background = mainMenu;
 
-            screen = 7;
+            screen = 0;
         } catch (IOException e) {
             System.out.println("FIle not Found");
         }
@@ -223,10 +231,9 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
             // plant shooting
             for (Plant p : pList.values()) {
-                if(p.getStat().contains("sun")){
+                if (p.getStat().contains("sun")) {
                     p.attack(sunList);
-                }
-                else if (p.checkRow(zList)){
+                } else if (p.checkRow(zList)) {
                     p.attack(projectileList);
                 }
             }
@@ -241,7 +248,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                 }
             }
 
-            for(int i = 0; i < sunList.size(); i++) {
+            for (int i = 0; i < sunList.size(); i++) {
                 // Sunlight s = (Sunlight) sunList.get(i);
                 boolean b = sunList.get(i).isHit(zList, 0, 0);
                 if (b) {
@@ -249,10 +256,12 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                     i--;
                 }
             }
-            
+
             // zombie attacking
             for (int i = 0; i < zList.size(); i++) {
                 zList.get(i).attack(pList);
+                if (zList.get(i).getRemove())
+                    zList.remove(zList.get(i));
             }
         }
 
@@ -277,7 +286,6 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
             else if (e.getX() > 576 && e.getX() < 692 && e.getY() > 317 && e.getY() < 353) {
                 System.out.println("TEAM");
-                screen = 4;
             }
 
             else if (e.getX() > 138 && e.getX() < 217 && e.getY() > 318 && e.getY() < 360) {
@@ -293,16 +301,16 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
         }
 
-        else if(screen == 4){
-             if (e.getX() > 211 && e.getX() < 286 && e.getY() > 319 && e.getY() < 340) {
+        else if (screen == 4) {
+            if (e.getX() > 211 && e.getX() < 286 && e.getY() > 319 && e.getY() < 340) {
                 System.out.println("Level 1 ");
                 map = new Grass("grass");
-                screen = 1 ;
+                screen = 1;
 
-
-            }
-            else if (e.getX() > 356 && e.getX() < 436 && e.getY() > 319 && e.getY() < 340) {
+            } else if (e.getX() > 356 && e.getX() < 436 && e.getY() > 319 && e.getY() < 340) {
                 System.out.println("Level 2 ");
+                map = new Night("night");
+                screen = 1;
 
             }
 
@@ -310,18 +318,12 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                 System.out.println("Level 3 ");
 
             }
-        
-        
-        
-
 
         }
 
-
-
         else if (screen == 1) {
-            for(int i = 0; i < sunList.size(); i++) {
-                if(sunList.get(i).isHit(zList, e.getX() - 5, e.getY() - 20)) {
+            for (int i = 0; i < sunList.size(); i++) {
+                if (sunList.get(i).isHit(zList, e.getX() - 5, e.getY() - 20)) {
                     sunList.remove(i);
                     break;
                 }
@@ -333,7 +335,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                 String cords = "" + xCord + yCord;
                 if (pList.containsKey(cords)) {
                     System.out.println("There is already a plant there! at " + cords);
-                } else if( xCord <= 8) {
+                } else if (xCord <= 8) {
                     pList.put(cords, plantObjects.get(0).createPlant(mapLcord + xCord * blockSizeX,
                             mapUcord + yCord * (blockSizeY - 10), yCord, cords));
                     System.out.println("Planted" + " " + cords);
@@ -345,6 +347,13 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
             if (e.getX() > 320 && e.getX() < 463 && e.getY() > 379 && e.getY() < 419) {
                 System.out.println("Hello");
+                screen = 0;
+
+            }
+        } else if (screen == 8) {
+
+            if (e.getX() > 311 && e.getX() < 490 && e.getY() > 389 && e.getY() < 439) {
+                // System.out.println("Hello");
                 screen = 0;
 
             }
@@ -362,16 +371,20 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {}
+    public void mousePressed(MouseEvent e) {
+    }
 
     @Override
-    public void mouseReleased(MouseEvent e) {}
+    public void mouseReleased(MouseEvent e) {
+    }
 
     @Override
-    public void mouseExited(MouseEvent e) {}
+    public void mouseExited(MouseEvent e) {
+    }
 
     @Override
-    public void keyTyped(KeyEvent e) {}
+    public void keyTyped(KeyEvent e) {
+    }
 
     @Override
     public void keyPressed(KeyEvent e) {
@@ -390,5 +403,6 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {}
+    public void keyReleased(KeyEvent e) {
+    }
 }

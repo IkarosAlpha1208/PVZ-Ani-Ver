@@ -6,13 +6,11 @@ import plants.Plant;
 
 public class Cone extends Zombie {
 
-    public Cone(int hp,int damage, int x, int y, int row){
-        super(hp, damage ,x, y, row);
-        this.path  = "assets/zombies/ConeheadZombie/conehead";
+    public Cone(int hp, int damage, int x, int y, int row, String name) {
+        super(hp, damage, x, y, row, name);
+        this.path = "assets/zombies/ConeheadZombie/conehead";
 
     }
-
-   
 
     @Override
     public void move() {
@@ -22,5 +20,5 @@ public class Cone extends Zombie {
         setRec();
 
     }
-    
+
 }

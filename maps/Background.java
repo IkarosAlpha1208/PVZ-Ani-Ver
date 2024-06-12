@@ -14,7 +14,8 @@ import java.awt.image.BufferedImage;
 public abstract class Background {
     protected BufferedImage background;
     protected int waveNum;
-    protected boolean newWave;
+    protected int zombieX;
+    protected int maxZombies;
 
     protected HashMap<Integer, Zombie> zombieGrid;
 
@@ -26,10 +27,12 @@ public abstract class Background {
             System.out.println("CANNOT READ FILE");
         }
 
-        this.waveNum = 1;
-        this.newWave = true;
+        this.waveNum = 4;
+        this.zombieX = 720;
 
     }
+
+    public abstract void miniWave(ArrayList<Zombie> li);
 
     public abstract void waveOne(ArrayList<Zombie> li);
 
@@ -48,18 +51,10 @@ public abstract class Background {
 
     }
 
-    public boolean getNewWave() {
-        return this.newWave;
-    }
-
     public int getWaveNum() {
         return this.waveNum;
     }
 
-    public void setNewWave(Boolean b) {
-        this.newWave = b;
-    }
-
-    public abstract boolean checkRow(Plant p);
+    // public abstract boolean checkRow(Plant p);
 
 }

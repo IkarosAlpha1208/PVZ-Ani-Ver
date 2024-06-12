@@ -1,10 +1,10 @@
 package zombies;
 
-public class Bucket  extends Zombie{
+public class Bucket extends Zombie {
 
-    public Bucket(int hp, int damage, int x, int y, int row) {
-        super(hp, damage, x, y, row);
-        //TODO Auto-generated constructor stub
+    public Bucket(int hp, int damage, int x, int y, int row, String name) {
+        super(hp, damage, x, y, row, name);
+        // TODO Auto-generated constructor stub
         this.path = "assets/zombies/BucketheadZombie/buckethead";
     }
 
@@ -16,5 +16,5 @@ public class Bucket  extends Zombie{
         setRec();
 
     }
-    
+
 }
