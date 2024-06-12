@@ -22,5 +22,4 @@ public class Cone extends Zombie {
         setRec();
 
     }
-    
 }

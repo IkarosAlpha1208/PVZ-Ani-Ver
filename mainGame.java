@@ -17,6 +17,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
     BufferedImage mainMenu;
     BufferedImage gameOver;
     BufferedImage levels;
+    BufferedImage inven;
 
     BufferedImage grass;
     BufferedImage zombieAni;
@@ -119,7 +120,10 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             // animation();
 
             // Game over screen
-        } else if (screen == 7) {
+        } else if(screen == 5){
+            background = inven;
+            g.drawImage(background, 0, 0, this);
+        }else if (screen == 7) {
             background = gameOver;
             g.drawImage(background, 0, 0, this);
             zList.removeAll(zList);
@@ -183,12 +187,10 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             gameOver = ImageIO.read(new File("assets/backgrounds/gameover.png"));
             zombieAni = ImageIO.read(new File("assets/zombies/NormalZombie/zombiewalk1.png"));
             levels = ImageIO.read(new File("assets/backgrounds/LevelSelect.png"));
+            inven = ImageIO.read(new File("assets/backgrounds/Team.png"));
             plantObjects.add(new Sunflower(0,0));
             plantObjects.add(new PeaShooter(0, 0));
             plantObjects.add(new Wallnut(0,0));
-            background = mainMenu;
-
-            screen = 7;
         } catch (IOException e) {
             System.out.println("FIle not Found");
         }
@@ -277,7 +279,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
             else if (e.getX() > 576 && e.getX() < 692 && e.getY() > 317 && e.getY() < 353) {
                 System.out.println("TEAM");
-                screen = 4;
+                screen = 5;
             }
 
             else if (e.getX() > 138 && e.getX() < 217 && e.getY() > 318 && e.getY() < 360) {
@@ -310,16 +312,16 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                 System.out.println("Level 3 ");
 
             }
-        
-        
-        
-
-
         }
 
+        else if(screen == 5){
+            if(e.getX() > 22 && e.getX() < 157 && e.getY() > 380 && e.getY() < 448){
+                System.out.println("Save and exit...");
+                screen = 0;
+            }
+        }
 
-
-        else if (screen == 1) {
+        else if (screen >= 1 && screen <= 3) {
             for(int i = 0; i < sunList.size(); i++) {
                 if(sunList.get(i).isHit(zList, e.getX() - 5, e.getY() - 20)) {
                     sunList.remove(i);
