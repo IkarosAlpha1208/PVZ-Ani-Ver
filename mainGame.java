@@ -19,6 +19,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
     BufferedImage levels;
     BufferedImage winnerScreen;
     BufferedImage inven;
+    BufferedImage teamDisplay;
     BufferedImage grass;
     BufferedImage zombieAni;
     ArrayList<Zombie> zList = new ArrayList<>();
@@ -87,6 +88,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
         else if (screen == 1) {
             g.drawImage(map.getBackground(), 0, 0, this);
+            g.drawImage(teamDisplay, 10, 0, this);
 
             // Printint out all the zombies
             for (int i = 0; i < zList.size(); i++) {
@@ -202,8 +204,8 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             gameOver = ImageIO.read(new File("assets/backgrounds/gameover.png"));
             levels = ImageIO.read(new File("assets/backgrounds/LevelSelect.png"));
             winnerScreen = ImageIO.read(new File("assets/backgrounds/winner.png"));
-
             inven = ImageIO.read(new File("assets/backgrounds/Team.png"));
+            teamDisplay = ImageIO.read(new File("assets/others/teamDisplay.png"));
             plantObjects.add(new Sunflower(0, 0));
             plantObjects.add(new PeaShooter(0, 0));
             plantObjects.add(new Wallnut(0, 0));
@@ -316,6 +318,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
         }
 
         else if (screen == 4) {
+            Player.resetForLevel();
             if (e.getX() > 211 && e.getX() < 286 && e.getY() > 319 && e.getY() < 340) {
                 System.out.println("Level 1 ");
                 map = new Grass("grass");
@@ -357,6 +360,8 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
             // this check if player selected a plant and trying to put it down
             if(Player.getCurrentPlant() > -1) {
+                
+                System.out.println(Player.getCurrentPlant());
                 if (e.getX() > mapLcord && e.getX() < mapRcord && e.getY() > mapUcord && e.getY() < mapDcord) {
                     int xCord = (e.getX() - mapLcord) / blockSizeX;
                     int yCord = (e.getY() - mapUcord) / blockSizeY;
@@ -364,8 +369,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                     if (pList.containsKey(cords)) {
                         System.out.println("There is already a plant there! at " + cords);
                     } else if (xCord <= 8) {
-                        pList.put(cords, plantObjects.get(0).createPlant(mapLcord + xCord * blockSizeX,
-                                mapUcord + yCord * (blockSizeY - 10), yCord, cords));
+                        pList.put(cords, plantObjects.get(0).createPlant(mapLcord + xCord * blockSizeX, mapUcord + yCord * (blockSizeY - 10), yCord, cords));
                         System.out.println("Planted" + " " + cords);
                     }
                 }
