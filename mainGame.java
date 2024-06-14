@@ -26,7 +26,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
     ArrayList<Plant> plantObjects = new ArrayList<>();
     ArrayList<Projectile> projectileList = new ArrayList<>();
     ArrayList<Projectile> sunList = new ArrayList<>();
-    Player player = new Player("test.txt", plantObjects);
+    Player player;
 
     Background map;
 
@@ -209,7 +209,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             plantObjects.add(new Wallnut(0, 0));
 
             background = mainMenu;
-
+            player = new Player("save.txt", plantObjects);
             screen = 0;
         } catch (IOException e) {
             System.out.println("FIle not Found");
@@ -324,14 +324,14 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             } else if (e.getX() > 356 && e.getX() < 436 && e.getY() > 319 && e.getY() < 340) {
                 System.out.println("Level 2 ");
                 map = new Night("night");
-                screen = 2;
+                screen = 1;
 
             }
 
             else if (e.getX() > 505 && e.getX() < 583 && e.getY() > 319 && e.getY() < 340) {
                 System.out.println("Level 3 ");
                 map = new Boss("grass");
-                screen = 3;
+                screen = 1;
 
             }
         }
@@ -345,7 +345,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
         }
 
         // this check for if player collect sunlight
-        else if (screen >= 1 && screen <= 3) {
+        else if (screen == 1) {
             for (int i = 0; i < sunList.size(); i++) {
                 if (sunList.get(i).isHit(zList, e.getX() - 5, e.getY() - 20)) {
                     sunList.remove(i);

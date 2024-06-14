@@ -20,15 +20,25 @@ public class Player {
             this.highWave = Integer.parseInt(reader.readLine());
             String line = reader.readLine();
             for(int i = 0; i < ownPlants.length; i++) {
+                if(line.indexOf(" ") == -1) {
+                    line += " ";
+                }
                 ownPlants[i] = Integer.parseInt(line.substring(0, line.indexOf(" ")));
-                line = line.substring(line.indexOf(" "));
+                line = line.substring(line.indexOf(" ") + 1);
             }
             line = reader.readLine();
-            for(int i = 0; i < team.size(); i++) {
+            for(int n = 0; n < 6; n++) {
+                if(line.indexOf(" ") == -1) {
+                    line += " ";
+                }
                 int id = Integer.parseInt(line.substring(0, line.indexOf(" ")));
-                team.add(plants.get(id).createPlant(0, 0, 0, ""));
-                line = line.substring(line.indexOf(" "));
+                if(id >= 0){
+                    team.add(plants.get(id).createPlant(0, 0, 0, ""));
+                }
+                line = line.substring(line.indexOf(" ") + 1);
             }
+            
+            System.out.println("Successfully read in the save");
             reader.close();
         } catch (FileNotFoundException e) {
             System.out.println("Cant find the save, creating a new one...");
@@ -109,5 +119,25 @@ public class Player {
 
     public static int getCurrentPlant(){
         return currentPlant;
+    }
+
+    public void addTeam(Plant p){
+        this.team.add(p);
+    }
+
+    public void removeTeam(int i){
+        this.team.remove(i);
+    }
+
+    public void obtainPlant(int id){
+        this.ownPlants[id] += 1;
+    }
+
+    public void removePlant(int id){
+        this.ownPlants[id] -= 1;
+    }
+
+    public int getOwnPlant(int id){
+        return this.ownPlants[id];
     }
 }
