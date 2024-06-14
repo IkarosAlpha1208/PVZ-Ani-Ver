@@ -9,7 +9,7 @@ public class Grass extends Background {
 
     public Grass(String name) {
         super(name);
-        this.waveNum = 2;
+        this.waveNum = 1;
 
     }
 
@@ -17,6 +17,8 @@ public class Grass extends Background {
     public void miniWave(ArrayList<Zombie> li) {
         this.maxZombies = 3;
         this.waveNum++;
+
+        System.out.println("Helo");
 
         int[][] randRow = {
                 { 0, 0 },
@@ -32,7 +34,7 @@ public class Grass extends Background {
             randomIndex = (int) (Math.random() * (4 - 0 + 1)) + 0;
             randY = randRow[randomIndex][0];
 
-            Zombie z = new Normal(100, 10, zombieX + i * 10, randY, randRow[randomIndex][1], "Normal");
+            Zombie z = new Normal(100, 10, zombieX + i * 10, randY, randRow[randomIndex][1], "Giant");
             // zombieGrid.put(randRow[randomIndex][1], z);
 
             // Add the zombie object into the list

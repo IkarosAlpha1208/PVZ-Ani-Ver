@@ -11,8 +11,8 @@ public class Bucket extends Zombie {
     @Override
     public void move() {
         // TODO Auto-generated method stub
-        this.x = this.x - 3;
-        this.hitX = this.hitX - 3;
+        this.x = this.x - 2;
+        this.hitX = this.hitX - 2;
         setRec();
 
     }

@@ -243,7 +243,7 @@ public abstract class Zombie {
 
     public int getY() {
 
-        if (isDead) {
+        if (isDead && !this.name.equals("Giant")) {
             return y + 44;
         }
 
@@ -261,7 +261,7 @@ public abstract class Zombie {
     }
 
     public void isDead() {
-        if (this.hp <= 0 && this.dyingIndex < 6) {
+        if ((this.hp <= 0 && this.dyingIndex < 6) || this.hp <= 0 && this.dyingIndex < 59) {
             this.isDead = true;
             this.isWalking = false;
             // this.dyingIndex = 1;
@@ -296,6 +296,10 @@ public abstract class Zombie {
 
     public int getHitY() {
         return this.hitY;
+    }
+
+    public String getName() {
+        return this.name;
     }
 
     public int getWidth() {

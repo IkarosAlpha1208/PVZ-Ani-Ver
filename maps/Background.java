@@ -28,7 +28,7 @@ public abstract class Background {
         }
 
         this.waveNum = 4;
-        this.zombieX = 720;
+        this.zombieX = 700;
 
     }
 

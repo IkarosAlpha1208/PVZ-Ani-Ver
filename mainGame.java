@@ -39,6 +39,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
     int maxZombies = 5;
 
     int zombieFrameCounter = 0;
+    int zombieMoveCounter = 0;
     // Normal z1;
 
     int[] randRow = { 0, 75, 150, 215, 290 };
@@ -118,10 +119,10 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             // animation();
 
             // Game over screen
-        } else if(screen == 5){
+        } else if (screen == 5) {
             background = inven;
             g.drawImage(background, 0, 0, this);
-        }else if (screen == 7) {
+        } else if (screen == 7) {
             background = gameOver;
             g.drawImage(background, 0, 0, this);
             zList.removeAll(zList);
@@ -142,6 +143,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
     public void addingZombies() {
         // 1
         if (map.getWaveNum() % 2 == 1 && map.getWaveNum() != 7) {
+            System.out.println("HEELLLOOO");
             map.miniWave(zList);
         }
 
@@ -165,10 +167,9 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
         // every 10 frame change the animation
         zombieFrameCounter++;
-        if (zombieFrameCounter == 30) {
+        zombieMoveCounter++;
+        if (zombieFrameCounter == 20) {
             for (int i = 0; i < zList.size(); i++) {
-
-                zList.get(i).takeDamage(10);
 
                 if (zList.get(i).getX() <= 145) {
                     screen = 7;
@@ -176,12 +177,21 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
                 }
 
-                if (!zList.get(i).getIsEating())
-                    zList.get(i).move();
+                // if (zombieMoveCounter == 20) {
+                // if (!zList.get(i).getIsEating())
+                // // zList.get(i).move();
+                // zombieMoveCounter = 0;
+                // }
+
                 zList.get(i).animation();
-                // zList.get(i).animateHead();
-                // zList.get(i).animateHead();
+                if (!zList.get(i).getIsEating() && !zList.get(i).getIsDead())
+                    zList.get(i).move();
+
                 zombieFrameCounter = 0;
+
+                // zList.get(i).animateHead();
+                // zList.get(i).animateHead();
+
             }
         }
 
@@ -190,6 +200,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
     public void initialize() {
         // initialize all the stuffff
         try {
+
             mainMenu = ImageIO.read(new File("assets/backgrounds/main.png"));
             gameOver = ImageIO.read(new File("assets/backgrounds/gameover.png"));
             levels = ImageIO.read(new File("assets/backgrounds/LevelSelect.png"));
@@ -198,10 +209,10 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             inven = ImageIO.read(new File("assets/backgrounds/Team.png"));
             plantObjects.add(new Sunflower(0, 0));
             plantObjects.add(new PeaShooter(0, 0));
-            plantObjects.add(new Wallnut(0,0));
+            plantObjects.add(new Wallnut(0, 0));
             background = mainMenu;
 
-            screen = 7;
+            screen = 0;
         } catch (IOException e) {
             System.out.println("FIle not Found");
         }
@@ -322,20 +333,22 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
             else if (e.getX() > 505 && e.getX() < 583 && e.getY() > 319 && e.getY() < 340) {
                 System.out.println("Level 3 ");
+                map = new Boss("grass");
+                screen = 1;
 
             }
         }
 
-        else if(screen == 5){
-            if(e.getX() > 22 && e.getX() < 157 && e.getY() > 380 && e.getY() < 448){
+        else if (screen == 5) {
+            if (e.getX() > 22 && e.getX() < 157 && e.getY() > 380 && e.getY() < 448) {
                 System.out.println("Save and exit...");
                 screen = 0;
             }
         }
 
         else if (screen >= 1 && screen <= 3) {
-            for(int i = 0; i < sunList.size(); i++) {
-                if(sunList.get(i).isHit(zList, e.getX() - 5, e.getY() - 20)) {
+            for (int i = 0; i < sunList.size(); i++) {
+                if (sunList.get(i).isHit(zList, e.getX() - 5, e.getY() - 20)) {
                     sunList.remove(i);
                     break;
                 }

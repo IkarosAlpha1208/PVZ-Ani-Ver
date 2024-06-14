@@ -21,8 +21,8 @@ public class Normal extends Zombie {
 
     @Override
     public void move() {
-        this.x = this.x - 3;
-        this.hitX = this.hitX - 3;
+        this.x = this.x - 2;
+        this.hitX = this.hitX - 2;
         setRec();
 
         // throw new UnsupportedOperationException("Unimplemented method 'move'");
