@@ -9,8 +9,8 @@ import plants.*;
 import zombies.*;
 import projectiles.*;
 import maps.*;
+import player.*;
 import javax.sound.sampled.*;
-import maps.*;
 
 class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
     BufferedImage background;
@@ -19,15 +19,14 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
     BufferedImage levels;
     BufferedImage winnerScreen;
     BufferedImage inven;
-
     BufferedImage grass;
     BufferedImage zombieAni;
     ArrayList<Zombie> zList = new ArrayList<>();
     HashMap<String, Plant> pList = new HashMap<>();
-    ArrayList<Plant> selectedPlants = new ArrayList<>();
     ArrayList<Plant> plantObjects = new ArrayList<>();
     ArrayList<Projectile> projectileList = new ArrayList<>();
     ArrayList<Projectile> sunList = new ArrayList<>();
+    Player player = new Player("test.txt", plantObjects);
 
     Background map;
 
@@ -93,12 +92,8 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             for (int i = 0; i < zList.size(); i++) {
                 g.drawImage(zList.get(i).getAnimation(), zList.get(i).getX(),
                         zList.get(i).getY(), this);
-
-                // // If the zombie is dead show the head falling off
-                // if (zList.get(i).getIsDead())
-                // g.drawImage(zList.get(i).getHead(), zList.get(i).getHeadX(),
-                // zList.get(i).getHeadY(), this);
-
+            
+            // print out the plant
             }
             for (Plant p : pList.values()) {
                 if (!p.isDead())
@@ -106,11 +101,13 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                 g.drawRect(p.getX() + 10, p.getY() + 10, p.getWidth(), p.getHeight());
             }
 
+            // print out projectile
             for (Projectile p : projectileList) {
                 g.drawImage(p.getImage(), p.getX(), p.getY(), this);
                 g.drawRect(p.getX(), p.getY(), p.getWidth(), p.getHeight());
             }
 
+            // print out all the sun
             for (Projectile p : sunList) {
                 g.drawImage(p.getImage(), p.getX(), p.getY(), this);
                 g.drawRect(p.getX(), p.getY(), p.getWidth(), p.getHeight());
@@ -210,6 +207,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             plantObjects.add(new Sunflower(0, 0));
             plantObjects.add(new PeaShooter(0, 0));
             plantObjects.add(new Wallnut(0, 0));
+
             background = mainMenu;
 
             screen = 0;
@@ -302,7 +300,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
             else if (e.getX() > 576 && e.getX() < 692 && e.getY() > 317 && e.getY() < 353) {
                 System.out.println("TEAM");
-                screen = 4;
+                screen = 5;
             }
 
             else if (e.getX() > 138 && e.getX() < 217 && e.getY() > 318 && e.getY() < 360) {
@@ -312,10 +310,9 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
             else if (e.getX() > 640 && e.getX() < 678 && e.getY() > 386 && e.getY() < 419) {
                 System.out.println("Exist");
+                player.save("save.txt");
                 System.exit(ABORT);
-
             }
-
         }
 
         else if (screen == 4) {
@@ -327,25 +324,27 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             } else if (e.getX() > 356 && e.getX() < 436 && e.getY() > 319 && e.getY() < 340) {
                 System.out.println("Level 2 ");
                 map = new Night("night");
-                screen = 1;
+                screen = 2;
 
             }
 
             else if (e.getX() > 505 && e.getX() < 583 && e.getY() > 319 && e.getY() < 340) {
                 System.out.println("Level 3 ");
                 map = new Boss("grass");
-                screen = 1;
+                screen = 3;
 
             }
         }
 
         else if (screen == 5) {
+            
             if (e.getX() > 22 && e.getX() < 157 && e.getY() > 380 && e.getY() < 448) {
                 System.out.println("Save and exit...");
                 screen = 0;
             }
         }
 
+        // this check for if player collect sunlight
         else if (screen >= 1 && screen <= 3) {
             for (int i = 0; i < sunList.size(); i++) {
                 if (sunList.get(i).isHit(zList, e.getX() - 5, e.getY() - 20)) {
@@ -354,16 +353,21 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                 }
             }
 
-            if (e.getX() > mapLcord && e.getX() < mapRcord && e.getY() > mapUcord && e.getY() < mapDcord) {
-                int xCord = (e.getX() - mapLcord) / blockSizeX;
-                int yCord = (e.getY() - mapUcord) / blockSizeY;
-                String cords = "" + xCord + yCord;
-                if (pList.containsKey(cords)) {
-                    System.out.println("There is already a plant there! at " + cords);
-                } else if (xCord <= 8) {
-                    pList.put(cords, plantObjects.get(0).createPlant(mapLcord + xCord * blockSizeX,
-                            mapUcord + yCord * (blockSizeY - 10), yCord, cords));
-                    System.out.println("Planted" + " " + cords);
+            
+
+            // this check if player selected a plant and trying to put it down
+            if(Player.getCurrentPlant() > -1) {
+                if (e.getX() > mapLcord && e.getX() < mapRcord && e.getY() > mapUcord && e.getY() < mapDcord) {
+                    int xCord = (e.getX() - mapLcord) / blockSizeX;
+                    int yCord = (e.getY() - mapUcord) / blockSizeY;
+                    String cords = "" + xCord + yCord;
+                    if (pList.containsKey(cords)) {
+                        System.out.println("There is already a plant there! at " + cords);
+                    } else if (xCord <= 8) {
+                        pList.put(cords, plantObjects.get(0).createPlant(mapLcord + xCord * blockSizeX,
+                                mapUcord + yCord * (blockSizeY - 10), yCord, cords));
+                        System.out.println("Planted" + " " + cords);
+                    }
                 }
             }
         }
