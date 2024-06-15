@@ -1,4 +1,5 @@
 package player;
+
 import java.util.*;
 import java.io.*;
 import plants.*;
@@ -12,32 +13,32 @@ public class Player {
     private static int currentPlant;
     private static int sunlight;
 
-    public Player(String fileN, ArrayList<Plant> plants){
+    public Player(String fileN, ArrayList<Plant> plants) {
         try {
             BufferedReader reader = new BufferedReader(new FileReader("player/" + fileN));
             this.name = reader.readLine();
             this.money = Integer.parseInt(reader.readLine());
             this.highWave = Integer.parseInt(reader.readLine());
             String line = reader.readLine();
-            for(int i = 0; i < ownPlants.length; i++) {
-                if(line.indexOf(" ") == -1) {
+            for (int i = 0; i < ownPlants.length; i++) {
+                if (line.indexOf(" ") == -1) {
                     line += " ";
                 }
                 ownPlants[i] = Integer.parseInt(line.substring(0, line.indexOf(" ")));
                 line = line.substring(line.indexOf(" ") + 1);
             }
             line = reader.readLine();
-            for(int n = 0; n < 6; n++) {
-                if(line.indexOf(" ") == -1) {
+            for (int n = 0; n < 6; n++) {
+                if (line.indexOf(" ") == -1) {
                     line += " ";
                 }
                 int id = Integer.parseInt(line.substring(0, line.indexOf(" ")));
-                if(id >= 0){
+                if (id >= 0) {
                     team.add(plants.get(id).createPlant(0, 0, 0, ""));
                 }
                 line = line.substring(line.indexOf(" ") + 1);
             }
-            
+
             System.out.println("Successfully read in the save");
             reader.close();
         } catch (FileNotFoundException e) {
@@ -54,21 +55,20 @@ public class Player {
         }
     }
 
-    public void save(String fileN){
+    public void save(String fileN) {
         try {
             PrintWriter writer = new PrintWriter(new FileWriter("player/" + fileN));
             writer.println(this.name);
             writer.println(this.money);
             writer.println(this.highWave);
-            for(int i = 0; i < ownPlants.length; i++) {
+            for (int i = 0; i < ownPlants.length; i++) {
                 writer.print(ownPlants[i] + " ");
             }
             writer.println("");
-            for(int i = 0; i < 6; i++) {
-                if(i >= team.size()){
+            for (int i = 0; i < 6; i++) {
+                if (i >= team.size()) {
                     writer.print(-1 + " ");
-                }
-                else{
+                } else {
                     writer.print(team.get(i).getId() + " ");
                 }
             }
@@ -79,17 +79,17 @@ public class Player {
         }
     }
 
-    public static void resetForLevel(){
+    public static void resetForLevel() {
         sunlight = 200;
         currentPlant = -1;
     }
 
-    public static int changeSunlight(int num){
+    public static int changeSunlight(int num) {
         sunlight += num;
         return sunlight;
     }
 
-    public static int getSunlight(){
+    public static int getSunlight() {
         return sunlight;
     }
 
@@ -97,51 +97,56 @@ public class Player {
         return this.name;
     }
 
-    public void setName(String name){
+    public void setName(String name) {
         this.name = name;
     }
 
-    public int getMoney(){
+    public int getMoney() {
         return this.money;
     }
 
-    public void changeMoney(int money){
+    public void changeMoney(int money) {
         this.money += money;
     }
 
-    public void setHighWave(int num){
-        this.highWave = num;
+    public void setHighWave(int num) {
+        if (this.highWave < num)
+            this.highWave = num;
     }
 
-    public static void setCurrentPlant(int p){
+    public int getHighWave() {
+        return this.highWave;
+    }
+
+    public static void setCurrentPlant(int p) {
         currentPlant = p;
     }
 
-    public static int getCurrentPlant(){
+    public static int getCurrentPlant() {
         return currentPlant;
     }
 
-    public void addTeam(Plant p){
+    public void addTeam(Plant p) {
         this.team.add(p);
     }
 
-    public void removeTeam(int i){
+    public void removeTeam(int i) {
         this.team.remove(i);
     }
 
-    public ArrayList<Plant> getTeam(){
+    public ArrayList<Plant> getTeam() {
         return this.team;
     }
 
-    public void obtainPlant(int id){
+    public void obtainPlant(int id) {
         this.ownPlants[id] += 1;
     }
 
-    public void removePlant(int id){
+    public void removePlant(int id) {
         this.ownPlants[id] -= 1;
     }
 
-    public int getOwnPlant(int id){
+    public int getOwnPlant(int id) {
         return this.ownPlants[id];
     }
 }
