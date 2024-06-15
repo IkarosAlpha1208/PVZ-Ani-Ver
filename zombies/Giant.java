@@ -6,14 +6,19 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+// Giant class for the giant Zombie, is the subclass of Zombie Class
 public class Giant extends Zombie {
-
+    // Constructor, gets the hp,damage, x, y, row, and name and pass most of it to
+    // the zombie Constructor
     public Giant(int hp, int damage, int x, int y, int row, String name) {
         super(hp, damage, x, y, row, name);
-        // TODO Auto-generated constructor stub
+        // Path to the giant zombie folder
         this.path = "assets/zombies/Giant";
     }
 
+    // Movement method, makes the zombie move 2 pixels
+    // no return value or paramters
+    // The hitbox moves along with the zombie
     @Override
     public void move() {
         // TODO Auto-generated method stub
@@ -22,6 +27,10 @@ public class Giant extends Zombie {
         setRec();
     }
 
+    // Method to handle zombie's animations
+    // No return type or parameters
+    // Has its own animation method cause the giant sprite came from a different
+    // pack
     @Override
     public void animation() {
 
@@ -95,6 +104,7 @@ public class Giant extends Zombie {
 
     }
 
+    // Getters & Setters methods
     @Override
     public void setRec() {
         this.hitbox = new Rectangle(this.hitX + 50, this.hitY, this.width, this.height);
