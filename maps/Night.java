@@ -9,7 +9,8 @@ public class Night extends Background {
 
     public Night(String name) {
         super(name);
-        this.zombiex = 700;
+        this.mode = "Level 2";
+
         // TODO Auto-generated constructor stub
     }
 

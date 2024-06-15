@@ -9,7 +9,7 @@ public class Grass extends Background {
 
     public Grass(String name) {
         super(name);
-        this.waveNum = 1;
+        this.mode = "Level 1";
 
     }
 
