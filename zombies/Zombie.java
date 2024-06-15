@@ -62,7 +62,7 @@ public abstract class Zombie {
         this.walkingIndex = 1;
         this.dyingIndex = 1;
         this.eatingIndex = 1;
-        this.atkSpd = 3;
+        this.atkSpd = 1;
         this.lastAttack = System.currentTimeMillis();
 
         // Making the hitbox closer to the zombie

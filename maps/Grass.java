@@ -8,7 +8,8 @@ public class Grass extends Background {
 
     public Grass(String name) {
         super(name);
-        this.mode = "Level 1";
+        this.mode = "Level 1"; 
+        this.stat = "day";
 
     }
 

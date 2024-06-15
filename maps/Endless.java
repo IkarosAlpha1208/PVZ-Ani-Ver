@@ -10,6 +10,7 @@ public class Endless extends Background {
         super(name);
         this.mode = "Endless";
         this.maxZombies = 1;
+        this.stat = "day";
     }
 
     @Override

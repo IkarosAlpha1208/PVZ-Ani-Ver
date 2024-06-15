@@ -5,13 +5,11 @@ import java.util.ArrayList;
 import zombies.*;
 
 public class Night extends Background {
-    protected int zombiex;
 
     public Night(String name) {
         super(name);
         this.mode = "Level 2";
-
-        // TODO Auto-generated constructor stub
+        this.stat = "night";
     }
 
     public void miniWave(ArrayList<Zombie> li) {
@@ -32,7 +30,7 @@ public class Night extends Background {
             randomIndex = (int) (Math.random() * (4 - 0 + 1)) + 0;
             randY = randRow[randomIndex][0];
 
-            Zombie cone = new Cone(140, 10, zombieX + i * 10, randY, randRow[randomIndex][1], "Cone");
+            Zombie cone = new Cone(200, 10, zombieX + i * 10, randY, randRow[randomIndex][1], "Cone");
             // zombieGrid.put(randRow[randomIndex][1], z);
 
             // Add the zombie object into the list

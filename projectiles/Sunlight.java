@@ -27,7 +27,7 @@ public class Sunlight extends Projectile{
     public boolean isHit(ArrayList<Zombie> zList, int x, int y) {
         long currentTime = System.currentTimeMillis();
         Rectangle r = new Rectangle(x, y, 5, 5);
-        if((currentTime - existTime)/1000 >= 8){
+        if((currentTime - existTime)/1000.0 >= 8){
             return true;
         }
         if(this.hitbox.intersects(r)){

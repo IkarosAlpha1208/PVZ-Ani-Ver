@@ -33,4 +33,8 @@ public class Wallnut extends Plant {
         p.grid = grid;
         return p;
     }
+
+    public BufferedImage animation() {
+        return null;
+    }
 }

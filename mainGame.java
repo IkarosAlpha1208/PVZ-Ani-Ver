@@ -87,7 +87,6 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
         } else if (screen == 4) {
             background = levels;
             g.drawImage(background, 0, 0, this);
-
         }
 
         else if (screen == 1) {

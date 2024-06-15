@@ -15,6 +15,7 @@ public abstract class Background {
     protected int zombieX;
     protected int maxZombies;
     protected String mode;
+    protected String stat;
 
     protected HashMap<Integer, Zombie> zombieGrid;
 
