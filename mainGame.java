@@ -121,6 +121,11 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
         } else if (screen == 5) {
             background = inven;
             g.drawImage(background, 0, 0, this);
+            int x = 22;
+            for(Plant p : player.getTeam()){
+                g.drawImage(p.getImage(), x, 18, this);
+                x += 77;
+            }
         } else if (screen == 7) {
             background = gameOver;
             g.drawImage(background, 0, 0, this);
@@ -340,7 +345,16 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
         }
 
         else if (screen == 5) {
+            if(e.getX() >= 20 && e.getX() <= 493 && e.getY() >= 41 && e.getY() <= 111){
+                int num = (e.getX()-20)/76;
+                if(num >= 6){num -= 1;}
+                player.removeTeam(num);
+            }
             
+            if(e.getX() >= 20 && e.getX() <= 482 && e.getY() >= 41 && e.getY() <= 111){
+                int num = (e.getX()-20)/76;
+                
+            }
             if (e.getX() > 22 && e.getX() < 157 && e.getY() > 380 && e.getY() < 448) {
                 System.out.println("Save and exit...");
                 screen = 0;
@@ -359,7 +373,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             
 
             // this check if player selected a plant and trying to put it down
-            if(Player.getCurrentPlant() > -1) {
+            if(true) {
                 
                 System.out.println(Player.getCurrentPlant());
                 if (e.getX() > mapLcord && e.getX() < mapRcord && e.getY() > mapUcord && e.getY() < mapDcord) {

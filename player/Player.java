@@ -129,6 +129,10 @@ public class Player {
         this.team.remove(i);
     }
 
+    public ArrayList<Plant> getTeam(){
+        return this.team;
+    }
+
     public void obtainPlant(int id){
         this.ownPlants[id] += 1;
     }
