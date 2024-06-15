@@ -12,40 +12,40 @@ import javax.imageio.ImageIO;
 import plants.*;
 
 public abstract class Zombie {
-    protected int hp;
-    protected int x, y;
-    protected int speed;
-    protected int atk;
-    protected int hitX, hitY;
-    protected int width, height;
-    protected Rectangle hitbox;
-    // The y cord of the head
-    protected int headY;
+    // Fields to store various attributes of the zombie
+    protected int hp; // Zombie's health points
+    protected int x, y; // Zombie's coordinates
+    protected int speed; // Zombie's speed
+    protected int atk; // Zombie's attack power
+    protected int hitX, hitY; // Coordinates for hitbox
+    protected int width, height; // Width and height of zombie
+    protected Rectangle hitbox; // Hitbox for collision detection
+    protected int headY; // Y coordinate of zombie's head
+    protected int headX; // X coordinate of zombie's head
 
-    protected int headX;
+    // States and status flags
+    protected boolean isDead; // Whether the zombie is dead
+    protected boolean isWalking; // Whether the zombie is walking
+    protected boolean isEating; // Whether the zombie is eating
+    protected String path; // Path to zombie's images
 
-    protected boolean isDead;
-    protected boolean isWalking;
-    protected boolean isEating;
-    protected String path;
+    protected boolean remove; // Whether the zombie should be removed
+    protected int walkingIndex; // Index for walking animation
+    protected int dyingIndex; // Index for dying animation
+    protected int eatingIndex; // Index for eating animation
+    protected BufferedImage zombieImage; // Current image of the zombie
+    protected int atkSpd; // Attack speed
+    protected long lastAttack; // Time of the last attack
+    protected int row; // Row position of the zombie
+    protected Plant currentEating; // Plant that the zombie is currently eating
+    protected int damage; // Damage the zombie deals
 
-    protected boolean remove;
-    protected int walkingIndex;
-    protected int dyingIndex;
-    protected int eatingIndex;
-    protected BufferedImage zombieImage;
-    protected int atkSpd;
-    protected long lastAttack;
-    protected int row;
-    protected Plant currentEating;
-    protected int damage;
+    protected BufferedImage currentAnimation; // Current animation frame
+    protected BufferedImage head; // Image of zombie's head
+    protected String name; // Name of the zombie
+    protected String extenstion = ""; // Extension for image files
 
-    protected BufferedImage currentAnimation;
-    protected BufferedImage head;
-    protected String name;
-
-    protected String extenstion = "";
-
+    // Constructor to initialize the zombie's attributes
     public Zombie(int hp, int damage, int x, int y, int row, String name) {
         this.name = name;
         this.hp = hp;
@@ -70,6 +70,7 @@ public abstract class Zombie {
         this.hitX = x + 15;
         this.hitbox = new Rectangle(this.hitX, this.hitY, this.width, this.height);
 
+        // Load the head image
         try {
             this.head = ImageIO.read(new File("assets/zombies/head.png"));
         } catch (IOException e) {
@@ -77,6 +78,9 @@ public abstract class Zombie {
         }
     }
 
+    // Method to handle zombie's attack on plants
+    // Gets the hashmap of all the plants on the screen
+    // Void return type
     public void attack(HashMap<String, Plant> pList) {
         Iterator<String> iter = pList.keySet().iterator();
 
@@ -85,49 +89,46 @@ public abstract class Zombie {
             Plant p = pList.get(currentKey);
             long currentTime = System.currentTimeMillis();
 
-            if (p.getRec().intersects(this.hitbox) && this.isDead == false
+            // Check if the zombie collides with a plant and can attack
+            if (p.getRec().intersects(this.hitbox) && !this.isDead
                     && (currentTime - lastAttack) / 1000 >= atkSpd && !p.isDead()) {
                 this.lastAttack = currentTime;
                 this.isEating = true;
                 this.isWalking = false;
                 p.takeDmg(this.damage);
                 this.currentEating = p;
-                // System.out.println("PLANTTTTT HEALLTTTHHH " + p.getHealth());
-
             }
 
+            // Check if the plant is dead
             if (p.isDead()) {
                 this.isEating = false;
                 this.isWalking = true;
-
                 iter.remove();
-
             }
+            // If the plant the zombie was eating is removed
             if (!pList.containsValue(this.currentEating)) {
                 this.isEating = false;
                 this.isWalking = true;
             }
-
         }
 
+        // If no plants are left
         if (pList.size() == 0 && !this.isDead && !this.remove) {
             this.isEating = false;
             this.isWalking = true;
-
         }
-
-        // throw new UnsupportedOperationException("Unimplemented method 'attack'");
     }
 
+    // Abstract method to handle zombie's movement
     public abstract void move();
 
+    // Method to handle zombie's animations
+    // No return type or parameters
     public void animation() {
-
-        // Need to add methods to see if the zombie is currently eating or dying here.
-        // HAVE TO WAIT FOR DAIVD
         isDead();
 
         if (isWalking) {
+            // Handle walking animation
             if (this.walkingIndex == 8) {
                 this.walkingIndex = 1;
             }
@@ -138,23 +139,15 @@ public abstract class Zombie {
                 this.currentAnimation = zombieImage;
                 this.height = this.currentAnimation.getHeight() - 60;
                 this.width = this.currentAnimation.getWidth() - 15;
-
             } catch (IOException e) {
                 System.out.println("----ERROR-----" + this.walkingIndex);
-
             }
-            // System.out.println("++++++++++++++++" + this.wal);
-
             this.walkingIndex++;
-
-        }
-
-        else if (isDead) {
-
+        } else if (isDead) {
+            // Handle dying animation
             if (this.dyingIndex == 6) {
                 this.isDead = false;
                 this.remove = true;
-
             }
             try {
                 zombieImage = ImageIO
@@ -163,21 +156,14 @@ public abstract class Zombie {
                 this.currentAnimation = zombieImage;
                 this.height = this.currentAnimation.getHeight() - 60;
                 this.width = this.currentAnimation.getWidth() - 15;
-
             } catch (IOException e) {
                 System.out.println("----ERROR-----" + this.dyingIndex);
-
             }
-
             this.dyingIndex++;
-
-            animateHead();
-
         } else if (isEating) {
-
+            // Handle eating animation
             if (this.eatingIndex == 8) {
                 this.eatingIndex = 1;
-
             }
             try {
                 zombieImage = ImageIO
@@ -185,35 +171,24 @@ public abstract class Zombie {
                 this.currentAnimation = zombieImage;
                 this.height = this.currentAnimation.getHeight() - 60;
                 this.width = this.currentAnimation.getWidth() - 15;
-
             } catch (IOException e) {
                 System.out.println("----ERROR-----" + this.eatingIndex);
-
             }
-
             this.eatingIndex++;
-
         }
-
     }
 
-    public void animateHead() {
-        this.headY += 3;
-        // this.headX -= 1;
-
-    }
-
+    // Method to reduce zombie's health when it takes damage
+    // Takes the amount of damage
+    // Returns nothing void type
     public void takeDamage(int damage) {
         this.hp -= damage;
         if ((this.name.equals("Cone") || this.name.equals("Bucket")) && (this.hp == 100 || this.hp == 50)) {
             this.extenstion += "d";
         }
-
-        // System.out.println("hp: " + this.hp);
     }
 
     // Getters & Setters Methods
-
     public int index() {
         return this.dyingIndex;
     }
@@ -235,6 +210,7 @@ public abstract class Zombie {
     }
 
     public int getX() {
+
         if (isDead) {
             return x - 16;
         }
@@ -242,11 +218,9 @@ public abstract class Zombie {
     }
 
     public int getY() {
-
         if (isDead && !this.name.equals("Giant")) {
             return y + 44;
         }
-
         return y;
     }
 
@@ -257,21 +231,23 @@ public abstract class Zombie {
     public void setX(int x) {
         this.x = x;
         this.headX = x;
-
     }
 
+    // Method to check if the zombie is dead
+    //
     public void isDead() {
+        // If the zombie health is currently below or equal to zero and the death
+        // animation is not finish set the isDead to true and isWalking & is eating to
+        // false
         if ((this.hp <= 0 && this.dyingIndex < 6) || this.hp <= 0 && this.dyingIndex < 59) {
             this.isDead = true;
             this.isWalking = false;
-            // this.dyingIndex = 1;
-
+            this.isEating = false;
         }
     }
 
     public boolean getIsDead() {
         return this.isDead;
-
     }
 
     public boolean getIsWalking() {

@@ -13,6 +13,7 @@ import player.*;
 import javax.sound.sampled.*;
 
 class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
+    // Image components
     BufferedImage background;
     BufferedImage mainMenu;
     BufferedImage gameOver;
@@ -22,6 +23,9 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
     BufferedImage teamDisplay;
     BufferedImage grass;
     BufferedImage zombieAni;
+    BufferedImage aboutScreen;
+    BufferedImage helpScreen;
+    // List of important objects
     ArrayList<Zombie> zList = new ArrayList<>();
     ArrayList<Lawnmower> lList = new ArrayList<>();
     HashMap<String, Plant> pList = new HashMap<>();
@@ -31,27 +35,20 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
     ArrayList<Scoreboard> scores = new ArrayList<>();
     Player player;
 
+    // Map object
     Background map;
-
-    Zombie z1;
-
-    int zombieX = 500;
-
-    // Abmount of zombies on the screen
-    int maxZombies = 5;
 
     int zombieFrameCounter = 0;
     int zombieMoveCounter = 0;
-    // Normal z1;
-
-    int[] randRow = { 0, 75, 150, 215, 290 };
-    int randY;
+    // Other important variables
     int mapLcord = 187, mapRcord = 720, mapUcord = 72, mapDcord = 440;
     int blockSizeX = 56, blockSizeY = 75;
     Thread thread;
     int FPS = 60;
     int screen;
+    int once;
 
+    // Constructor sets up Jpanel
     public mainGame() {
         // sets up JPanel
         setPreferredSize(new Dimension(770, 429));
@@ -63,6 +60,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
         thread.start();
     }
 
+    // Main method
     public static void main(String[] args) {
         JFrame frame = new JFrame();
         mainGame myPanel = new mainGame();
@@ -77,19 +75,26 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
     }
 
+    // Paint component, method that draws everything on the screen
+    // Gets the grpahics obeject and does not return anything
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
 
+        // Draw the Main menu screen
         if (screen == 0) {
             background = mainMenu;
             g.drawImage(background, 0, 0, this);
+            once = 0;
+            // Draw the level select screen
         } else if (screen == 4) {
             background = levels;
             g.drawImage(background, 0, 0, this);
         }
-
+        // if its the game screen
         else if (screen == 1) {
+
+            // Draw the background & and teams display
             g.drawImage(map.getBackground(), 0, 0, this);
 
             // Printint out all the zombies
@@ -110,83 +115,105 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                 g.drawImage(p.getImage(), p.getX(), p.getY(), this);
                 g.drawRect(p.getX(), p.getY(), p.getWidth(), p.getHeight());
             }
-
+            // Draw the zombies
             for (int i = 0; i < zList.size(); i++) {
                 g.drawImage(zList.get(i).getAnimation(), zList.get(i).getX(),
                         zList.get(i).getY(), this);
 
                 // print out the plant
             }
-
-            //lawnmower picture
+            // Draw all the lawnmowers
+            // lawnmower picture
             for (int i = 0; i < lList.size(); i++) {
                 g.drawImage(lList.get(i).getImage(), lList.get(i).getX(), lList.get(i).getY(), this);
             }
 
-            //this is for the plant team that you have
+            // this is for the plant team that you have
             g.drawImage(teamDisplay, 10, 0, this);
             g.drawString("" + Player.getSunlight(), 128, 68);
             int y = 20;
             int index = 0;
-            for(Plant p : player.getTeam()){
+            for (Plant p : player.getTeam()) {
                 g.drawImage(p.getImage(), 32, y, this);
                 g2d.setColor(Color.WHITE);
-                g2d.drawString(""  + p.getCost(), 85, y + 40);
+                g2d.drawString("" + p.getCost(), 85, y + 40);
                 g2d.setStroke(new BasicStroke(5));
-                if(!p.isCooldown()){
+                if (!p.isCooldown()) {
                     g2d.drawLine(32, y, 84, y + 52);
                     g2d.drawLine(32, y + 52, 84, y);
                 }
-                if(Player.getCurrentPlant() == index){
+                if (Player.getCurrentPlant() == index) {
                     g2d.drawRect(32, y, 54, 54);
                 }
                 index++;
                 y += 67;
             }
 
-            // Game over screen
         } else if (screen == 5) {
             background = inven;
             g.drawImage(background, 0, 0, this);
             int tile = 22;
-            for(Plant p : player.getTeam()){
+
+            for (Plant p : player.getTeam()) {
                 g.drawImage(p.getImage(), tile, 18, this);
                 tile += 77;
             }
             int x = 56;
             int y = 123;
-            for(int i = 0; i < player.plantSize(); i++) {
+            for (int i = 0; i < player.plantSize(); i++) {
                 g.drawString(player.getOwnPlant(i) + "", x, y + 23);
-                if(x >= 427){
+                if (x >= 427) {
                     x = 56;
                     y += 85;
-                } else{
+                } else {
                     x += 58;
                 }
             }
+            // Game over screen
+
         } else if (screen == 7) {
             background = gameOver;
             g.drawImage(background, 0, 0, this);
-            zList.removeAll(zList);
-            lList.removeAll(lList);
+            // Reset the zombie & Lawnmower lists
+
             if (map.getMode().equals("Endless")) {
                 player.setHighWave(map.getWaveNum() - 1);
             }
 
             zombieFrameCounter = 0;
 
+            // Winner Screen
         } else if (screen == 8) {
+            // Reset all the lists
+            if (once == 0)
+                player.changeMoney(map.getMoney());
+            once++;
+
+            zList.removeAll(zList);
+            lList.removeAll(lList);
             background = winnerScreen;
+            g.drawImage(background, 0, 0, this);
+
+            System.out.println(player.getMoney());
+
+        } else if (screen == 9) {
+            background = aboutScreen;
+            g.drawImage(background, 0, 0, this);
+        } else if (screen == 10) {
+            background = helpScreen;
             g.drawImage(background, 0, 0, this);
 
         }
     }
 
     // Adding the zombies to the arraylist
+    // no return type or paramters
     public void addingZombies() {
 
         // 1
 
+        // If the gammode is not endless alternate between mini wave and big wave
+        // until player beats wave 3
         if (!map.getMode().equals("Endless")) {
             if (map.getWaveNum() % 2 == 1 && map.getWaveNum() != 7) {
                 System.out.println("HEELLLOOO");
@@ -206,12 +233,15 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             else {
                 screen = 8;
             }
+            // If its endless just keep on adding newWaves
         } else {
             map.newWave(zList);
         }
 
     }
 
+    // Adding lawnmowers to the Lawnmower list
+    // No return type or paramters
     public void addingLawnmowers() {
         for (int i = 0; i < 5; i++) {
             Lawnmower l = new Lawnmower(i);
@@ -221,9 +251,11 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
     }
 
+    // Animation method for the zombie
+    // No return type or paramters
     public void animation() {
 
-        // every 10 frame change the animation
+        // every 20 frame change the animation
         zombieFrameCounter++;
         zombieMoveCounter++;
         if (zombieFrameCounter == 20) {
@@ -235,28 +267,21 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
                 }
 
-                // if (zombieMoveCounter == 20) {
-                // if (!zList.get(i).getIsEating())
-                // // zList.get(i).move();
-                // zombieMoveCounter = 0;
-                // }
-
                 zList.get(i).animation();
+                // If its not currently dying or eating move the zombie
                 if (!zList.get(i).getIsEating() && !zList.get(i).getIsDead())
                     zList.get(i).move();
 
                 zombieFrameCounter = 0;
-
-                // zList.get(i).animateHead();
-                // zList.get(i).animateHead();
 
             }
         }
 
     }
 
+    // initialize all the images and reading in the score board
+    // Does not return anything or have any paramters
     public void initialize() {
-        // initialize all the stuffff
         try {
 
             mainMenu = ImageIO.read(new File("assets/backgrounds/main.png"));
@@ -264,7 +289,10 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             levels = ImageIO.read(new File("assets/backgrounds/LevelSelect.png"));
             winnerScreen = ImageIO.read(new File("assets/backgrounds/winner.png"));
             inven = ImageIO.read(new File("assets/backgrounds/Team.png"));
+            aboutScreen = ImageIO.read(new File("assets/backgrounds/credits.png"));
+            helpScreen = ImageIO.read(new File("assets/backgrounds/howtoplay.png"));
             teamDisplay = ImageIO.read(new File("assets/others/teamDisplay.png"));
+
             plantObjects.add(new Sunflower(0, 0));
             plantObjects.add(new PeaShooter(0, 0));
             plantObjects.add(new Wallnut(0, 0));
@@ -299,6 +327,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
     }
 
     @Override
+    // Method to run was part of the template you gave.
     public void run() {
 
         initialize();
@@ -315,9 +344,10 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
         }
     }
 
+    // updates all the stuff about the game
     public void update() {
-        // updates the game
 
+        // If its currently on the game screen
         if (screen == 1) {
             animation();
             if (zList.size() == 0) {
@@ -352,7 +382,8 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                 }
             }
 
-            // this is for the lawnmower, moving and looping through all zombies until it hit wall
+            // this is for the lawnmower, moving and looping through all zombies until it
+            // hit wall
             for (int i = 0; i < lList.size(); i++) {
                 Lawnmower l = lList.get(i);
                 l.intersection(zList);
@@ -362,12 +393,12 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                     lList.remove(i);
             }
 
-            // zombie attacking
+            // zombie attacking & zombie removing if its dead
             for (int i = 0; i < zList.size(); i++) {
-                if (zList.get(i).getRemove()){
+                if (zList.get(i).getRemove()) {
                     zList.remove(zList.get(i));
                     i--;
-                } else{
+                } else {
                     zList.get(i).attack(pList);
                 }
             }
@@ -376,9 +407,14 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
     }
 
     @Override
+    // Mouse clicked method, gets the Mouse event and does not return anything
     public void mouseClicked(MouseEvent e) {
 
         System.out.println(e.getX() + " " + e.getY());
+
+        // All of this is just for the user to clicking on a button
+        // If it clickes between a area that were the button exist switch game state
+        // If it chooses to start the game intializes background object
 
         if (screen == 0) {
             if (e.getX() > 592 && e.getX() < 710 && e.getY() > 225 && e.getY() < 264) {
@@ -462,24 +498,25 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
         // team screen
         else if (screen == 5) {
-            if(e.getX() >= 20 && e.getX() <= 493 && e.getY() >= 41 && e.getY() <= 111){
-                int num = (e.getX()-20)/76;
-                if(num >= 6){num -= 1;}
+            if (e.getX() >= 20 && e.getX() <= 493 && e.getY() >= 41 && e.getY() <= 111) {
+                int num = (e.getX() - 20) / 76;
+                if (num >= 6) {
+                    num -= 1;
+                }
                 int i = player.getTeam(num).getId();
                 player.addPlant(player.getTeam(num).getId());
                 player.removeTeam(num);
             }
-            
-            if(e.getX() >= 20 && e.getX() <= 482 && e.getY() >= 123 && e.getY() <= 291){
-                int x = (e.getX()-20)/58;
-                int y = (e.getY()-123)/84;
-                int num = x + (y*8);
-                if(player.getTeam().size() >= 6){
+
+            if (e.getX() >= 20 && e.getX() <= 482 && e.getY() >= 123 && e.getY() <= 291) {
+                int x = (e.getX() - 20) / 58;
+                int y = (e.getY() - 123) / 84;
+                int num = x + (y * 8);
+                if (player.getTeam().size() >= 6) {
                     System.out.println("Team is full");
-                } else if(player.getOwnPlant(num) <= 0){
+                } else if (player.getOwnPlant(num) <= 0) {
                     System.out.println("You dont have this plant");
-                }
-                else{
+                } else {
                     player.removePlant(num);
                     player.addTeam(plantObjects.get(num));
                 }
@@ -491,7 +528,8 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             }
         }
 
-        // this is the level screen, here are all the statement for planting, collecting sun
+        // this is the level screen, here are all the statement for planting, collecting
+        // sun
         else if (screen == 1) {
             // this check for if player collect sunlight
             for (int i = 0; i < sunList.size(); i++) {
@@ -502,28 +540,28 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                 }
             }
 
-            if(e.getX() >= 31 && e.getX() <= 124 && e.getY() >= 45 && e.getY() <= 446){
-                int y = (e.getY()-45)/67;
-                if(player.getTeam(y).isCooldown()){
+            if (e.getX() >= 31 && e.getX() <= 124 && e.getY() >= 45 && e.getY() <= 446) {
+                int y = (e.getY() - 45) / 67;
+                if (player.getTeam(y).isCooldown()) {
                     Player.setCurrentPlant(y);
                 }
-            }
-            else if(Player.getCurrentPlant() > -1) {
+            } else if (Player.getCurrentPlant() > -1) {
                 System.out.println(Player.getCurrentPlant());
                 if (e.getX() > mapLcord && e.getX() < mapRcord && e.getY() > mapUcord && e.getY() < mapDcord) {
                     int xCord = (e.getX() - mapLcord) / blockSizeX;
                     int yCord = (e.getY() - mapUcord) / blockSizeY;
                     String cords = "" + xCord + yCord;
 
-                    //check if therer is already a plant existed in that tile
+                    // check if therer is already a plant existed in that tile
                     if (pList.containsKey(cords)) {
                         System.out.println("There is already a plant there! at " + cords);
-                    } else if(player.getTeam(Player.getCurrentPlant()).getCost() > Player.getSunlight()){
+                    } else if (player.getTeam(Player.getCurrentPlant()).getCost() > Player.getSunlight()) {
                         System.out.println("Not enough sunlight");
                         Player.setCurrentPlant(-1);
                     } else if (xCord <= 8) {
-                        pList.put(cords, player.getTeam(Player.getCurrentPlant()).createPlant(mapLcord + xCord * blockSizeX,
-                                mapUcord + yCord * (blockSizeY - 10), yCord, cords));
+                        pList.put(cords,
+                                player.getTeam(Player.getCurrentPlant()).createPlant(mapLcord + xCord * blockSizeX,
+                                        mapUcord + yCord * (blockSizeY - 10), yCord, cords));
                         player.getTeam(Player.getCurrentPlant()).setCooldown();
                         Player.changeSunlight(player.getTeam(Player.getCurrentPlant()).getCost() * -1);
                         Player.setCurrentPlant(-1);
@@ -545,7 +583,20 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                 screen = 0;
 
             }
+        } else if (screen == 9) {
+
+            if (e.getX() > 17 && e.getX() < 175 && e.getY() > 399 && e.getY() < 441) {
+                screen = 0;
+
+            }
+        } else if (screen == 10) {
+
+            if (e.getX() > 30 && e.getX() < 209 && e.getY() > 387 && e.getY() < 440) {
+                screen = 0;
+
+            }
         }
+
     }
 
     @Override
@@ -569,14 +620,22 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
     }
 
     @Override
+    // Keypresssed method, gets a keyEvent object
+    // No return value
     public void keyPressed(KeyEvent e) {
 
         int key = e.getKeyCode();
 
-        if (key == KeyEvent.VK_A) {
-            System.out.println("About");
-        } else if (key == KeyEvent.VK_H) {
-            System.out.println("Help");
+        if (screen == 0) {
+            // if the key pressed is a show the about screen
+            if (key == KeyEvent.VK_A) {
+                System.out.println("About");
+                screen = 9;
+                // if the key pressedd is h show the help screen
+            } else if (key == KeyEvent.VK_H) {
+                System.out.println("Help");
+                screen = 10;
+            }
         }
     }
 
