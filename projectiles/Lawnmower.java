@@ -4,7 +4,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
@@ -30,7 +29,6 @@ public class Lawnmower {
         try {
             this.image = ImageIO.read(new File("assets/projectiles/LawnMower.png"));
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             System.out.println("ERRROR reading");
         }
 

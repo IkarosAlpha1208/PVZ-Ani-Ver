@@ -138,7 +138,11 @@ public class Player {
         return this.team;
     }
 
-    public void obtainPlant(int id) {
+    public Plant getTeam(int index){
+        return this.team.get(index);
+    }
+
+    public void addPlant(int id){
         this.ownPlants[id] += 1;
     }
 
@@ -148,5 +152,9 @@ public class Player {
 
     public int getOwnPlant(int id) {
         return this.ownPlants[id];
+    }
+
+    public int plantSize(){
+        return this.ownPlants.length;
     }
 }

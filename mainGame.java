@@ -82,9 +82,13 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
         else if (screen == 1) {
             g.drawImage(map.getBackground(), 0, 0, this);
             g.drawImage(teamDisplay, 10, 0, this);
+            int y = 20;
+            for(Plant p : player.getTeam()){
+                g.drawImage(p.getImage(), 32, y, this);
+                y += 67;
+            }
 
             // Printint out all the zombies
-
             for (Plant p : pList.values()) {
                 if (!p.isDead())
                     g.drawImage(p.getImage(), p.getX(), p.getY(), this);
@@ -120,10 +124,21 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
         } else if (screen == 5) {
             background = inven;
             g.drawImage(background, 0, 0, this);
-            int x = 22;
-            for (Plant p : player.getTeam()) {
-                g.drawImage(p.getImage(), x, 18, this);
-                x += 77;
+            int tile = 22;
+            for(Plant p : player.getTeam()){
+                g.drawImage(p.getImage(), tile, 18, this);
+                tile += 77;
+            }
+            int x = 56;
+            int y = 123;
+            for(int i = 0; i < player.plantSize(); i++) {
+                g.drawString(player.getOwnPlant(i) + "", x, y + 23);
+                if(x >= 427){
+                    x = 56;
+                    y += 85;
+                } else{
+                    x += 58;
+                }
             }
         } else if (screen == 7) {
             background = gameOver;
@@ -141,9 +156,6 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             g.drawImage(background, 0, 0, this);
 
         }
-
-        // g.drawImage(background, 0, 0, this);
-
     }
 
     // Adding the zombies to the arraylist
@@ -307,8 +319,8 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                 }
             }
 
+            // this check if the sun exist for to long and delete it
             for (int i = 0; i < sunList.size(); i++) {
-                // Sunlight s = (Sunlight) sunList.get(i);
                 boolean b = sunList.get(i).isHit(zList, 0, 0);
                 if (b) {
                     sunList.remove(i);
@@ -316,6 +328,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                 }
             }
 
+            // this is for the lawnmower, moving and looping through all zombies until it hit wall
             for (int i = 0; i < lList.size(); i++) {
                 Lawnmower l = lList.get(i);
                 l.intersection(zList);
@@ -327,9 +340,12 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
             // zombie attacking
             for (int i = 0; i < zList.size(); i++) {
-                zList.get(i).attack(pList);
-                if (zList.get(i).getRemove())
+                if (zList.get(i).getRemove()){
                     zList.remove(zList.get(i));
+                    i--;
+                } else{
+                    zList.get(i).attack(pList);
+                }
             }
         }
 
@@ -420,27 +436,40 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             }
         }
 
+        // team screen
         else if (screen == 5) {
-            if (e.getX() >= 20 && e.getX() <= 493 && e.getY() >= 41 && e.getY() <= 111) {
-                int num = (e.getX() - 20) / 76;
-                if (num >= 6) {
-                    num -= 1;
-                }
+            if(e.getX() >= 20 && e.getX() <= 493 && e.getY() >= 41 && e.getY() <= 111){
+                int num = (e.getX()-20)/76;
+                if(num >= 6){num -= 1;}
+                int i = player.getTeam(num).getId();
+                player.addPlant(player.getTeam(num).getId());
                 player.removeTeam(num);
             }
-
-            if (e.getX() >= 20 && e.getX() <= 482 && e.getY() >= 41 && e.getY() <= 111) {
-                int num = (e.getX() - 20) / 76;
-
+            
+            if(e.getX() >= 20 && e.getX() <= 482 && e.getY() >= 123 && e.getY() <= 291){
+                int x = (e.getX()-20)/58;
+                int y = (e.getY()-123)/84;
+                int num = x + (y*8);
+                if(player.getTeam().size() >= 6){
+                    System.out.println("Team is full");
+                } else if(player.getOwnPlant(num) <= 0){
+                    System.out.println("You dont have this plant");
+                }
+                else{
+                    player.removePlant(num);
+                    player.addTeam(plantObjects.get(num));
+                }
             }
             if (e.getX() > 22 && e.getX() < 157 && e.getY() > 380 && e.getY() < 448) {
                 System.out.println("Save and exit...");
+                player.save("save.txt");
                 screen = 0;
             }
         }
 
-        // this check for if player collect sunlight
+        // this is the level screen, here are all the statement for planting, collecting sun
         else if (screen == 1) {
+            // this check for if player collect sunlight
             for (int i = 0; i < sunList.size(); i++) {
                 if (sunList.get(i).isHit(zList, e.getX() - 5, e.getY() - 20)) {
                     sunList.remove(i);
@@ -448,14 +477,17 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                 }
             }
 
-            // this check if player selected a plant and trying to put it down
-            if (true) {
+            if(e.getX() >= 31 && e.getX() <= 124 && e.getY() >= 45 && e.getY() <= 447){
 
+            }
+            if(Player.getCurrentPlant() > -1) {
                 System.out.println(Player.getCurrentPlant());
                 if (e.getX() > mapLcord && e.getX() < mapRcord && e.getY() > mapUcord && e.getY() < mapDcord) {
                     int xCord = (e.getX() - mapLcord) / blockSizeX;
                     int yCord = (e.getY() - mapUcord) / blockSizeY;
                     String cords = "" + xCord + yCord;
+
+                    //check if therer is already a plant existed in that tile
                     if (pList.containsKey(cords)) {
                         System.out.println("There is already a plant there! at " + cords);
                     } else if (xCord <= 8) {
@@ -477,12 +509,10 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
         } else if (screen == 8) {
 
             if (e.getX() > 311 && e.getX() < 490 && e.getY() > 389 && e.getY() < 439) {
-                // System.out.println("Hello");
                 screen = 0;
 
             }
         }
-
     }
 
     @Override
@@ -515,10 +545,6 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
         } else if (key == KeyEvent.VK_H) {
             System.out.println("Help");
         }
-
-        // throw new UnsupportedOperationException("Unimplemented method
-        // 'keyReleased'");
-
     }
 
     @Override
