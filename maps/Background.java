@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.imageio.ImageIO;
-
-import plants.Plant;
 import zombies.*;
 import java.awt.image.BufferedImage;
 
@@ -29,7 +27,7 @@ public abstract class Background {
         }
 
         this.waveNum = 3;
-        this.zombieX = 300;
+        this.zombieX = 750;
 
     }
 
