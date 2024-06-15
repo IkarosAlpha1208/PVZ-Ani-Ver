@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.imageio.ImageIO;
-
-import plants.Plant;
 import zombies.*;
 import java.awt.image.BufferedImage;
 
@@ -31,8 +29,9 @@ public abstract class Background {
             System.out.println("CANNOT READ FILE");
         }
 
-        this.waveNum = 12; // Initialize wave number to 1
-        this.zombieX = 700; // Initialize zombie spawn X coordinate
+        this.waveNum = 3;
+        this.zombieX = 750;
+
     }
 
     // Abstract methods to be implemented by subclasses for different waves

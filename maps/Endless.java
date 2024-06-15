@@ -7,9 +7,9 @@ public class Endless extends Background {
 
     // Constructor for Endless class
     public Endless(String name) {
-        super(name); // Call the constructor of the superclass Background
-        this.mode = "Endless"; // Set the game mode to "Endless"
-        this.maxZombies = 12; // Initialize maxZombies to 1
+        super(name);
+        this.mode = "Endless";
+        this.maxZombies = 1;
     }
 
     @Override

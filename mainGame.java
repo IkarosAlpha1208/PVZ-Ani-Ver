@@ -79,6 +79,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
     // Gets the grpahics obeject and does not return anything
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D) g;
 
         // Draw the Main menu screen
         if (screen == 0) {
@@ -96,14 +97,6 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
             // Draw the background & and teams display
             g.drawImage(map.getBackground(), 0, 0, this);
-            g.drawImage(teamDisplay, 10, 0, this);
-            int y = 20;
-
-            // Draw all the plants
-            for (Plant p : player.getTeam()) {
-                g.drawImage(p.getImage(), 32, y, this);
-                y += 67;
-            }
 
             // Printint out all the zombies
             for (Plant p : pList.values()) {
@@ -131,11 +124,31 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                 // print out the plant
             }
             // Draw all the lawnmowers
+            // lawnmower picture
             for (int i = 0; i < lList.size(); i++) {
                 g.drawImage(lList.get(i).getImage(), lList.get(i).getX(), lList.get(i).getY(), this);
             }
 
-            // animation();
+            // this is for the plant team that you have
+            g.drawImage(teamDisplay, 10, 0, this);
+            g.drawString("" + Player.getSunlight(), 128, 68);
+            int y = 20;
+            int index = 0;
+            for (Plant p : player.getTeam()) {
+                g.drawImage(p.getImage(), 32, y, this);
+                g2d.setColor(Color.WHITE);
+                g2d.drawString("" + p.getCost(), 85, y + 40);
+                g2d.setStroke(new BasicStroke(5));
+                if (!p.isCooldown()) {
+                    g2d.drawLine(32, y, 84, y + 52);
+                    g2d.drawLine(32, y + 52, 84, y);
+                }
+                if (Player.getCurrentPlant() == index) {
+                    g2d.drawRect(32, y, 54, 54);
+                }
+                index++;
+                y += 67;
+            }
 
         } else if (screen == 5) {
             background = inven;
@@ -441,8 +454,8 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                         outFile.println(i + 1 + ") " + scores.get(i).getHighWave());
 
                     }
+                    outFile.close();
                 } catch (IOException e1) {
-                    // TODO Auto-generated catch block
                     e1.printStackTrace();
                 }
 
@@ -523,14 +536,17 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             for (int i = 0; i < sunList.size(); i++) {
                 if (sunList.get(i).isHit(zList, e.getX() - 5, e.getY() - 20)) {
                     sunList.remove(i);
+                    Player.changeSunlight(25);
                     break;
                 }
             }
 
-            if (e.getX() >= 31 && e.getX() <= 124 && e.getY() >= 45 && e.getY() <= 447) {
-
-            }
-            if (Player.getCurrentPlant() > -1) {
+            if (e.getX() >= 31 && e.getX() <= 124 && e.getY() >= 45 && e.getY() <= 446) {
+                int y = (e.getY() - 45) / 67;
+                if (player.getTeam(y).isCooldown()) {
+                    Player.setCurrentPlant(y);
+                }
+            } else if (Player.getCurrentPlant() > -1) {
                 System.out.println(Player.getCurrentPlant());
                 if (e.getX() > mapLcord && e.getX() < mapRcord && e.getY() > mapUcord && e.getY() < mapDcord) {
                     int xCord = (e.getX() - mapLcord) / blockSizeX;
@@ -540,10 +556,16 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                     // check if therer is already a plant existed in that tile
                     if (pList.containsKey(cords)) {
                         System.out.println("There is already a plant there! at " + cords);
+                    } else if (player.getTeam(Player.getCurrentPlant()).getCost() > Player.getSunlight()) {
+                        System.out.println("Not enough sunlight");
+                        Player.setCurrentPlant(-1);
                     } else if (xCord <= 8) {
-                        pList.put(cords, plantObjects.get(0).createPlant(mapLcord + xCord * blockSizeX,
-                                mapUcord + yCord * (blockSizeY - 10), yCord, cords));
-                        System.out.println("Planted" + " " + cords);
+                        pList.put(cords,
+                                player.getTeam(Player.getCurrentPlant()).createPlant(mapLcord + xCord * blockSizeX,
+                                        mapUcord + yCord * (blockSizeY - 10), yCord, cords));
+                        player.getTeam(Player.getCurrentPlant()).setCooldown();
+                        Player.changeSunlight(player.getTeam(Player.getCurrentPlant()).getCost() * -1);
+                        Player.setCurrentPlant(-1);
                     }
                 }
             }

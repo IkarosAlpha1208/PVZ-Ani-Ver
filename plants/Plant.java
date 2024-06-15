@@ -18,6 +18,7 @@ public abstract class Plant {
     protected String stat;
     protected int x, y, yTile;
     protected long lastAttack;
+    protected long lastPlant;
     protected Rectangle hitbox;
     protected BufferedImage img;
     protected String grid;
@@ -81,6 +82,10 @@ public abstract class Plant {
         return this.stat;
     }
 
+    public int getCost(){
+        return this.cost;
+    }
+
     public int yTile() {
         return (this.y - 72) / 65;
     }
@@ -104,6 +109,7 @@ public abstract class Plant {
         return Integer.parseInt(this.grid);
     }
 
+    //check if there is zombie on the same row as the current plant
     public boolean checkRow(ArrayList<Zombie> li) {
         for (int i = 0; i < li.size(); i++) {
             if (Integer.parseInt(this.grid) % 10 == li.get(i).getRow()) {
@@ -112,5 +118,14 @@ public abstract class Plant {
 
         }
         return false;
+    }
+
+    //return if this is done cooldown
+    public boolean isCooldown(){
+        return (System.currentTimeMillis() - this.lastPlant)/1000 >= this.cooldown;
+    }
+
+    public void setCooldown(){
+        this.lastPlant = System.currentTimeMillis();
     }
 }
