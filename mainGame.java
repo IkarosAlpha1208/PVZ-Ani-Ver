@@ -33,19 +33,9 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
     Background map;
 
-    Zombie z1;
-
-    int zombieX = 500;
-
-    // Abmount of zombies on the screen
-    int maxZombies = 5;
-
     int zombieFrameCounter = 0;
     int zombieMoveCounter = 0;
-    // Normal z1;
 
-    int[] randRow = { 0, 75, 150, 215, 290 };
-    int randY;
     int mapLcord = 187, mapRcord = 720, mapUcord = 72, mapDcord = 440;
     int blockSizeX = 56, blockSizeY = 75;
     Thread thread;

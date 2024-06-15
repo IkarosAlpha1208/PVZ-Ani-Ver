@@ -71,8 +71,6 @@ public class Giant extends Zombie {
 
             this.dyingIndex++;
 
-            animateHead();
-
         } else if (isEating) {
 
             if (this.eatingIndex == 34) {
