@@ -8,6 +8,7 @@ public class Boss extends Background {
 
     public Boss(String name) {
         super(name);
+        this.mode = "Level 3";
 
         // TODO Auto-generated constructor stub
     }

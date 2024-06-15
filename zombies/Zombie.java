@@ -310,6 +310,10 @@ public abstract class Zombie {
         return this.height;
     }
 
+    public int getHp() {
+        return this.hp;
+    }
+
     public void setRec() {
         this.hitbox = new Rectangle(this.hitX, this.hitY, this.width, this.height);
     }
