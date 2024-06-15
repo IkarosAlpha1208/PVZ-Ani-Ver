@@ -28,6 +28,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
     ArrayList<Plant> plantObjects = new ArrayList<>();
     ArrayList<Projectile> projectileList = new ArrayList<>();
     ArrayList<Projectile> sunList = new ArrayList<>();
+    ArrayList<Scoreboard> scores = new ArrayList<>();
     Player player;
 
     Background map;
@@ -73,6 +74,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
+
     }
 
     public void paintComponent(Graphics g) {
@@ -153,6 +155,9 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             g.drawImage(background, 0, 0, this);
             zList.removeAll(zList);
             lList.removeAll(lList);
+            if (map.getMode().equals("Endless")) {
+                player.setHighWave(map.getWaveNum() - 1);
+            }
 
             zombieFrameCounter = 0;
 
@@ -255,6 +260,26 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             screen = 0;
         } catch (IOException e) {
             System.out.println("FIle not Found");
+        }
+
+        try {
+            Scanner inFile = new Scanner(new File("scoreboard.txt"));
+            while (inFile.hasNext()) {
+                String line = inFile.next();
+                System.out.println(line.length());
+
+                if (line.substring(line.indexOf(")") + 1).length() > 0) {
+                    int score = Integer.parseInt(line.substring(line.indexOf(")") + 1));
+                    Scoreboard temp = new Scoreboard(score);
+                    scores.add(temp);
+                }
+
+            }
+            inFile.close();
+
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
 
     }
@@ -368,11 +393,28 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             else if (e.getX() > 640 && e.getX() < 678 && e.getY() > 386 && e.getY() < 419) {
                 System.out.println("Exist");
                 player.save("save.txt");
+                Scoreboard playerHigh = new Scoreboard(player.getHighWave());
+                scores.add(playerHigh);
+                scores.sort(null);
+
+                try {
+                    PrintWriter outFile = new PrintWriter(new FileWriter("scoreboard.txt"), true);
+                    for (int i = 0; i < scores.size(); i++) {
+                        outFile.println(i + 1 + ") " + scores.get(i).getHighWave());
+
+                    }
+                } catch (IOException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+
                 System.exit(ABORT);
             }
         }
 
-        else if (screen == 4) {
+        else if (screen == 4)
+
+        {
             Player.resetForLevel();
             if (e.getX() > 211 && e.getX() < 286 && e.getY() > 319 && e.getY() < 340) {
                 System.out.println("Level 1 ");
