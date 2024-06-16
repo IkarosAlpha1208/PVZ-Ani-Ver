@@ -48,6 +48,7 @@ public class Pea extends Projectile {
             return true;
         }
         for (Zombie z : zList) {
+            // z.setRec();
             if (this.hitbox.intersects(z.getRec())) {
                 System.out.println("Hit zombie");
                 this.hitSound.start();
