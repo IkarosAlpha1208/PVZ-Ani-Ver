@@ -30,10 +30,10 @@ public class Pea extends Projectile {
                 System.out.println("Hit zombie");
                 hit(z);
 
-                z.isDead();
-                if (z.getIsDead()) {
-                    zList.remove(z);
-                }
+                // z.isDead();
+                // if (z.getIsDead()) {
+                // zList.remove(z);
+                // }
                 return true;
             }
         }

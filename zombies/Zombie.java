@@ -145,6 +145,7 @@ public abstract class Zombie {
             this.walkingIndex++;
         } else if (isDead) {
             // Handle dying animation
+            System.out.println("Hello");
             if (this.dyingIndex == 6) {
                 this.isDead = false;
                 this.remove = true;

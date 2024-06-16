@@ -19,6 +19,9 @@ public abstract class Background {
     // Money to get if they win
     protected int money;
 
+    // Winner Screen
+    protected BufferedImage winner;
+
     protected HashMap<Integer, Zombie> zombieGrid; // Map to keep track of zombies on the grid
 
     // Constructor to initialize the background with a specific image
@@ -74,6 +77,10 @@ public abstract class Background {
 
     public int getMoney() {
         return this.money;
+    }
+
+    public BufferedImage getWinner() {
+        return this.winner;
     }
 
 }
