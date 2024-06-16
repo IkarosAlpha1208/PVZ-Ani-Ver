@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import javax.imageio.ImageIO;
-import javax.sound.sampled.*;
 
 import plants.*;
 
@@ -45,10 +44,8 @@ public abstract class Zombie {
     protected BufferedImage head; // Image of zombie's head
     protected String name; // Name of the zombie
     protected String extenstion = ""; // Extension for image files
-    protected Clip eatingClip; // soundeffect of eating
-    boolean eatingPlaying; // boolean to see if the soundeffect is playing
-    // Constructor to initialize the zombie's attributes
 
+    // Constructor to initialize the zombie's attributes
     public Zombie(int hp, int damage, int x, int y, int row, String name) {
         this.name = name;
         this.hp = hp;
@@ -72,25 +69,13 @@ public abstract class Zombie {
         this.hitY = y + 58;
         this.hitX = x + 15;
         this.hitbox = new Rectangle(this.hitX, this.hitY, this.width, this.height);
-        AudioInputStream sound;
 
+        // Load the head image
         try {
-            sound = AudioSystem.getAudioInputStream(new File("assets/sound/eating.wav"));
-            this.eatingClip = AudioSystem.getClip();
-            this.eatingClip.open(sound);
-
-        } catch (LineUnavailableException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            this.head = ImageIO.read(new File("assets/zombies/head.png"));
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (UnsupportedAudioFileException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        this.eatingPlaying = false;
-
     }
 
     // Method to handle zombie's attack on plants
@@ -112,7 +97,6 @@ public abstract class Zombie {
                 this.isWalking = false;
                 p.takeDmg(this.damage);
                 this.currentEating = p;
-                playEatingSound();
             }
 
             // Check if the plant is dead
@@ -120,13 +104,11 @@ public abstract class Zombie {
                 this.isEating = false;
                 this.isWalking = true;
                 iter.remove();
-                stopEatingSound();
             }
             // If the plant the zombie was eating is removed
             if (!pList.containsValue(this.currentEating)) {
                 this.isEating = false;
                 this.isWalking = true;
-                stopEatingSound();
             }
         }
 
@@ -134,7 +116,6 @@ public abstract class Zombie {
         if (pList.size() == 0 && !this.isDead && !this.remove) {
             this.isEating = false;
             this.isWalking = true;
-            stopEatingSound();
         }
     }
 
@@ -164,7 +145,6 @@ public abstract class Zombie {
             this.walkingIndex++;
         } else if (isDead) {
             // Handle dying animation
-            System.out.println("Hello");
             if (this.dyingIndex == 6) {
                 this.isDead = false;
                 this.remove = true;
@@ -264,17 +244,6 @@ public abstract class Zombie {
             this.isWalking = false;
             this.isEating = false;
         }
-    }
-
-    public void playEatingSound() {
-        this.eatingClip.start();
-        this.eatingClip.loop(Clip.LOOP_CONTINUOUSLY);
-        this.eatingPlaying = true;
-    }
-
-    public void stopEatingSound() {
-        this.eatingClip.stop();
-        this.eatingPlaying = false;
     }
 
     public boolean getIsDead() {

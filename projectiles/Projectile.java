@@ -1,9 +1,7 @@
 package projectiles;
-
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import javax.sound.sampled.*;
 
 import zombies.*;
 
@@ -14,7 +12,6 @@ public abstract class Projectile {
     protected int x, y;
     protected Rectangle hitbox;
     protected BufferedImage img;
-    protected Clip hitSound;
 
     public Projectile(int speed, int damage, String stat, int x, int y) {
         this.speed = speed;
@@ -28,16 +25,16 @@ public abstract class Projectile {
 
     public abstract void hit(Object o);
 
-    public void move() {
+    public void move(){
         this.x += this.speed;
         hitbox.x = this.x;
     }
 
-    public String getStat() {
+    public String getStat(){
         return this.stat;
     }
 
-    public BufferedImage getImage() {
+    public BufferedImage getImage(){
         return this.img;
     }
 
@@ -49,11 +46,11 @@ public abstract class Projectile {
         return this.y;
     }
 
-    public int getWidth() {
+    public int getWidth(){
         return this.hitbox.width;
     }
 
-    public int getHeight() {
+    public int getHeight(){
         return this.hitbox.height;
     }
 }

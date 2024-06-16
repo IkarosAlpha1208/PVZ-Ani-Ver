@@ -8,7 +8,6 @@ import java.util.HashMap;
 import javax.imageio.ImageIO;
 import zombies.*;
 import java.awt.image.BufferedImage;
-import javax.sound.sampled.*;
 
 public abstract class Background {
     // Fields to store various attributes of the background
@@ -21,12 +20,6 @@ public abstract class Background {
     protected int money;
     protected String stat;
 
-    // Winner Screen
-    protected BufferedImage winner;
-
-    protected Clip gameMusic;
-    protected Clip winnerMusic;
-
     protected HashMap<Integer, Zombie> zombieGrid; // Map to keep track of zombies on the grid
 
     // Constructor to initialize the background with a specific image
@@ -37,28 +30,8 @@ public abstract class Background {
             System.out.println("CANNOT READ FILE");
         }
 
-        this.waveNum = 1;
+        this.waveNum = 3;
         this.zombieX = 750;
-        AudioInputStream sound;
-
-        try {
-            sound = AudioSystem.getAudioInputStream(new File("assets/sound/Grasswalk.wav"));
-            this.gameMusic = AudioSystem.getClip();
-            this.gameMusic.open(sound);
-            sound = AudioSystem.getAudioInputStream(new File("assets/sound/winmusic.wav"));
-            this.winnerMusic = AudioSystem.getClip();
-            this.winnerMusic.open(sound);
-
-        } catch (LineUnavailableException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (UnsupportedAudioFileException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
 
     }
 
@@ -102,28 +75,6 @@ public abstract class Background {
 
     public int getMoney() {
         return this.money;
-    }
-
-    public void playMusic() {
-        this.gameMusic.start();
-        this.gameMusic.loop(Clip.LOOP_CONTINUOUSLY);
-    }
-
-    public void stopMusic() {
-        this.gameMusic.stop();
-    }
-
-    public void playWinMusic() {
-        this.winnerMusic.start();
-        this.winnerMusic.loop(Clip.LOOP_CONTINUOUSLY);
-    }
-
-    public void stopWinMusic() {
-        this.winnerMusic.stop();
-    }
-
-    public BufferedImage getWinner() {
-        return this.winner;
     }
 
 }
