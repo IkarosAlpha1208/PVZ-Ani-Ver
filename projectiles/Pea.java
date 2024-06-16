@@ -5,6 +5,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+
 import zombies.*;
 
 public class Pea extends Projectile {
@@ -17,6 +22,24 @@ public class Pea extends Projectile {
         } catch (IOException e) {
             System.out.println("Cant find projectile");
         }
+        AudioInputStream sound;
+
+        try {
+            sound = AudioSystem.getAudioInputStream(new File("assets/sound/splat.wav"));
+            this.hitSound = AudioSystem.getClip();
+            this.hitSound.open(sound);
+
+        } catch (LineUnavailableException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (UnsupportedAudioFileException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -28,6 +51,7 @@ public class Pea extends Projectile {
             // z.setRec();
             if (this.hitbox.intersects(z.getRec())) {
                 System.out.println("Hit zombie");
+                this.hitSound.start();
                 hit(z);
 
                 // z.isDead();

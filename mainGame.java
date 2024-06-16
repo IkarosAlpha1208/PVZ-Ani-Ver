@@ -33,6 +33,11 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
     ArrayList<Projectile> sunList = new ArrayList<>();
     ArrayList<Scoreboard> scores = new ArrayList<>();
     Player player;
+    // Background music
+    Clip menuMusic;
+    Clip loserMusic;
+    Clip teamMusic;
+    Clip zombieComing;
 
     // Map object
     Background map;
@@ -82,16 +87,23 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
         // Draw the Main menu screen
         if (screen == 0) {
+            loserMusic.stop();
+            teamMusic.stop();
+            menuMusic.start();
+            menuMusic.loop(Clip.LOOP_CONTINUOUSLY);
+
             background = mainMenu;
             g.drawImage(background, 0, 0, this);
             once = 0;
             // Draw the level select screen
         } else if (screen == 4) {
+
             background = levels;
             g.drawImage(background, 0, 0, this);
         }
         // if its the game screen
         else if (screen == 1) {
+            menuMusic.stop();
 
             // Draw the background & and teams display
             g.drawImage(map.getBackground(), 0, 0, this);
@@ -150,6 +162,9 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             }
 
         } else if (screen == 5) {
+            menuMusic.stop();
+            teamMusic.start();
+            teamMusic.loop(Clip.LOOP_CONTINUOUSLY);
             background = inven;
             g.drawImage(background, 0, 0, this);
             int tile = 22;
@@ -172,9 +187,21 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             // Game over screen
 
         } else if (screen == 7) {
+            map.stopMusic();
+            // Stopping the eating noise from the zombie
+            for (int i = 0; i < zList.size(); i++) {
+
+                zList.get(i).stopEatingSound();
+            }
+
+            loserMusic.start();
+            loserMusic.loop(Clip.LOOP_CONTINUOUSLY);
+
             background = gameOver;
             g.drawImage(background, 0, 0, this);
             // Reset the zombie & Lawnmower lists
+            zList.removeAll(zList);
+            lList.removeAll(lList);
 
             if (map.getMode().equals("Endless")) {
                 player.setHighWave(map.getWaveNum() - 1);
@@ -184,6 +211,8 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
             // Winner Screen
         } else if (screen == 8) {
+            map.stopMusic();
+            map.playWinMusic();
             // Reset all the lists
             if (once == 0)
                 player.changeMoney(map.getMoney());
@@ -213,9 +242,11 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
         // If the gammode is not endless alternate between mini wave and big wave
         // until player beats wave 3
+
         if (!map.getMode().equals("Endless")) {
+            if (map.getWaveNum() == 1)
+                zombieComing.start();
             if (map.getWaveNum() % 2 == 1 && map.getWaveNum() != 7) {
-                System.out.println("HEELLLOOO");
                 map.miniWave(zList);
             }
 
@@ -322,6 +353,34 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             e.printStackTrace();
         }
 
+        // Loading in background music
+        AudioInputStream sound;
+
+        try {
+            sound = AudioSystem.getAudioInputStream(new File("assets/sound/theme.wav"));
+            menuMusic = AudioSystem.getClip();
+            menuMusic.open(sound);
+            sound = AudioSystem.getAudioInputStream(new File("assets/sound/losemusic.wav"));
+            loserMusic = AudioSystem.getClip();
+            this.loserMusic.open(sound);
+            sound = AudioSystem.getAudioInputStream(new File("assets/sound/teamselection.wav"));
+            teamMusic = AudioSystem.getClip();
+            teamMusic.open(sound);
+            sound = AudioSystem.getAudioInputStream(new File("assets/sound/zombiesarecoming.wav"));
+            zombieComing = AudioSystem.getClip();
+            zombieComing.open(sound);
+
+        } catch (LineUnavailableException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (UnsupportedAudioFileException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -393,12 +452,14 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
             // zombie attacking & zombie removing if its dead
             for (int i = 0; i < zList.size(); i++) {
+
                 if (zList.get(i).getRemove()) {
                     zList.remove(zList.get(i));
                     i--;
                 } else {
                     zList.get(i).attack(pList);
                 }
+
             }
         }
 
@@ -423,6 +484,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             else if (e.getX() > 582 && e.getX() < 705 && e.getY() > 270 && e.getY() < 308) {
                 System.out.println("ENDLESS");
                 map = new Endless("grass");
+                map.playMusic();
                 addingLawnmowers();
                 screen = 1;
 
@@ -467,6 +529,8 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             if (e.getX() > 211 && e.getX() < 286 && e.getY() > 319 && e.getY() < 340) {
                 System.out.println("Level 1 ");
                 map = new Grass("grass");
+                map.playMusic();
+
                 addingLawnmowers();
 
                 screen = 1;
@@ -474,6 +538,8 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             } else if (e.getX() > 356 && e.getX() < 436 && e.getY() > 319 && e.getY() < 340) {
                 System.out.println("Level 2 ");
                 map = new Night("night");
+                map.playMusic();
+
                 addingLawnmowers();
 
                 screen = 1;
@@ -483,6 +549,8 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             else if (e.getX() > 505 && e.getX() < 583 && e.getY() > 319 && e.getY() < 340) {
                 System.out.println("Level 3 ");
                 map = new Boss("grass");
+                map.playMusic();
+
                 addingLawnmowers();
 
                 screen = 1;
@@ -522,6 +590,8 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             if (e.getX() > 22 && e.getX() < 157 && e.getY() > 380 && e.getY() < 448) {
                 System.out.println("Save and exit...");
                 player.save("save.txt");
+                menuMusic.setFramePosition(0);
+
                 screen = 0;
             }
         }
@@ -571,25 +641,33 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
         else if (screen == 7) {
 
             if (e.getX() > 320 && e.getX() < 463 && e.getY() > 379 && e.getY() < 419) {
-                System.out.println("Hello");
+                menuMusic.setFramePosition(0);
+
                 screen = 0;
 
             }
         } else if (screen == 8) {
 
             if (e.getX() > 311 && e.getX() < 490 && e.getY() > 389 && e.getY() < 439) {
+                map.stopWinMusic();
+                menuMusic.setFramePosition(0);
+
                 screen = 0;
 
             }
         } else if (screen == 9) {
 
             if (e.getX() > 17 && e.getX() < 175 && e.getY() > 399 && e.getY() < 441) {
+                menuMusic.setFramePosition(0);
+
                 screen = 0;
 
             }
         } else if (screen == 10) {
 
             if (e.getX() > 30 && e.getX() < 209 && e.getY() > 387 && e.getY() < 440) {
+                menuMusic.setFramePosition(0);
+
                 screen = 0;
 
             }
