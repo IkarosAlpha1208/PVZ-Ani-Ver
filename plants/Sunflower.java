@@ -17,6 +17,7 @@ public class Sunflower extends Plant {
         this.stat = "sun";
         this.id = 0;
         this.lastAttack = System.currentTimeMillis();
+        this.describe = "Spawn sunlight";
         try {
             BufferedImage img = ImageIO.read((new File("assets/plants/Sunflower.png")));
             this.setImage(img);

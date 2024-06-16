@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.awt.Rectangle;
 
+// this is useless i just kept it for holder
 public class Coffee extends Plant {
 
     public Coffee(int x, int y) {

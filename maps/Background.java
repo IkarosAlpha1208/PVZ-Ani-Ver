@@ -50,13 +50,10 @@ public abstract class Background {
             this.winnerMusic.open(sound);
 
         } catch (LineUnavailableException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (UnsupportedAudioFileException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 

@@ -65,7 +65,7 @@ public class Endless extends Background {
                     zombieChoose = 0;
 
             } else {
-                z = new Giant(1500, 15, zombieX + i * 10, rowSpawn, randRow[counter][1], "Giant");
+                z = new Giant(1500 + 100*i, 100 + 10*i, zombieX + i * 10, rowSpawn, randRow[counter][1], "Giant");
 
             }
 

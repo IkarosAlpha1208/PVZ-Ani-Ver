@@ -12,11 +12,12 @@ import java.awt.Rectangle;
 public class NClair extends Plant {
 
     public NClair(int x, int y) {
-        super(50, 10, 1.5, 7.5, 500, x, y, new Rectangle(x, y, 36, 48));
+        super(500, 150, 2, 20, 500, x, y, new Rectangle(x, y, 36, 48));
         this.name = "Sinclair";
         this.stat = "";
         this.id = 13;
         this.lastAttack = 0;
+        this.describe = "Attack like pepper";
         try {
             BufferedImage img = ImageIO.read((new File("assets/plants/NClair.png")));
             this.setImage(img);
@@ -30,7 +31,7 @@ public class NClair extends Plant {
         long currentTime = System.currentTimeMillis();
         if ((currentTime - lastAttack)/1000.0 >= atkSpd) {
             lastAttack = currentTime;
-            projectileList.add(new Pea(5, atk, "none", this.x - 10, this.y + 10));
+            projectileList.add(new fire(0, atk, "none", 188, this.y + 10));
         }
     }
 

@@ -30,6 +30,7 @@ public class Sunlight extends Projectile{
         if((currentTime - existTime)/1000.0 >= 8){
             return true;
         }
+        
         if(this.hitbox.intersects(r)){
             System.out.println("Collected 25 sunlight");
             return true;
@@ -38,7 +39,7 @@ public class Sunlight extends Projectile{
     }
 
     @Override
-    public void hit(Object o) {
+    public void hit(Zombie z) {
         Player.changeSunlight(this.damage);
     }
 }

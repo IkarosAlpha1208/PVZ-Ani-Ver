@@ -12,11 +12,12 @@ import java.awt.Rectangle;
 public class RHeath extends Plant {
 
     public RHeath(int x, int y) {
-        super(50, 10, 1.5, 7.5, 300, x, y, new Rectangle(x, y, 36, 48));
+        super(200, 15, 0.375, 15, 300, x, y, new Rectangle(x, y, 36, 48));
         this.name = "Heathcliff";
         this.stat = "";
         this.id = 14;
         this.lastAttack = 0;
+        this.describe = "Hit fast and hard";
         try {
             BufferedImage img = ImageIO.read((new File("assets/plants/RHeath.png")));
             this.setImage(img);
@@ -30,7 +31,7 @@ public class RHeath extends Plant {
         long currentTime = System.currentTimeMillis();
         if ((currentTime - lastAttack)/1000.0 >= atkSpd) {
             lastAttack = currentTime;
-            projectileList.add(new Pea(5, atk, "none", this.x - 10, this.y + 10));
+            projectileList.add(new needle(10, atk, "none", this.x - 10, this.y + 10));
         }
     }
 

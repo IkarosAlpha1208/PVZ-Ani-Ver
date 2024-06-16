@@ -17,6 +17,7 @@ public class PeaShooter extends Plant {
         this.stat = "pea";
         this.id = 1;
         this.lastAttack = 0;
+        this.describe = "Shoot Pea";
         try {
             BufferedImage img = ImageIO.read((new File("assets/plants/PeaShooter.png")));
             this.setImage(img);

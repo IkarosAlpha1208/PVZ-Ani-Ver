@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.awt.Rectangle;
 
+//generate sun
 public class Yisang extends Plant {
 
     public Yisang(int x, int y) {
@@ -20,6 +21,7 @@ public class Yisang extends Plant {
         this.stat = "sun";
         this.id = 15;
         this.lastAttack = 0;
+        this.describe = "Generate sun every second";
         try {
             BufferedImage img = ImageIO.read((new File("assets/plants/YiSang.png")));
             this.setImage(img);

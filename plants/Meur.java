@@ -17,6 +17,7 @@ public class Meur extends Plant {
         this.stat = "penetrate";
         this.id = 18;
         this.lastAttack = 0;
+        this.describe = "Can penetrate enemy";
         try {
             BufferedImage img = ImageIO.read((new File("assets/plants/Meur.png")));
             this.setImage(img);
@@ -30,7 +31,7 @@ public class Meur extends Plant {
         long currentTime = System.currentTimeMillis();
         if ((currentTime - lastAttack)/1000.0 >= atkSpd) {
             lastAttack = currentTime;
-            projectileList.add(new Pea(5, atk, "none", this.x - 10, this.y + 10));
+            projectileList.add(new slashP(10, atk, "none", this.x - 10, this.y + 10));
         }
     }
 

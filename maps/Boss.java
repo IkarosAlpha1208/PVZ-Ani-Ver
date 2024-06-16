@@ -19,7 +19,6 @@ public class Boss extends Background {
         try {
             this.winner = ImageIO.read(new File("assets/backgrounds/winner1.png"));
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             System.out.println("File error");
         }
     }

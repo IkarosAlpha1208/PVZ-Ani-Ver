@@ -12,11 +12,13 @@ import java.awt.Rectangle;
 public class Jalepeno extends Plant {
 
     public Jalepeno(int x, int y) {
-        super(1000, 1800, 1, 25, 125, x, y, new Rectangle(x, y, 36, 48));
+        super(1000, 900, 2, 25, 125, x, y, new Rectangle(x, y, 36, 48));
         this.name = "Pepper";
         this.stat = "bomb";
         this.id = 4;
-        this.lastAttack = 0;
+        this.lastAttack = System.currentTimeMillis();
+        this.describe = "Hit all zombie on a line";
+        this.exist = true;
         try {
             BufferedImage img = ImageIO.read((new File("assets/plants/Jalepno.png")));
             this.setImage(img);
@@ -29,8 +31,8 @@ public class Jalepeno extends Plant {
     public void attack(ArrayList<Projectile> projectileList) {
         long currentTime = System.currentTimeMillis();
         if ((currentTime - lastAttack)/1000.0 >= atkSpd) {
-            lastAttack = currentTime;
-            projectileList.add(new Pea(5, atk, "none", this.x - 10, this.y + 10));
+            projectileList.add(new fire(0, atk, "none", 188, this.y + 10));
+            this.exist = false;
         }
     }
 
@@ -43,12 +45,6 @@ public class Jalepeno extends Plant {
     }
 
     public boolean checkRow(ArrayList<Zombie> li){
-        for (int i = 0; i < li.size(); i++) {
-            if (Integer.parseInt(this.grid) % 10 == li.get(i).getRow()) {
-                return true;
-            }
-
-        }
-        return false;
+        return true;
     }
 }

@@ -12,11 +12,12 @@ import java.awt.Rectangle;
 public class DawnClair extends Plant {
 
     public DawnClair(int x, int y) {
-        super(50, 10, 1.5, 7.5, 350, x, y, new Rectangle(x, y, 36, 48));
+        super(300, 20, 0.75, 15, 350, x, y, new Rectangle(x, y, 36, 48));
         this.name = "Crying Child";
         this.stat = "";
         this.id = 11;
         this.lastAttack = 0;
+        this.describe = "Shoot flame sword that goes through enemy";
         try {
             BufferedImage img = ImageIO.read((new File("assets/plants/DawnClairAttack.png")));
             this.setImage(img);
@@ -30,7 +31,7 @@ public class DawnClair extends Plant {
         long currentTime = System.currentTimeMillis();
         if ((currentTime - lastAttack)/1000.0 >= atkSpd) {
             lastAttack = currentTime;
-            projectileList.add(new Pea(5, atk, "none", this.x - 10, this.y + 10));
+            projectileList.add(new flameSword(10, atk, "none", this.x - 10, this.y + 10));
         }
     }
 

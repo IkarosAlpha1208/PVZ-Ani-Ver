@@ -12,11 +12,12 @@ import java.awt.Rectangle;
 public class SmallShroom extends Plant {
 
     public SmallShroom(int x, int y) {
-        super(50, 10, 1.5, 7.5, 0, x, y, new Rectangle(x, y, 36, 48));
+        super(50, 5, 2, 5, 0, x, y, new Rectangle(x, y, 36, 48));
         this.name = "Puff Shroom";
         this.stat = "";
         this.id = 6;
         this.lastAttack = 0;
+        this.describe = "Is free";
         try {
             BufferedImage img = ImageIO.read((new File("assets/plants/SmallShroom.png")));
             this.setImage(img);
@@ -30,7 +31,7 @@ public class SmallShroom extends Plant {
         long currentTime = System.currentTimeMillis();
         if ((currentTime - lastAttack)/1000.0 >= atkSpd) {
             lastAttack = currentTime;
-            projectileList.add(new Pea(5, atk, "none", this.x - 10, this.y + 10));
+            projectileList.add(new puffS(5, atk, "none", this.x - 10, this.y + 10));
         }
     }
 

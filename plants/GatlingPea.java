@@ -17,6 +17,7 @@ public class GatlingPea extends Plant {
         this.stat = "pea";
         this.id = 9;
         this.lastAttack = 0;
+        this.describe = "Shoot 4x faster than pea shooter";
         try {
             BufferedImage img = ImageIO.read((new File("assets/plants/GatlinShooter.png")));
             this.setImage(img);

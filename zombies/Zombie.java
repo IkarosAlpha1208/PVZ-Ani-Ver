@@ -80,13 +80,10 @@ public abstract class Zombie {
             this.eatingClip.open(sound);
 
         } catch (LineUnavailableException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (UnsupportedAudioFileException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         this.eatingPlaying = false;
@@ -254,6 +251,12 @@ public abstract class Zombie {
         this.headX = x;
     }
 
+    public void moveBack(int i){
+        this.x += i;
+        this.hitX += i;
+        setRec();
+    }
+
     // Method to check if the zombie is dead
     //
     public void isDead() {
@@ -264,6 +267,7 @@ public abstract class Zombie {
             this.isDead = true;
             this.isWalking = false;
             this.isEating = false;
+            stopEatingSound();
         }
     }
 

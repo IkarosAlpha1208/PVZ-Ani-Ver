@@ -9,14 +9,17 @@ import java.io.File;
 import java.io.IOException;
 import java.awt.Rectangle;
 
+//cherry bomb
 public class Cherry extends Plant {
 
     public Cherry(int x, int y) {
-        super(1000, 900, 1, 25, 150, x, y, new Rectangle(x, y, 36, 48));
-        this.name = "bomb";
-        this.stat = "";
+        super(1000, 900, 2, 25, 150, x, y, new Rectangle(x, y, 36, 48));
+        this.name = "Cherrybomb";
+        this.stat = "bomb";
         this.id = 5;
         this.lastAttack = System.currentTimeMillis();
+        this.describe = "Deal damage to zombie around";
+        this.exist = true;
         try {
             BufferedImage img = ImageIO.read((new File("assets/plants/Cherry.png")));
             this.setImage(img);
@@ -29,8 +32,8 @@ public class Cherry extends Plant {
     public void attack(ArrayList<Projectile> projectileList) {
         long currentTime = System.currentTimeMillis();
         if ((currentTime - lastAttack)/1000.0 >= atkSpd) {
-            lastAttack = currentTime;
-            projectileList.add(new Pea(5, atk, "none", this.x - 10, this.y + 10));
+            projectileList.add(new bomb(0, atk, "none", this.x - 40, this.y - 15));
+            this.exist = false;
         }
     }
 
@@ -43,12 +46,6 @@ public class Cherry extends Plant {
     }
 
     public boolean checkRow(ArrayList<Zombie> li){
-        for (int i = 0; i < li.size(); i++) {
-            if (Integer.parseInt(this.grid) % 10 == li.get(i).getRow()) {
-                return true;
-            }
-
-        }
-        return false;
+        return true;
     }
 }

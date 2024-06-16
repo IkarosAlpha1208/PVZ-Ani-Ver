@@ -17,6 +17,7 @@ public class FreezeShooter extends Plant {
         this.stat = "pea";
         this.id = 3;
         this.lastAttack = 0;
+        this.describe = "Shoot Pea and knock zombie back";
         try {
             BufferedImage img = ImageIO.read((new File("assets/plants/ForstShooter.png")));
             this.setImage(img);
@@ -30,7 +31,7 @@ public class FreezeShooter extends Plant {
         long currentTime = System.currentTimeMillis();
         if ((currentTime - lastAttack)/1000.0 >= atkSpd) {
             lastAttack = currentTime;
-            projectileList.add(new Pea(5, atk, "none", this.x - 10, this.y + 10));
+            projectileList.add(new frozenPea(5, atk, "none", this.x - 10, this.y + 10));
         }
     }
 

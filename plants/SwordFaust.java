@@ -12,11 +12,12 @@ import java.awt.Rectangle;
 public class SwordFaust extends Plant {
 
     public SwordFaust(int x, int y) {
-        super(50, 10, 1.5, 7.5, 200, x, y, new Rectangle(x, y, 36, 48));
+        super(100, 20, 1, 10, 200, x, y, new Rectangle(x, y, 36, 48));
         this.name = "Blade Faust";
         this.stat = "";
         this.id = 16;
         this.lastAttack = 0;
+        this.describe = "shoot slashes out";
         try {
             BufferedImage img = ImageIO.read((new File("assets/plants/SwordFaust.png")));
             this.setImage(img);
@@ -30,7 +31,7 @@ public class SwordFaust extends Plant {
         long currentTime = System.currentTimeMillis();
         if ((currentTime - lastAttack)/1000.0 >= atkSpd) {
             lastAttack = currentTime;
-            projectileList.add(new Pea(5, atk, "none", this.x - 10, this.y + 10));
+            projectileList.add(new slash(5, atk, "none", this.x - 10, this.y + 10));
         }
     }
 

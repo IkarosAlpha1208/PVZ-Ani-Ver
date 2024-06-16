@@ -16,6 +16,7 @@ public class Wallnut extends Plant {
         this.name = "Wallnut";
         this.stat = "nut";
         this.id = 2;
+        this.describe = "It is hard";
         try {
             BufferedImage img = ImageIO.read((new File("assets/plants/Wallnut.png")));
             this.setImage(img);

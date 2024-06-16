@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.awt.Rectangle;
 
+// repeater shoot out peat
 public class Repeater extends Plant {
 
     public Repeater(int x, int y) {
@@ -17,6 +18,7 @@ public class Repeater extends Plant {
         this.stat = "pea";
         this.id = 10;
         this.lastAttack = 0;
+        this.describe = "Shoot 2x faster than pea shooter";
         try {
             BufferedImage img = ImageIO.read((new File("assets/plants/Repeater.png")));
             this.setImage(img);

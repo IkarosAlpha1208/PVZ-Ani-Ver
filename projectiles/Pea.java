@@ -30,13 +30,10 @@ public class Pea extends Projectile {
             this.hitSound.open(sound);
 
         } catch (LineUnavailableException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (UnsupportedAudioFileException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -47,25 +44,30 @@ public class Pea extends Projectile {
         if (this.x >= 720) {
             return true;
         }
-        for (Zombie z : zList) {
-            if (this.hitbox.intersects(z.getRec())) {
-                System.out.println("Hit zombie");
-                this.hitSound.start();
-                hit(z);
-
-                // z.isDead();
-                // if (z.getIsDead()) {
-                // zList.remove(z);
-                // }
-                return true;
+        try {
+            this.hitSound.start();
+            for (int i = 0; i < zList.size(); i++) {
+                Zombie z = zList.get(i);
+                if (this.hitbox.intersects(z.getRec())) {
+                    System.out.println("Zombie Health: " + z.getHp());
+                    hit(z);
+                    z.isDead();
+                    if(z.getIsDead()){
+                        zList.remove(i);
+                        i--;
+                    }
+                    return true;
+                }
             }
+            return false;
+        } catch (Exception e) {
+            System.out.println("Error");
+            return false;
         }
-        return false;
     }
 
     @Override
-    public void hit(Object o) {
-        Zombie z = (Zombie) o;
+    public void hit(Zombie z) {
         z.takeDamage(this.damage);
     }
 }

@@ -11,12 +11,12 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 import zombies.*;
 
-// projectile for fume shroom, only disapear after hit wall
-public class puffP extends Projectile{
-    public puffP(int speed, int damage, String stat, int x, int y) {
+public class frozenPea extends Projectile {
+
+    public frozenPea(int speed, int damage, String stat, int x, int y) {
         super(speed, damage, stat, x, y);
         try {
-            this.img = ImageIO.read(new File("assets/projectiles/Puff.png"));
+            this.img = ImageIO.read(new File("assets/projectiles/ProjectileSnowPea.png"));
             this.hitbox = new Rectangle(this.x, this.y, this.img.getWidth(), this.img.getHeight());
         } catch (IOException e) {
             System.out.println("Cant find projectile");
@@ -35,8 +35,9 @@ public class puffP extends Projectile{
         } catch (UnsupportedAudioFileException e) {
             e.printStackTrace();
         }
-    }    
-    
+
+    }
+
     @Override
     public boolean isHit(ArrayList<Zombie> zList, int x, int y) {
         if (this.x >= 720) {
@@ -54,6 +55,7 @@ public class puffP extends Projectile{
                         zList.remove(i);
                         i--;
                     }
+                    return true;
                 }
             }
             return false;
@@ -66,5 +68,6 @@ public class puffP extends Projectile{
     @Override
     public void hit(Zombie z) {
         z.takeDamage(this.damage);
+        z.moveBack(2);
     }
 }

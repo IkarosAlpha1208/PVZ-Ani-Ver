@@ -8,6 +8,7 @@ import projectiles.Projectile;
 import zombies.Zombie;
 
 public abstract class Plant {
+    //variables
     protected int hp;
     protected int atk;
     protected double atkSpd;
@@ -15,18 +16,22 @@ public abstract class Plant {
     protected int cost;
     protected String name;
     protected int id;
-    protected String stat;
-    protected int x, y, yTile;
-    protected long lastAttack;
-    protected long lastPlant;
+    protected String stat;// mainly for bomb, to let the program know this plant is a bomb
+    protected int x, y, yTile;// y tile is for the tile this plant at when we are in a level
+    protected long lastAttack;//record the last attack
+    protected long lastPlant;//record the last time this plant is puted
     protected Rectangle hitbox;
     protected BufferedImage img;
-    protected String grid;
-    protected int aniCounter;
-    protected boolean attacking;
-    protected double exist;
+    protected String grid;//similar to y tile
+    protected boolean exist;// if it should be living, mainly for bomb
+    protected String describe;// brief description
 
+    //This is the plant class, every plant that extends this have basically the same template
+    //usually the only difference is the projectile each plant create, and create plant method
+    //I dont think i have to explan more right, i mean there is like 19 plant
+    //constructer here
     public Plant(int hp, int atk, double atkSpd, double cooldown, int cost, int x, int y, Rectangle rectangle) {
+        //variables
         this.hp = hp;
         this.atk = atk;
         this.atkSpd = atkSpd;
@@ -41,9 +46,11 @@ public abstract class Plant {
     public abstract void attack(ArrayList<Projectile> projectileList);
 
     //create a duplicate of this plant
+    //and return it
     public abstract Plant createPlant(int x, int y, int yTi, String grid);
 
     //this is for checking if the plant is going to attack
+    //and return it
     public abstract boolean checkRow(ArrayList<Zombie> li);
 
     //getter and setter methods
@@ -87,8 +94,16 @@ public abstract class Plant {
         return this.id;
     }
 
+    public String getDescribe(){
+        return this.describe;
+    }
+
     public String getStat() {
         return this.stat;
+    }
+
+    public boolean getExist(){
+        return this.exist;
     }
 
     public int getCost(){

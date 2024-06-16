@@ -11,11 +11,12 @@ import java.awt.Rectangle;
 public class Mahou extends Plant{
 
     public Mahou(int x, int y) {
-        super(50, 10, 1.5, 7.5, 175, x, y, new Rectangle(x, y, 36, 48));
+        super(2000, 0, 0, 10, 250, x, y, new Rectangle(x, y, 36, 48));
         this.name = "Sad Heathcliff";
         this.stat = "nut";
         this.id = 12;
         this.lastAttack = 0;
+        this.describe = "Tank af";
         try {
             BufferedImage img = ImageIO.read((new File("assets/plants/Mahou.png")));
             this.setImage(img);
@@ -25,11 +26,6 @@ public class Mahou extends Plant{
     }
     @Override
     public void attack(ArrayList<Projectile> projectileList) {
-        long currentTime = System.currentTimeMillis();
-        if ((currentTime - lastAttack)/1000.0 >= atkSpd) {
-            lastAttack = currentTime;
-            projectileList.add(new Pea(5, atk, "none", this.x - 10, this.y + 10));
-        }
     }
 
     @Override
@@ -41,12 +37,6 @@ public class Mahou extends Plant{
     }
 
     public boolean checkRow(ArrayList<Zombie> li){
-        for (int i = 0; i < li.size(); i++) {
-            if (Integer.parseInt(this.grid) % 10 == li.get(i).getRow()) {
-                return true;
-            }
-
-        }
         return false;
     }
 }

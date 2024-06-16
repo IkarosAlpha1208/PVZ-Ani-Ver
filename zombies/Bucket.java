@@ -13,12 +13,12 @@ public class Bucket extends Zombie {
     }
 
     @Override
-    // Movement method, makes the zombie move 2 pixels
+    // Movement method, makes the zombie move 3 pixels
     // no return value or paramters
     // The hitbox moves along with the zombie
     public void move() {
-        this.x = this.x - 2;
-        this.hitX = this.hitX - 2;
+        this.x = this.x - 3;
+        this.hitX = this.hitX - 3;
         setRec();
 
     }

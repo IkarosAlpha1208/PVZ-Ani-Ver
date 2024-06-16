@@ -4,7 +4,9 @@ import java.util.*;
 import java.io.*;
 import plants.*;
 
+//this is the player, with all the variables and methods for player
 public class Player {
+    //variables
     private String name;
     private int money;
     private int[] ownPlants = new int[19];
@@ -14,6 +16,8 @@ public class Player {
     private static int sunlight;
 
     public Player(String fileN, ArrayList<Plant> plants) {
+        //constructor
+        //read in info from save file
         try {
             BufferedReader reader = new BufferedReader(new FileReader("player/" + fileN));
             this.name = reader.readLine();
@@ -42,6 +46,7 @@ public class Player {
             System.out.println("Successfully read in the save");
             reader.close();
         } catch (FileNotFoundException e) {
+            //if no file is found then create a new one
             System.out.println("Cant find the save, creating a new one...");
             this.name = "player";
             this.money = 100;
@@ -55,6 +60,7 @@ public class Player {
         }
     }
 
+    //export the player info into the save file
     public void save(String fileN) {
         try {
             PrintWriter writer = new PrintWriter(new FileWriter("player/" + fileN));
@@ -79,6 +85,7 @@ public class Player {
         }
     }
 
+    //getter and setter methods
     public static void resetForLevel() {
         sunlight = 2000;
         currentPlant = -1;

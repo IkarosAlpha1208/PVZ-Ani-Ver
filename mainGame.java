@@ -1,6 +1,5 @@
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.Queue;
 import java.io.*;
 import javax.swing.*;
 import javax.imageio.*;
@@ -37,14 +36,21 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
     ArrayList<Projectile> projectileList = new ArrayList<>();
     ArrayList<Projectile> sunList = new ArrayList<>();
     ArrayList<Scoreboard> scores = new ArrayList<>();
-    Queue<String> rolls = new LinkedList<>();
+    LinkedList<Integer> rolls = new LinkedList<>();
     Player player;
+
+    // Background music
+    Clip menuMusic;
+    Clip loserMusic;
+    Clip teamMusic;
+    Clip zombieComing;
 
     // Map object
     Background map;
 
     int zombieFrameCounter = 0;
     int zombieMoveCounter = 0;
+    //gacha variables
     int rollType = 0;
     int[] common = {0, 1, 2, 3, 6};
     int[] rare = {4, 5, 7, 9, 10};
@@ -93,6 +99,12 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
         // Draw the Main menu screen
         if (screen == 0) {
+            loserMusic.stop();
+            teamMusic.stop();
+            zombieComing.setFramePosition(0);
+            menuMusic.start();
+            menuMusic.loop(Clip.LOOP_CONTINUOUSLY);
+
             background = mainMenu;
             g.drawImage(background, 0, 0, this);
             once = 0;
@@ -103,7 +115,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
         }
         // if its the game screen
         else if (screen == 1) {
-
+            menuMusic.stop();
             try {
                 // Draw the background & and teams display
                 g.drawImage(map.getBackground(), 0, 0, this);
@@ -112,7 +124,6 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                 for (Plant p : pList.values()) {
                     if (!p.isDead())
                         g.drawImage(p.getImage(), p.getX(), p.getY(), this);
-                    g.drawRect(p.getX() + 10, p.getY() + 10, p.getWidth(), p.getHeight());
                 }
     
                 // print out projectile
@@ -124,14 +135,12 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                 // print out all the sun
                 for (Projectile p : sunList) {
                     g.drawImage(p.getImage(), p.getX(), p.getY(), this);
-                    g.drawRect(p.getX(), p.getY(), p.getWidth(), p.getHeight());
                 }
                 // Draw the zombies
                 for (int i = 0; i < zList.size(); i++) {
                     g.drawImage(zList.get(i).getAnimation(), zList.get(i).getX(),
                             zList.get(i).getY(), this);
     
-                    // print out the plant
                 }
                 // Draw all the lawnmowers
                 // lawnmower picture
@@ -149,6 +158,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                     g2d.setColor(Color.WHITE);
                     g2d.drawString("" + p.getCost(), 85, y + 40);
                     g2d.setStroke(new BasicStroke(5));
+                    //put a cross if the plant is on cooldown
                     if (!p.isCooldown()) {
                         g2d.drawLine(32, y, 84, y + 52);
                         g2d.drawLine(32, y + 52, 84, y);
@@ -159,12 +169,19 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                     index++;
                     y += 67;
                 }
+                if(Player.getCurrentPlant() == 7){
+                    g2d.drawRect(121, 78, 48, 48);
+                }
             } catch (ConcurrentModificationException e) {
                 System.out.println(e.getMessage());
                 System.out.println("OH no there is some problem with the list");
             }
 
+        // Gacha screen, where you can roll for plant
         } else if(screen == 2){
+            menuMusic.stop();
+            teamMusic.start();
+            teamMusic.loop(Clip.LOOP_CONTINUOUSLY);
             background = gacha;
             g2d.setColor(Color.WHITE);
             Font font = new Font("Arial", Font.PLAIN, 16);
@@ -172,16 +189,25 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             g.drawImage(background, 0, 0, this);
             g2d.drawString("" + player.getMoney(), 249, 398);
         
+        // extraction screen, showing you what plant you got
         } else if(screen == 3){
-            background = inven;
+            background = extract;
             g.drawImage(background, 0, 0, this);
             if(rollType == 0){
-
+                g.drawImage(plantObjects.get(rolls.get(0)).getImage(), 328, 131, this);
             }else{
-
+                int x = 85;
+                for(int i = 0; i < 10; i++){
+                    g.drawImage(plantObjects.get(rolls.get(i)).getImage(), x, 131, this);
+                    x += 60;
+                }
             }
         
+        // team screen, where you select your team
         } else if (screen == 5) {
+            menuMusic.stop();
+            teamMusic.start();
+            teamMusic.loop(Clip.LOOP_CONTINUOUSLY);
             background = inven;
             g.drawImage(background, 0, 0, this);
 
@@ -201,6 +227,9 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                     x += 58;
                 }
             }
+            Player.setCurrentPlant(0);
+            g.drawImage(plantObjects.get(Player.getCurrentPlant()).getImage(), 578, 36, this);
+            g.drawString(plantObjects.get(Player.getCurrentPlant()).getDescribe(), 512, 213);
             Font font = new Font("Arial", Font.PLAIN, 16);
             g2d.setFont(font);
             g2d.setColor(Color.WHITE);
@@ -208,6 +237,16 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
             // Game over screen
         } else if (screen == 7) {
+            map.stopMusic();
+            // Stopping the eating noise from the zombie
+            for (int i = 0; i < zList.size(); i++) {
+
+                zList.get(i).stopEatingSound();
+            }
+
+            loserMusic.start();
+            loserMusic.loop(Clip.LOOP_CONTINUOUSLY);
+
             background = gameOver;
             g.drawImage(background, 0, 0, this);
             // Reset the zombie & Lawnmower lists
@@ -224,6 +263,8 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
             // Winner Screen
         } else if (screen == 8) {
+            map.stopMusic();
+            map.playWinMusic();
             // Reset all the lists
             if (once == 0)
                 player.changeMoney(map.getMoney());
@@ -257,8 +298,11 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
         // If the gammode is not endless alternate between mini wave and big wave
         // until player beats wave 3
         if (!map.getMode().equals("Endless")) {
+
+            if (map.getWaveNum() == 1)
+                zombieComing.start();
+
             if (map.getWaveNum() % 2 == 1 && map.getWaveNum() != 7) {
-                System.out.println("HEELLLOOO");
                 map.miniWave(zList);
             }
 
@@ -322,6 +366,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
     }
 
     // initialize all the images and reading in the score board
+    // and the important variables like plants and player
     // Does not return anything or have any paramters
     public void initialize() {
         try {
@@ -366,12 +411,15 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
         try {
             Scanner inFile = new Scanner(new File("scoreboard.txt"));
+            System.out.println("Scores");
             while (inFile.hasNext()) {
-                String line = inFile.next();
-                System.out.println(line.length());
+                String line = inFile.nextLine();
 
-                if (line.substring(line.indexOf(")") + 1).length() > 0) {
-                    int score = Integer.parseInt(line.substring(line.indexOf(")") + 1));
+                if (line.length() > 0) {
+                    String number = line.substring(line.indexOf(")") + 2);
+                    System.out.println(line.substring(0, line.indexOf(")") + 1) + number);
+
+                    int score = Integer.parseInt(number);
                     Scoreboard temp = new Scoreboard(score);
                     scores.add(temp);
                 }
@@ -383,6 +431,30 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             e.printStackTrace();
         }
 
+        // Loading in background music
+        AudioInputStream sound;
+
+        try {
+            sound = AudioSystem.getAudioInputStream(new File("assets/sound/theme.wav"));
+            menuMusic = AudioSystem.getClip();
+            menuMusic.open(sound);
+            sound = AudioSystem.getAudioInputStream(new File("assets/sound/losemusic.wav"));
+            loserMusic = AudioSystem.getClip();
+            this.loserMusic.open(sound);
+            sound = AudioSystem.getAudioInputStream(new File("assets/sound/teamselection.wav"));
+            teamMusic = AudioSystem.getClip();
+            teamMusic.open(sound);
+            sound = AudioSystem.getAudioInputStream(new File("assets/sound/zombiesarecoming.wav"));
+            zombieComing = AudioSystem.getClip();
+            zombieComing.open(sound);
+
+        } catch (LineUnavailableException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (UnsupportedAudioFileException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -422,6 +494,9 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                         p.attack(sunList);
                     } else if (p.checkRow(zList)) {
                         p.attack(projectileList);
+                        if(p.getStat().equalsIgnoreCase("bomb") && !p.getExist()){
+                            itP.remove();
+                        }
                     }
                 }
     
@@ -491,7 +566,9 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
             else if (e.getX() > 582 && e.getX() < 705 && e.getY() > 270 && e.getY() < 308) {
                 System.out.println("ENDLESS");
+                Player.resetForLevel();
                 map = new Endless("grass");
+                map.playMusic();
                 addingLawnmowers();
                 screen = 1;
 
@@ -537,6 +614,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             if (e.getX() > 211 && e.getX() < 286 && e.getY() > 319 && e.getY() < 340) {
                 System.out.println("Level 1 ");
                 map = new Grass("grass");
+                map.playMusic();
                 addingLawnmowers();
 
                 screen = 1;
@@ -544,6 +622,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             } else if (e.getX() > 356 && e.getX() < 436 && e.getY() > 319 && e.getY() < 340) {
                 System.out.println("Level 2 ");
                 map = new Night("night");
+                map.playMusic();
                 addingLawnmowers();
 
                 screen = 1;
@@ -553,6 +632,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             else if (e.getX() > 505 && e.getX() < 583 && e.getY() > 319 && e.getY() < 340) {
                 System.out.println("Level 3 ");
                 map = new Boss("grass");
+                map.playMusic();
                 addingLawnmowers();
 
                 screen = 1;
@@ -579,6 +659,9 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                 int x = (e.getX() - 20) / 58;
                 int y = (e.getY() - 123) / 84;
                 int num = x + (y * 8);
+                if(num != 8){
+                    Player.setCurrentPlant(num);
+                }
                 if(num == 8){
                     System.out.println("Not available");
                 } else if (player.getTeam().size() >= 6) {
@@ -593,6 +676,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             if (e.getX() > 22 && e.getX() < 157 && e.getY() > 380 && e.getY() < 448) {
                 System.out.println("Save and exit...");
                 player.save("save.txt");
+                menuMusic.setFramePosition(0);
                 screen = 0;
             }
         }
@@ -600,55 +684,83 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
         else if(screen == 2){
             if(e.getX() >= 656 && e.getX() <= 754 && e.getY() >= 53 && e.getY() <= 91){
                 screen = 0;
+            } else if(e.getX() >= 32 && e.getX() <= 192 && e.getY() >= 307 && e.getY() <= 362 && player.getMoney() >= 100){
+                System.out.println("roll 1");
+                player.changeMoney(-100);
+                rollType = 0;
+                rolls.add(rolling());
+                screen = 3;
+
+            } else if(e.getX() >= 32 && e.getX() <= 192 && e.getY() >= 386 && e.getY() <= 442 && player.getMoney() >= 1000){
+                System.out.println("roll 10");
+                player.changeMoney(-1000);
+                rollType = 1;
+                for(int i = 0; i < 10; i++){
+                    rolls.add(rolling());
+                }
+                screen = 3;
             }
         }
 
         else if(screen == 3){
+            if(e.getX() >= 296 && e.getX() <= 496 && e.getY() >= 373 && e.getY() <= 440){
+                System.out.println("exit extraction");
+                screen = 2;
+                while(rolls.size() > 0){
+                    player.addPlant(rolls.get(0));
+                    rolls.remove(0);
+                }
 
+            }
         }
 
         // this is the level screen, here are all the statement for planting, collecting
         // sun
         else if (screen == 1) {
             // this check for if player collect sunlight
-           try {
-             for (int i = 0; i < sunList.size(); i++) {
-                 if (sunList.get(i).isHit(zList, e.getX() - 5, e.getY() - 20)) {
-                     sunList.remove(i);
-                     Player.changeSunlight(25);
-                     break;
-                 }
-             }
+            try {
+                for (int i = 0; i < sunList.size(); i++) {
+                    if (sunList.get(i).isHit(zList, e.getX() - 5, e.getY() - 20)) {
+                        sunList.remove(i);
+                        Player.changeSunlight(25);
+                        break;
+                    }
+                }
  
-             // this is for player to select plant to put down
-             if (e.getX() >= 31 && e.getX() <= 124 && e.getY() >= 45 && e.getY() <= 446) {
-                 int y = (e.getY() - 45) / 67;
-                 if (player.getTeam(y).isCooldown()) {
-                     Player.setCurrentPlant(y);
-                 }
-             } else if (Player.getCurrentPlant() > -1) {
-                 if (e.getX() > mapLcord && e.getX() < mapRcord && e.getY() > mapUcord && e.getY() < mapDcord) {
-                     int xCord = (e.getX() - mapLcord) / blockSizeX;
-                     int yCord = (e.getY() - mapUcord) / blockSizeY;
-                     String cords = "" + xCord + yCord;
- 
-                     // check if therer is already a plant existed in that tile and if player have enough sunlight
-                     // if all yes then put the plant down
-                     if (pList.containsKey(cords)) {
-                         System.out.println("There is already a plant there! at " + cords);
-                     } else if (player.getTeam(Player.getCurrentPlant()).getCost() > Player.getSunlight()) {
-                         System.out.println("Not enough sunlight");
-                         Player.setCurrentPlant(-1);
-                     } else if (xCord <= 8) {
-                         pList.put(cords,
-                                 player.getTeam(Player.getCurrentPlant()).createPlant(mapLcord + xCord * blockSizeX,
-                                         mapUcord + yCord * (blockSizeY - 10), yCord, cords));
-                         player.getTeam(Player.getCurrentPlant()).setCooldown();
-                         Player.changeSunlight(player.getTeam(Player.getCurrentPlant()).getCost() * -1);
-                         Player.setCurrentPlant(-1);
-                     }
-                 }
-             }
+                // this is for player to select plant to put down
+                if(e.getX() >= 133 && e.getX() <= 168 && e.getY() >= 116 && e.getY() <= 149){
+                    Player.setCurrentPlant(7);
+                } else if (e.getX() >= 31 && e.getX() <= 124 && e.getY() >= 45 && e.getY() <= 446) {
+                    int y = (e.getY() - 45) / 67;
+                    if (player.getTeam(y).isCooldown()) {
+                        Player.setCurrentPlant(y);
+                    }
+                } else if (Player.getCurrentPlant() > -1) {
+                    if (e.getX() > mapLcord && e.getX() < mapRcord && e.getY() > mapUcord && e.getY() < mapDcord) {
+                        int xCord = (e.getX() - mapLcord) / blockSizeX;
+                        int yCord = (e.getY() - mapUcord) / blockSizeY;
+                        String cords = "" + xCord + yCord;
+    
+                        // check if therer is already a plant existed in that tile and if player have enough sunlight
+                        // if all yes then put the plant down
+                        if (pList.containsKey(cords)) {
+                            if(Player.getCurrentPlant() == 7){
+                                pList.remove(cords);
+                            }
+                            System.out.println("There is already a plant there! at " + cords);
+                        } else if (player.getTeam(Player.getCurrentPlant()).getCost() > Player.getSunlight()) {
+                            System.out.println("Not enough sunlight");
+                            Player.setCurrentPlant(-1);
+                        } else if (xCord <= 8) {
+                            pList.put(cords,
+                                    player.getTeam(Player.getCurrentPlant()).createPlant(mapLcord + xCord * blockSizeX,
+                                            mapUcord + yCord * (blockSizeY - 10), yCord, cords));
+                            player.getTeam(Player.getCurrentPlant()).setCooldown();
+                            Player.changeSunlight(player.getTeam(Player.getCurrentPlant()).getCost() * -1);
+                            Player.setCurrentPlant(-1);
+                        }
+                    }
+                }
            } catch (Exception ex) {
             ex.printStackTrace();
             System.out.println("Something happened in screen 1");
@@ -658,12 +770,15 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
         else if (screen == 7) {
 
             if (e.getX() > 320 && e.getX() < 463 && e.getY() > 379 && e.getY() < 419) {
+                menuMusic.setFramePosition(0);
                 screen = 0;
 
             }
         } else if (screen == 8) {
 
             if (e.getX() > 311 && e.getX() < 490 && e.getY() > 389 && e.getY() < 439) {
+                map.stopWinMusic();
+                menuMusic.setFramePosition(0);
                 screen = 0;
 
             }
@@ -681,6 +796,21 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             }
         }
 
+    }
+
+    public int rolling(){
+        Random random = new Random();
+        int ran = random.nextInt(100) + 1;
+        if(ran <= 60){
+            ran = random.nextInt(common.length);
+            return common[ran];
+        } else if(ran <= 90){
+            ran = random.nextInt(rare.length);
+            return rare[ran];
+        } else{
+            ran = random.nextInt(epic.length);
+            return epic[ran];
+        }
     }
 
     @Override

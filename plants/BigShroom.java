@@ -8,17 +8,18 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 import java.awt.Rectangle;
-import projectiles.Pea;
 import projectiles.Projectile;
+import projectiles.puffP;
 import zombies.Zombie;
 
 public class BigShroom extends Plant{
     public BigShroom(int x, int y){
-        super(100, 10, 1.5, 7.5, 75, x, y, new Rectangle(x, y, 36, 48));
+        super(75, 5, 1.5, 7.5, 75, x, y, new Rectangle(x, y, 36, 48));
         this.name = "Fume Shroom";
         this.stat = "penetrate";
         this.id = 7;
         this.lastAttack = 0;
+        this.describe = "Penetrate through enemy";
         try {
             BufferedImage img = ImageIO.read((new File("assets/plants/BigShroom.png")));
             this.setImage(img);
@@ -32,7 +33,7 @@ public class BigShroom extends Plant{
         long currentTime = System.currentTimeMillis();
         if ((currentTime - lastAttack)/1000.0 >= atkSpd) {
             lastAttack = currentTime;
-            projectileList.add(new Pea(5, atk, "none", this.x - 10, this.y + 10));
+            projectileList.add(new puffP(10, atk, "none", this.x - 10, this.y + 10));
         }
     }
 
