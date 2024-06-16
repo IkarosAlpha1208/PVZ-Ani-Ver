@@ -3,13 +3,7 @@ package maps;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-<<<<<<< HEAD
-=======
-import java.util.HashMap;
-
 import javax.imageio.ImageIO;
-
->>>>>>> 35e66005b3aec6b16c502aa4094aaba0edbc5425
 import zombies.*;
 
 public class Grass extends Background {
