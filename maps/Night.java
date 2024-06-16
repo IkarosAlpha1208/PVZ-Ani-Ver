@@ -1,6 +1,11 @@
 package maps;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
+
 import zombies.*;
 
 public class Night extends Background {
@@ -10,6 +15,12 @@ public class Night extends Background {
         this.mode = "Level 2"; // Set the game mode to "Level 2"
         this.money = 200;
         this.stat = "night";
+        try {
+            this.winner = ImageIO.read(new File("assets/backgrounds/winner2.png"));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            System.out.println("File error");
+        }
     }
 
     @Override

@@ -1,6 +1,10 @@
 package maps;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
 
 import zombies.*;
 
@@ -12,6 +16,12 @@ public class Boss extends Background {
         this.mode = "Level 3"; // Set the game mode to "Level 3"
         this.money = 400;
         this.stat = "day";
+        try {
+            this.winner = ImageIO.read(new File("assets/backgrounds/winner1.png"));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            System.out.println("File error");
+        }
     }
 
     // Method to generate a mini wave of zombies
