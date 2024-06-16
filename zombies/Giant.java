@@ -34,7 +34,6 @@ public class Giant extends Zombie {
     public void animation() {
 
         isDead();
-        stopEatingSound();
 
         if (isWalking) {
             if (this.walkingIndex == 49) {

@@ -100,8 +100,6 @@ public class Night extends Background {
     // Add the zombies to the provided list
     // No return value
 
-    // Cone 280
-    // Bucket 650
     public void waveTwo(ArrayList<Zombie> li) {
         System.out.println("Wave Number " + this.waveNum / 2);
         this.waveNum++; // Increment the wave number

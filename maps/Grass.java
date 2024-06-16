@@ -52,7 +52,7 @@ public class Grass extends Background {
             randomIndex = (int) (Math.random() * (4 - 0 + 1)) + 0;
             randY = randRow[randomIndex][0];
 
-            Zombie z = new Normal(100, 10, zombieX + i * 10, randY, randRow[randomIndex][1], "Normal");
+            Zombie z = new Normal(20, 10, zombieX + i * 10, randY, randRow[randomIndex][1], "Normal");
 
             // Add the zombie object into the list
             li.add(z);

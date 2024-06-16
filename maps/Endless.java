@@ -19,7 +19,11 @@ public class Endless extends Background {
     // No return type;
     public void newWave(ArrayList<Zombie> li) {
         Zombie z;
-
+        // Zombie [] types = { new Normal(100, 10, zombieX + i * 10, rowSpawn,
+        // randRow[counter][1], "Normal"),
+        // new Cone(280, 10, zombieX + i * 10, rowSpawn, randRow[counter][1], "Cone"),
+        // new Bucket(650, 10, zombieX + i * 10, rowSpawn, randRow[counter][1],
+        // "Bucket")}
         System.out.println("Wave Number " + this.waveNum); // Print the current wave number
         this.maxZombies += 2; // Increase the maximum number of zombies for the next wave
         this.waveNum++; // Increment the wave number
