@@ -1,6 +1,7 @@
 package plants;
 
 import projectiles.*;
+import zombies.Zombie;
 
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
@@ -40,5 +41,9 @@ public class Sunflower extends Plant {
         p.grid = grid;
 
         return p;
+    }
+
+    public boolean checkRow(ArrayList<Zombie> li){
+        return true;
     }
 }

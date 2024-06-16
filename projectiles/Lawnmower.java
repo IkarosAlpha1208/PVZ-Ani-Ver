@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 
 import zombies.Zombie;
 
+// lawnmower class
 public class Lawnmower {
     // Fields to store various attributes of the lawnmower
     private int row; // Row position of the lawnmower

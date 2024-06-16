@@ -24,8 +24,9 @@ public abstract class Plant {
     protected String grid;
     protected int aniCounter;
     protected boolean attacking;
+    protected double exist;
 
-    public Plant(int hp, int atk, double atkSpd, double cooldown, int cost, int x, int y, Rectangle hitbox) {
+    public Plant(int hp, int atk, double atkSpd, double cooldown, int cost, int x, int y, Rectangle rectangle) {
         this.hp = hp;
         this.atk = atk;
         this.atkSpd = atkSpd;
@@ -33,13 +34,19 @@ public abstract class Plant {
         this.cost = cost;
         this.x = x;
         this.y = y;
-        this.hitbox = hitbox;
+        this.hitbox = rectangle;
     }
 
+    //Either gonna shoot projectile, or just hit the zombie when collide with it(To be honest there only 1 plant that do this)
     public abstract void attack(ArrayList<Projectile> projectileList);
 
+    //create a duplicate of this plant
     public abstract Plant createPlant(int x, int y, int yTi, String grid);
 
+    //this is for checking if the plant is going to attack
+    public abstract boolean checkRow(ArrayList<Zombie> li);
+
+    //getter and setter methods
     public void takeDmg(int damage) {
         this.hp -= damage;
     }
@@ -109,17 +116,6 @@ public abstract class Plant {
 
     public int getGrid() {
         return Integer.parseInt(this.grid);
-    }
-
-    //check if there is zombie on the same row as the current plant
-    public boolean checkRow(ArrayList<Zombie> li) {
-        for (int i = 0; i < li.size(); i++) {
-            if (Integer.parseInt(this.grid) % 10 == li.get(i).getRow()) {
-                return true;
-            }
-
-        }
-        return false;
     }
 
     //return if this is done cooldown
