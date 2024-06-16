@@ -89,6 +89,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
         if (screen == 0) {
             loserMusic.stop();
             teamMusic.stop();
+            zombieComing.setFramePosition(0);
             menuMusic.start();
             menuMusic.loop(Clip.LOOP_CONTINUOUSLY);
 
@@ -244,6 +245,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
         // until player beats wave 3
 
         if (!map.getMode().equals("Endless")) {
+
             if (map.getWaveNum() == 1)
                 zombieComing.start();
             if (map.getWaveNum() % 2 == 1 && map.getWaveNum() != 7) {
@@ -291,7 +293,8 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
         if (zombieFrameCounter == 20) {
             for (int i = 0; i < zList.size(); i++) {
 
-                if (zList.get(i).getX() <= 145) {
+                if ((zList.get(i).getX() <= 130 && !zList.get(i).getName().equals("Giant"))
+                        || (zList.get(i).getX() <= 100 && zList.get(i).getName().equals("Giant"))) {
                     screen = 7;
                     return;
 
@@ -336,11 +339,13 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
         try {
             Scanner inFile = new Scanner(new File("scoreboard.txt"));
             while (inFile.hasNext()) {
-                String line = inFile.next();
-                System.out.println(line.length());
+                String line = inFile.nextLine();
 
-                if (line.substring(line.indexOf(")") + 1).length() > 0) {
-                    int score = Integer.parseInt(line.substring(line.indexOf(")") + 1));
+                if (line.length() > 0) {
+                    String number = line.substring(line.indexOf("d") + 2, line.lastIndexOf(" "));
+                    System.out.println(number);
+
+                    int score = Integer.parseInt(number);
                     Scoreboard temp = new Scoreboard(score);
                     scores.add(temp);
                 }
@@ -510,7 +515,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                 try {
                     PrintWriter outFile = new PrintWriter(new FileWriter("scoreboard.txt"), true);
                     for (int i = 0; i < scores.size(); i++) {
-                        outFile.println(i + 1 + ") " + scores.get(i).getHighWave());
+                        outFile.println(i + 1 + ") survived " + scores.get(i).getHighWave() + " Wave(s)");
 
                     }
                     outFile.close();
@@ -658,7 +663,6 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
         } else if (screen == 9) {
 
             if (e.getX() > 17 && e.getX() < 175 && e.getY() > 399 && e.getY() < 441) {
-                menuMusic.setFramePosition(0);
 
                 screen = 0;
 
@@ -666,7 +670,6 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
         } else if (screen == 10) {
 
             if (e.getX() > 30 && e.getX() < 209 && e.getY() > 387 && e.getY() < 440) {
-                menuMusic.setFramePosition(0);
 
                 screen = 0;
 
