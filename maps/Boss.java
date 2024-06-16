@@ -36,7 +36,7 @@ public class Boss extends Background {
             randomIndex = (int) (Math.random() * (4 - 0 + 1)) + 0;
             randY = randRow[randomIndex][0];
 
-            Zombie bucket = new Bucket(125, 15, zombieX + i * 10, randY, randRow[randomIndex][1], "Bucket");
+            Zombie bucket = new Bucket(680, 10, zombieX + i * 10, randY, randRow[randomIndex][1], "Bucket");
             // Add the zombie object into the list
             li.add(bucket);
         }
@@ -73,7 +73,7 @@ public class Boss extends Background {
             if (i < maxZombies / 2) {
                 z = new Bucket(650, 10, zombieX + i * 10, rowSpawn, randRow[counter][1], "Cone");
             } else {
-                z = new Giant(1500, 15, zombieX + i * 10 - 30, rowSpawn, randRow[counter][1], "Giant");
+                z = new Giant(1500, 100, zombieX + i * 10 - 30, rowSpawn, randRow[counter][1], "Giant");
             }
 
             // Add the zombie object into the list
@@ -113,7 +113,7 @@ public class Boss extends Background {
             if (i < maxZombies / 2) {
                 z = new Bucket(650, 10, zombieX + i * 10, rowSpawn, randRow[counter][1], "Cone");
             } else {
-                z = new Giant(1500, 15, zombieX + i * 10 - 30, rowSpawn, randRow[counter][1], "Giant");
+                z = new Giant(1500, 100, zombieX + i * 10 - 30, rowSpawn, randRow[counter][1], "Giant");
             }
             // Add the zombie object into the list
             li.add(z);
@@ -152,7 +152,7 @@ public class Boss extends Background {
             if (i < maxZombies / 2) {
                 z = new Bucket(650, 10, zombieX + i * 10, rowSpawn, randRow[counter][1], "Cone");
             } else {
-                z = new Giant(1500, 15, zombieX + i * 10 - 30, rowSpawn, randRow[counter][1], "Giant");
+                z = new Giant(1500, 100, zombieX + i * 10 - 30, rowSpawn, randRow[counter][1], "Giant");
             }
 
             // Add the zombie object into the list

@@ -7,7 +7,7 @@ import plants.*;
 public class Player {
     private String name;
     private int money;
-    private int[] ownPlants = new int[10];
+    private int[] ownPlants = new int[19];
     private ArrayList<Plant> team = new ArrayList<Plant>();
     private int highWave;
     private static int currentPlant;
@@ -80,7 +80,7 @@ public class Player {
     }
 
     public static void resetForLevel() {
-        sunlight = 200;
+        sunlight = 2000;
         currentPlant = -1;
     }
 

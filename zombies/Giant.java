@@ -21,7 +21,6 @@ public class Giant extends Zombie {
     // The hitbox moves along with the zombie
     @Override
     public void move() {
-        // TODO Auto-generated method stub
         this.x = this.x - 2;
         this.hitX = this.hitX - 2;
         setRec();

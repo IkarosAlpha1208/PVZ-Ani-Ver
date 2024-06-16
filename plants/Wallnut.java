@@ -1,6 +1,7 @@
 package plants;
 
 import projectiles.*;
+import zombies.Zombie;
 
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
@@ -34,7 +35,13 @@ public class Wallnut extends Plant {
         return p;
     }
 
-    public BufferedImage animation() {
-        return null;
+    public boolean checkRow(ArrayList<Zombie> li){
+        for (int i = 0; i < li.size(); i++) {
+            if (Integer.parseInt(this.grid) % 10 == li.get(i).getRow()) {
+                return true;
+            }
+
+        }
+        return false;
     }
 }

@@ -1,6 +1,7 @@
 package plants;
 
 import projectiles.*;
+import zombies.Zombie;
 
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
@@ -42,8 +43,7 @@ public class Sunflower extends Plant {
         return p;
     }
 
-    @Override
-    public BufferedImage animation() {
-        return null;
+    public boolean checkRow(ArrayList<Zombie> li){
+        return true;
     }
 }

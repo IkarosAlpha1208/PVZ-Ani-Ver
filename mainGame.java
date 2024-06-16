@@ -1,4 +1,6 @@
 import java.util.*;
+import java.util.Map.Entry;
+import java.util.Queue;
 import java.io.*;
 import javax.swing.*;
 import javax.imageio.*;
@@ -21,6 +23,8 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
     BufferedImage winnerScreen;
     BufferedImage inven;
     BufferedImage teamDisplay;
+    BufferedImage gacha;
+    BufferedImage extract;
     BufferedImage grass;
     BufferedImage zombieAni;
     BufferedImage aboutScreen;
@@ -33,6 +37,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
     ArrayList<Projectile> projectileList = new ArrayList<>();
     ArrayList<Projectile> sunList = new ArrayList<>();
     ArrayList<Scoreboard> scores = new ArrayList<>();
+    Queue<String> rolls = new LinkedList<>();
     Player player;
 
     // Map object
@@ -40,7 +45,12 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
     int zombieFrameCounter = 0;
     int zombieMoveCounter = 0;
+    int rollType = 0;
+    int[] common = {0, 1, 2, 3, 6};
+    int[] rare = {4, 5, 7, 9, 10};
+    int[] epic = {11, 12, 13, 14, 15, 16, 17, 18};
     // Other important variables
+    // this is the planting area
     int mapLcord = 187, mapRcord = 720, mapUcord = 72, mapDcord = 440;
     int blockSizeX = 56, blockSizeY = 75;
     Thread thread;
@@ -94,66 +104,88 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
         // if its the game screen
         else if (screen == 1) {
 
-            // Draw the background & and teams display
-            g.drawImage(map.getBackground(), 0, 0, this);
-
-            // Printint out all the zombies
-            for (Plant p : pList.values()) {
-                if (!p.isDead())
+            try {
+                // Draw the background & and teams display
+                g.drawImage(map.getBackground(), 0, 0, this);
+    
+                // Printint out all the zombies
+                for (Plant p : pList.values()) {
+                    if (!p.isDead())
+                        g.drawImage(p.getImage(), p.getX(), p.getY(), this);
+                    g.drawRect(p.getX() + 10, p.getY() + 10, p.getWidth(), p.getHeight());
+                }
+    
+                // print out projectile
+                for (Projectile p : projectileList) {
                     g.drawImage(p.getImage(), p.getX(), p.getY(), this);
-                g.drawRect(p.getX() + 10, p.getY() + 10, p.getWidth(), p.getHeight());
-            }
-
-            // print out projectile
-            for (Projectile p : projectileList) {
-                g.drawImage(p.getImage(), p.getX(), p.getY(), this);
-                g.drawRect(p.getX(), p.getY(), p.getWidth(), p.getHeight());
-            }
-
-            // print out all the sun
-            for (Projectile p : sunList) {
-                g.drawImage(p.getImage(), p.getX(), p.getY(), this);
-                g.drawRect(p.getX(), p.getY(), p.getWidth(), p.getHeight());
-            }
-            // Draw the zombies
-            for (int i = 0; i < zList.size(); i++) {
-                g.drawImage(zList.get(i).getAnimation(), zList.get(i).getX(),
-                        zList.get(i).getY(), this);
-
-                // print out the plant
-            }
-            // Draw all the lawnmowers
-            // lawnmower picture
-            for (int i = 0; i < lList.size(); i++) {
-                g.drawImage(lList.get(i).getImage(), lList.get(i).getX(), lList.get(i).getY(), this);
-            }
-
-            // this is for the plant team that you have
-            g.drawImage(teamDisplay, 10, 0, this);
-            g.drawString("" + Player.getSunlight(), 128, 68);
-            int y = 20;
-            int index = 0;
-            for (Plant p : player.getTeam()) {
-                g.drawImage(p.getImage(), 32, y, this);
-                g2d.setColor(Color.WHITE);
-                g2d.drawString("" + p.getCost(), 85, y + 40);
-                g2d.setStroke(new BasicStroke(5));
-                if (!p.isCooldown()) {
-                    g2d.drawLine(32, y, 84, y + 52);
-                    g2d.drawLine(32, y + 52, 84, y);
+                    g.drawRect(p.getX(), p.getY(), p.getWidth(), p.getHeight());
                 }
-                if (Player.getCurrentPlant() == index) {
-                    g2d.drawRect(32, y, 54, 54);
+    
+                // print out all the sun
+                for (Projectile p : sunList) {
+                    g.drawImage(p.getImage(), p.getX(), p.getY(), this);
+                    g.drawRect(p.getX(), p.getY(), p.getWidth(), p.getHeight());
                 }
-                index++;
-                y += 67;
+                // Draw the zombies
+                for (int i = 0; i < zList.size(); i++) {
+                    g.drawImage(zList.get(i).getAnimation(), zList.get(i).getX(),
+                            zList.get(i).getY(), this);
+    
+                    // print out the plant
+                }
+                // Draw all the lawnmowers
+                // lawnmower picture
+                for (int i = 0; i < lList.size(); i++) {
+                    g.drawImage(lList.get(i).getImage(), lList.get(i).getX(), lList.get(i).getY(), this);
+                }
+    
+                // this is for the plant team that you have
+                g.drawImage(teamDisplay, 10, 0, this);
+                g.drawString("" + Player.getSunlight(), 128, 68);
+                int y = 20;
+                int index = 0;
+                for (Plant p : player.getTeam()) {
+                    g.drawImage(p.getImage(), 32, y, this);
+                    g2d.setColor(Color.WHITE);
+                    g2d.drawString("" + p.getCost(), 85, y + 40);
+                    g2d.setStroke(new BasicStroke(5));
+                    if (!p.isCooldown()) {
+                        g2d.drawLine(32, y, 84, y + 52);
+                        g2d.drawLine(32, y + 52, 84, y);
+                    }
+                    if (Player.getCurrentPlant() == index) {
+                        g2d.drawRect(32, y, 54, 54);
+                    }
+                    index++;
+                    y += 67;
+                }
+            } catch (ConcurrentModificationException e) {
+                System.out.println(e.getMessage());
+                System.out.println("OH no there is some problem with the list");
             }
 
+        } else if(screen == 2){
+            background = gacha;
+            g2d.setColor(Color.WHITE);
+            Font font = new Font("Arial", Font.PLAIN, 16);
+            g2d.setFont(font);
+            g.drawImage(background, 0, 0, this);
+            g2d.drawString("" + player.getMoney(), 249, 398);
+        
+        } else if(screen == 3){
+            background = inven;
+            g.drawImage(background, 0, 0, this);
+            if(rollType == 0){
+
+            }else{
+
+            }
+        
         } else if (screen == 5) {
             background = inven;
             g.drawImage(background, 0, 0, this);
-            int tile = 22;
 
+            int tile = 22;
             for (Plant p : player.getTeam()) {
                 g.drawImage(p.getImage(), tile, 18, this);
                 tile += 77;
@@ -169,13 +201,21 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                     x += 58;
                 }
             }
-            // Game over screen
+            Font font = new Font("Arial", Font.PLAIN, 16);
+            g2d.setFont(font);
+            g2d.setColor(Color.WHITE);
+            g2d.drawString("" + player.getMoney(), 270, 395);
 
+            // Game over screen
         } else if (screen == 7) {
             background = gameOver;
             g.drawImage(background, 0, 0, this);
             // Reset the zombie & Lawnmower lists
 
+            zList.removeAll(zList);
+            lList.removeAll(lList);
+            pList.clear();
+            projectileList.removeAll(projectileList);
             if (map.getMode().equals("Endless")) {
                 player.setHighWave(map.getWaveNum() - 1);
             }
@@ -191,6 +231,8 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
             zList.removeAll(zList);
             lList.removeAll(lList);
+            pList.clear();
+            projectileList.removeAll(projectileList);
             background = winnerScreen;
             g.drawImage(background, 0, 0, this);
 
@@ -292,10 +334,28 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             aboutScreen = ImageIO.read(new File("assets/backgrounds/credits.png"));
             helpScreen = ImageIO.read(new File("assets/backgrounds/howtoplay.png"));
             teamDisplay = ImageIO.read(new File("assets/others/teamDisplay.png"));
+            gacha = ImageIO.read(new File("assets/backgrounds/gacha.png"));
+            extract = ImageIO.read(new File("assets/backgrounds/extraction.png"));
 
             plantObjects.add(new Sunflower(0, 0));
             plantObjects.add(new PeaShooter(0, 0));
             plantObjects.add(new Wallnut(0, 0));
+            plantObjects.add(new FreezeShooter(0, 0));
+            plantObjects.add(new Jalepeno(0, 0));
+            plantObjects.add(new Cherry(0, 0));
+            plantObjects.add(new SmallShroom(0, 0));
+            plantObjects.add(new BigShroom(0, 0));
+            plantObjects.add(new Coffee(0, 0));
+            plantObjects.add(new GatlingPea(0, 0));
+            plantObjects.add(new Repeater(0, 0));
+            plantObjects.add(new DawnClair(0, 0));
+            plantObjects.add(new Mahou(0, 0));
+            plantObjects.add(new NClair(0, 0));
+            plantObjects.add(new RHeath(0, 0));
+            plantObjects.add(new Yisang(0, 0));
+            plantObjects.add(new SwordFaust(0, 0));
+            plantObjects.add(new ClockFaust(0, 0));
+            plantObjects.add(new Meur(0, 0));
 
             background = mainMenu;
             player = new Player("save.txt", plantObjects);
@@ -320,7 +380,6 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             inFile.close();
 
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -347,61 +406,69 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
     // updates all the stuff about the game
     public void update() {
 
-        // If its currently on the game screen
-        if (screen == 1) {
-            animation();
-            if (zList.size() == 0) {
-                addingZombies();
-            }
-
-            // plant shooting
-            for (Plant p : pList.values()) {
-                if (p.getStat().contains("sun")) {
-                    p.attack(sunList);
-                } else if (p.checkRow(zList)) {
-                    p.attack(projectileList);
+        try {
+            // If its currently on the game screen
+            if (screen == 1) {
+                animation();
+                if (zList.size() == 0) {
+                    addingZombies();
+                }
+    
+                // plant shooting
+                Iterator<Entry<String, Plant>> itP = pList.entrySet().iterator();
+                while(itP.hasNext()) {
+                    Plant p = itP.next().getValue();
+                    if (p.getStat().contains("sun")) {
+                        p.attack(sunList);
+                    } else if (p.checkRow(zList)) {
+                        p.attack(projectileList);
+                    }
+                }
+    
+                // projectile moving & hitting
+                Iterator<Projectile> itPro = projectileList.iterator();
+                while(itPro.hasNext()) {
+                    Projectile pro = (Projectile) itPro.next();
+                    pro.move();
+                    boolean b = pro.isHit(zList, 0, 0);
+                    if (b) {
+                        itPro.remove();
+                    }
+                }
+    
+                // this check if the sun exist for to long and delete it
+                for (int i = 0; i < sunList.size(); i++) {
+                    boolean b = sunList.get(i).isHit(zList, 0, 0);
+                    if (b) {
+                        sunList.remove(i);
+                        i--;
+                    }
+                }
+    
+                // this is for the lawnmower, moving and looping through all zombies until it
+                // hit wall
+                for (int i = 0; i < lList.size(); i++) {
+                    Lawnmower l = lList.get(i);
+                    l.intersection(zList);
+                    if (l.getActive())
+                        l.move();
+                    if (l.getX() > 700)
+                        lList.remove(i);
+                }
+    
+                // zombie attacking & zombie removing if its dead
+                for (int i = 0; i < zList.size(); i++) {
+                    if (zList.get(i).getRemove()) {
+                        zList.remove(zList.get(i));
+                        i--;
+                    } else {
+                        zList.get(i).attack(pList);
+                    }
                 }
             }
-
-            // projectile moving & hitting
-            for (int i = 0; i < projectileList.size(); i++) {
-                projectileList.get(i).move();
-                boolean b = projectileList.get(i).isHit(zList, 0, 0);
-                if (b) {
-                    projectileList.remove(i);
-                    i--;
-                }
-            }
-
-            // this check if the sun exist for to long and delete it
-            for (int i = 0; i < sunList.size(); i++) {
-                boolean b = sunList.get(i).isHit(zList, 0, 0);
-                if (b) {
-                    sunList.remove(i);
-                    i--;
-                }
-            }
-
-            // this is for the lawnmower, moving and looping through all zombies until it
-            // hit wall
-            for (int i = 0; i < lList.size(); i++) {
-                Lawnmower l = lList.get(i);
-                l.intersection(zList);
-                if (l.getActive())
-                    l.move();
-                if (l.getX() > 700)
-                    lList.remove(i);
-            }
-
-            // zombie attacking & zombie removing if its dead
-            for (int i = 0; i < zList.size(); i++) {
-                if (zList.get(i).getRemove()) {
-                    zList.remove(zList.get(i));
-                    i--;
-                } else {
-                    zList.get(i).attack(pList);
-                }
-            }
+        } catch (ConcurrentModificationException e) {
+            System.out.println(e.getMessage());
+            System.out.println("OH no there is some problem with the list on update");
         }
 
     }
@@ -437,6 +504,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
             else if (e.getX() > 138 && e.getX() < 217 && e.getY() > 318 && e.getY() < 360) {
                 System.out.println("GACHA");
+                screen = 2;
 
             }
 
@@ -503,22 +571,23 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                 if (num >= 6) {
                     num -= 1;
                 }
-                int i = player.getTeam(num).getId();
                 player.addPlant(player.getTeam(num).getId());
                 player.removeTeam(num);
             }
 
-            if (e.getX() >= 20 && e.getX() <= 482 && e.getY() >= 123 && e.getY() <= 291) {
+            if (e.getX() >= 20 && e.getX() <= 482 && e.getY() >= 123 && e.getY() <= 367) {
                 int x = (e.getX() - 20) / 58;
                 int y = (e.getY() - 123) / 84;
                 int num = x + (y * 8);
-                if (player.getTeam().size() >= 6) {
+                if(num == 8){
+                    System.out.println("Not available");
+                } else if (player.getTeam().size() >= 6) {
                     System.out.println("Team is full");
                 } else if (player.getOwnPlant(num) <= 0) {
                     System.out.println("You dont have this plant");
                 } else {
                     player.removePlant(num);
-                    player.addTeam(plantObjects.get(num));
+                    player.addTeam(plantObjects.get(num).createPlant(0, 0, 0, ""));
                 }
             }
             if (e.getX() > 22 && e.getX() < 157 && e.getY() > 380 && e.getY() < 448) {
@@ -528,52 +597,67 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             }
         }
 
+        else if(screen == 2){
+            if(e.getX() >= 656 && e.getX() <= 754 && e.getY() >= 53 && e.getY() <= 91){
+                screen = 0;
+            }
+        }
+
+        else if(screen == 3){
+
+        }
+
         // this is the level screen, here are all the statement for planting, collecting
         // sun
         else if (screen == 1) {
             // this check for if player collect sunlight
-            for (int i = 0; i < sunList.size(); i++) {
-                if (sunList.get(i).isHit(zList, e.getX() - 5, e.getY() - 20)) {
-                    sunList.remove(i);
-                    Player.changeSunlight(25);
-                    break;
-                }
-            }
-
-            if (e.getX() >= 31 && e.getX() <= 124 && e.getY() >= 45 && e.getY() <= 446) {
-                int y = (e.getY() - 45) / 67;
-                if (player.getTeam(y).isCooldown()) {
-                    Player.setCurrentPlant(y);
-                }
-            } else if (Player.getCurrentPlant() > -1) {
-                System.out.println(Player.getCurrentPlant());
-                if (e.getX() > mapLcord && e.getX() < mapRcord && e.getY() > mapUcord && e.getY() < mapDcord) {
-                    int xCord = (e.getX() - mapLcord) / blockSizeX;
-                    int yCord = (e.getY() - mapUcord) / blockSizeY;
-                    String cords = "" + xCord + yCord;
-
-                    // check if therer is already a plant existed in that tile
-                    if (pList.containsKey(cords)) {
-                        System.out.println("There is already a plant there! at " + cords);
-                    } else if (player.getTeam(Player.getCurrentPlant()).getCost() > Player.getSunlight()) {
-                        System.out.println("Not enough sunlight");
-                        Player.setCurrentPlant(-1);
-                    } else if (xCord <= 8) {
-                        pList.put(cords,
-                                player.getTeam(Player.getCurrentPlant()).createPlant(mapLcord + xCord * blockSizeX,
-                                        mapUcord + yCord * (blockSizeY - 10), yCord, cords));
-                        player.getTeam(Player.getCurrentPlant()).setCooldown();
-                        Player.changeSunlight(player.getTeam(Player.getCurrentPlant()).getCost() * -1);
-                        Player.setCurrentPlant(-1);
-                    }
-                }
-            }
+           try {
+             for (int i = 0; i < sunList.size(); i++) {
+                 if (sunList.get(i).isHit(zList, e.getX() - 5, e.getY() - 20)) {
+                     sunList.remove(i);
+                     Player.changeSunlight(25);
+                     break;
+                 }
+             }
+ 
+             // this is for player to select plant to put down
+             if (e.getX() >= 31 && e.getX() <= 124 && e.getY() >= 45 && e.getY() <= 446) {
+                 int y = (e.getY() - 45) / 67;
+                 if (player.getTeam(y).isCooldown()) {
+                     Player.setCurrentPlant(y);
+                 }
+             } else if (Player.getCurrentPlant() > -1) {
+                 if (e.getX() > mapLcord && e.getX() < mapRcord && e.getY() > mapUcord && e.getY() < mapDcord) {
+                     int xCord = (e.getX() - mapLcord) / blockSizeX;
+                     int yCord = (e.getY() - mapUcord) / blockSizeY;
+                     String cords = "" + xCord + yCord;
+ 
+                     // check if therer is already a plant existed in that tile and if player have enough sunlight
+                     // if all yes then put the plant down
+                     if (pList.containsKey(cords)) {
+                         System.out.println("There is already a plant there! at " + cords);
+                     } else if (player.getTeam(Player.getCurrentPlant()).getCost() > Player.getSunlight()) {
+                         System.out.println("Not enough sunlight");
+                         Player.setCurrentPlant(-1);
+                     } else if (xCord <= 8) {
+                         pList.put(cords,
+                                 player.getTeam(Player.getCurrentPlant()).createPlant(mapLcord + xCord * blockSizeX,
+                                         mapUcord + yCord * (blockSizeY - 10), yCord, cords));
+                         player.getTeam(Player.getCurrentPlant()).setCooldown();
+                         Player.changeSunlight(player.getTeam(Player.getCurrentPlant()).getCost() * -1);
+                         Player.setCurrentPlant(-1);
+                     }
+                 }
+             }
+           } catch (Exception ex) {
+            ex.printStackTrace();
+            System.out.println("Something happened in screen 1");
+           }
         }
 
         else if (screen == 7) {
 
             if (e.getX() > 320 && e.getX() < 463 && e.getY() > 379 && e.getY() < 419) {
-                System.out.println("Hello");
                 screen = 0;
 
             }

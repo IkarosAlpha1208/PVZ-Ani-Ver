@@ -1,7 +1,6 @@
 package maps;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import zombies.*;
 
 public class Grass extends Background {

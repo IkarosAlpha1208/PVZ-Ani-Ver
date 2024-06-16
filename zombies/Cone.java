@@ -1,9 +1,4 @@
 package zombies;
-
-import java.util.HashMap;
-
-import plants.Plant;
-
 // Class for the cone Zombie   subclass of Zombie Class
 public class Cone extends Zombie {
     // Constructor, gets the hp,damage, x, y, row, and name and pass most of it to
@@ -20,7 +15,6 @@ public class Cone extends Zombie {
     // The hitbox moves along with the zombie
     @Override
     public void move() {
-        // TODO Auto-generated method stub
         this.x = this.x - 2;
         this.hitX = this.hitX - 2;
         setRec();
