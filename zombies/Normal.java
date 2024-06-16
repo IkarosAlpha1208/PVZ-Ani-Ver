@@ -1,5 +1,9 @@
 package zombies;
+
+import plants.*;
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Iterator;
 
 // Class for the normal zombie, is a subclass of the Zombie Class 
 public class Normal extends Zombie {
