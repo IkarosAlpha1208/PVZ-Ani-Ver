@@ -10,8 +10,8 @@ import zombies.Zombie;
 public abstract class Plant {
     protected int hp;
     protected int atk;
-    protected int atkSpd;
-    protected int cooldown;
+    protected double atkSpd;
+    protected double cooldown;
     protected int cost;
     protected String name;
     protected int id;
@@ -22,8 +22,10 @@ public abstract class Plant {
     protected Rectangle hitbox;
     protected BufferedImage img;
     protected String grid;
+    protected int aniCounter;
+    protected boolean attacking;
 
-    public Plant(int hp, int atk, int atkSpd, int cooldown, int cost, int x, int y, Rectangle hitbox) {
+    public Plant(int hp, int atk, double atkSpd, double cooldown, int cost, int x, int y, Rectangle hitbox) {
         this.hp = hp;
         this.atk = atk;
         this.atkSpd = atkSpd;
@@ -38,6 +40,7 @@ public abstract class Plant {
 
     public abstract Plant createPlant(int x, int y, int yTi, String grid);
 
+    public abstract BufferedImage animation();
     public void takeDmg(int damage) {
         this.hp -= damage;
     }

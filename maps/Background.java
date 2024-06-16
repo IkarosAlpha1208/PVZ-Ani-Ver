@@ -18,6 +18,7 @@ public abstract class Background {
     protected String mode; // Game mode
     // Money to get if they win
     protected int money;
+    protected String stat;
 
     // Winner Screen
     protected BufferedImage winner;

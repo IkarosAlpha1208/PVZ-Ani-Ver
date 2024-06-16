@@ -4,14 +4,12 @@ import java.util.ArrayList;
 import zombies.*;
 
 public class Night extends Background {
-    protected int zombiex; // This variable is not currently used in the class
-
     // Constructor for Night class
     public Night(String name) {
         super(name); // Call the constructor of the superclass Background
         this.mode = "Level 2"; // Set the game mode to "Level 2"
         this.money = 200;
-
+        this.stat = "night";
     }
 
     @Override

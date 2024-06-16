@@ -11,6 +11,7 @@ public class Boss extends Background {
         super(name); // Call the constructor of the superclass Background
         this.mode = "Level 3"; // Set the game mode to "Level 3"
         this.money = 400;
+        this.stat = "day";
     }
 
     // Method to generate a mini wave of zombies

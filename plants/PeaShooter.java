@@ -10,7 +10,7 @@ import java.awt.Rectangle;
 public class PeaShooter extends Plant {
 
     public PeaShooter(int x, int y) {
-        super(50, 10, 2, 10, 100, x, y, new Rectangle(x, y, 36, 48));
+        super(50, 10, 1.5, 7.5, 100, x, y, new Rectangle(x, y, 36, 48));
         this.name = "PeaShooter";
         this.stat = "pea";
         this.id = 1;
@@ -26,7 +26,7 @@ public class PeaShooter extends Plant {
     @Override
     public void attack(ArrayList<Projectile> projectileList) {
         long currentTime = System.currentTimeMillis();
-        if ((currentTime - lastAttack) / 1000 >= atkSpd) {
+        if ((currentTime - lastAttack)/1000.0 >= atkSpd) {
             lastAttack = currentTime;
             projectileList.add(new Pea(5, atk, "none", this.x - 10, this.y + 10));
         }
@@ -38,5 +38,9 @@ public class PeaShooter extends Plant {
         p.yTile = yTi;
         p.grid = grid;
         return p;
+    }
+
+    public BufferedImage animation() {
+        return null;
     }
 }

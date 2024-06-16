@@ -11,6 +11,7 @@ public class Grass extends Background {
         super(name); // Call the constructor of the superclass Background
         this.mode = "Level 1"; // Set the game mode to "Level 1"
         this.money = 100;
+        this.stat = "day"; // Set the type of this level
 
     }
 

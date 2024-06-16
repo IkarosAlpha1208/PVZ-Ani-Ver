@@ -11,7 +11,7 @@ import java.awt.Rectangle;
 
 public class Sunflower extends Plant {
     public Sunflower(int x, int y) {
-        super(50, 25, 10, 5, 50, x, y, new Rectangle(x, y, 36, 48));
+        super(50, 25, 12.5, 7.5, 50, x, y, new Rectangle(x, y, 36, 48));
         this.name = "Sunflower";
         this.stat = "sun";
         this.id = 0;
@@ -27,7 +27,7 @@ public class Sunflower extends Plant {
     @Override
     public void attack(ArrayList<Projectile> projectileList) {
         long currentTime = System.currentTimeMillis();
-        if ((currentTime - lastAttack) / 1000 >= atkSpd) {
+        if ((currentTime - lastAttack)/1000.0 >= atkSpd) {
             lastAttack = currentTime;
             projectileList.add(new Sunlight(0, atk, stat, this.x - 10, this.y + 10));
         }
@@ -40,5 +40,10 @@ public class Sunflower extends Plant {
         p.grid = grid;
 
         return p;
+    }
+
+    @Override
+    public BufferedImage animation() {
+        return null;
     }
 }
