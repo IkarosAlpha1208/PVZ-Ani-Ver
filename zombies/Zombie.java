@@ -181,6 +181,7 @@ public abstract class Zombie {
             }
             this.dyingIndex++;
         } else if (isEating) {
+            stopEatingSound();
             // Handle eating animation
             if (this.eatingIndex == 8) {
                 this.eatingIndex = 1;
