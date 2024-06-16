@@ -1,7 +1,12 @@
 package maps;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import javax.imageio.ImageIO;
+
 import zombies.*;
 
 public class Grass extends Background {
@@ -12,6 +17,12 @@ public class Grass extends Background {
         this.mode = "Level 1"; // Set the game mode to "Level 1"
         this.money = 100;
         this.stat = "day"; // Set the type of this level
+        try {
+            this.winner = ImageIO.read(new File("assets/backgrounds/winner3.png"));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            System.out.println("File error");
+        }
 
     }
 

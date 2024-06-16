@@ -33,7 +33,7 @@ public abstract class Background {
             System.out.println("CANNOT READ FILE");
         }
 
-        this.waveNum = 3;
+        this.waveNum = 12;
         this.zombieX = 750;
 
     }

@@ -18,7 +18,6 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
     BufferedImage mainMenu;
     BufferedImage gameOver;
     BufferedImage levels;
-    BufferedImage winnerScreen;
     BufferedImage inven;
     BufferedImage teamDisplay;
     BufferedImage grass;
@@ -143,6 +142,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                     g2d.drawLine(32, y + 52, 84, y);
                 }
                 if (Player.getCurrentPlant() == index) {
+
                     g2d.drawRect(32, y, 54, 54);
                 }
                 index++;
@@ -191,8 +191,7 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
 
             zList.removeAll(zList);
             lList.removeAll(lList);
-            background = winnerScreen;
-            g.drawImage(background, 0, 0, this);
+            g.drawImage(map.getWinner(), 0, 0, this);
 
             System.out.println(player.getMoney());
 
@@ -287,7 +286,6 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
             mainMenu = ImageIO.read(new File("assets/backgrounds/main.png"));
             gameOver = ImageIO.read(new File("assets/backgrounds/gameover.png"));
             levels = ImageIO.read(new File("assets/backgrounds/LevelSelect.png"));
-            winnerScreen = ImageIO.read(new File("assets/backgrounds/winner.png"));
             inven = ImageIO.read(new File("assets/backgrounds/Team.png"));
             aboutScreen = ImageIO.read(new File("assets/backgrounds/credits.png"));
             helpScreen = ImageIO.read(new File("assets/backgrounds/howtoplay.png"));
