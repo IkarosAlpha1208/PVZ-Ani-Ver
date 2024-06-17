@@ -227,7 +227,9 @@ class mainGame extends JPanel implements Runnable, MouseListener, KeyListener {
                     x += 58;
                 }
             }
-            Player.setCurrentPlant(0);
+            if(Player.getCurrentPlant() == -1){
+                Player.setCurrentPlant(0);
+            }
             g.drawImage(plantObjects.get(Player.getCurrentPlant()).getImage(), 578, 36, this);
             g.drawString(plantObjects.get(Player.getCurrentPlant()).getDescribe(), 512, 213);
             Font font = new Font("Arial", Font.PLAIN, 16);

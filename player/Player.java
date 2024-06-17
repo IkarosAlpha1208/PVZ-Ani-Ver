@@ -87,7 +87,7 @@ public class Player {
 
     //getter and setter methods
     public static void resetForLevel() {
-        sunlight = 2000;
+        sunlight = 500;
         currentPlant = -1;
     }
 

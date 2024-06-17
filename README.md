@@ -10,6 +10,7 @@ team page is where you select plant to add in ur team
 The battle is just like plant vs zombie
 gather sun, put down plant and kill all the zombies
 Oh yea, just saying there is no exit once you start a battle
+you can change the starting sunlight by going to the playe class and look for a method called resetForLevel or something like that
 Enjoy :)
 
 David worked on:
