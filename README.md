@@ -1,4 +1,4 @@
-**Gr. 12 ISU Assignment – David and Hamse**
+**Plant vs Zombie Project – David and Hamse**
 
 This is a Plants vs. Zombies–style game with some characters from other games.
 For more information, you can check the help page.
